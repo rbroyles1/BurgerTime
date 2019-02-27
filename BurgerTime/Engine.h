@@ -5,7 +5,7 @@
 #include "SDL.h"
 #include "SDL_ttf.h"
 
-class AvancezLib {
+class Engine {
 	SDL_Window * window;
 	SDL_Renderer * renderer;
 	TTF_Font * font;

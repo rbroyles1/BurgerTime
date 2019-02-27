@@ -1,9 +1,9 @@
-#include "avancezlib.h"
+#include "Engine.h"
 #include <iostream>
 #include <chrono>
 #include <thread>
 
-void AvancezLib::destroy() {
+void Engine::destroy() {
 	SDL_DestroyRenderer(this->renderer);
 	SDL_DestroyWindow(this->window);
 	TTF_CloseFont(this->font);
@@ -12,7 +12,7 @@ void AvancezLib::destroy() {
 	SDL_Quit();
 }
 
-bool AvancezLib::init(int width, int height) {
+bool Engine::init(int width, int height) {
 	if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0) {
 		return false;
 	}
@@ -29,7 +29,7 @@ bool AvancezLib::init(int width, int height) {
 	return true;
 }
 
-bool AvancezLib::update() {
+bool Engine::update() {
 	int current = this->getElapsedTime();
 	int delta = current - this->previousUpdateTime;
 	this->previousUpdateTime = current;
@@ -48,11 +48,11 @@ bool AvancezLib::update() {
 	return this->keepRendering;
 }
 
-void AvancezLib::stop() {
+void Engine::stop() {
 	this->keepRendering = false;
 }
 
-void AvancezLib::drawText(int x, int y, const char* msg) {
+void Engine::drawText(int x, int y, const char* msg) {
 	SDL_Surface* surface = TTF_RenderText_Solid(this->font, msg, { 255, 255, 255 });
 	SDL_Texture* texture = SDL_CreateTextureFromSurface(this->renderer, surface);
 
@@ -71,19 +71,19 @@ void AvancezLib::drawText(int x, int y, const char* msg) {
 	this->entities.push_back(sprite);
 }*/
 
-void AvancezLib::setFpsLimit(int limit) {
+void Engine::setFpsLimit(int limit) {
 	this->millisecondsPerFrame = 1000 / limit;
 }
 
-int AvancezLib::getElapsedTime() {
+int Engine::getElapsedTime() {
 	return SDL_GetTicks();
 }
 
-int AvancezLib::getFrameRate() {
+int Engine::getFrameRate() {
 	return this->frameRate;
 }
 
-bool AvancezLib::getKeyStatus(SDL_Keycode key) {
+bool Engine::getKeyStatus(SDL_Keycode key) {
 	auto found = this->keyStatus.find(key);
 
 	if (found != this->keyStatus.end()) {
@@ -93,7 +93,7 @@ bool AvancezLib::getKeyStatus(SDL_Keycode key) {
 	return false;
 }
 
-void AvancezLib::handleEvents() {
+void Engine::handleEvents() {
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
 		switch (event.type) {
@@ -110,7 +110,7 @@ void AvancezLib::handleEvents() {
 	}
 }
 
-void AvancezLib::fpsLimitSleep() {
+void Engine::fpsLimitSleep() {
 	int sleepTime = this->millisecondsPerFrame - getElapsedTime() + this->previousFrameEndTime;
 
 	if (sleepTime > 0) {

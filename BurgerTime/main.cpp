@@ -1,10 +1,10 @@
 #include <string>
-#include "avancezlib.h"
+#include "Engine.h"
 
-void processInput(AvancezLib& engine);
+void processInput(Engine& engine);
 
 int main(int argc, char* argv[]) {
-	AvancezLib engine;
+	Engine engine;
 
 	engine.init(512, 512);
 	engine.setFpsLimit(60);
@@ -20,7 +20,7 @@ int main(int argc, char* argv[]) {
 }
 
 // TODO remove this
-void processInput(AvancezLib& engine) {
+void processInput(Engine& engine) {
 	if (engine.getKeyStatus(SDLK_ESCAPE) || engine.getKeyStatus(SDLK_q)) {
 		engine.stop();
 		return;
