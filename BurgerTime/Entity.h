@@ -7,13 +7,13 @@ enum Message { HIT };
 class Component;
 
 class Entity {
+private:
+	std::vector<Component*>* components;
+	std::vector<Entity*>* receivers;
 
 protected:
 	unsigned int id;
 	Coordinate* position;
-
-	std::vector<Component*>* components;
-	std::vector<Entity*>* receivers;
 
 public:
 

@@ -11,6 +11,5 @@ void FpsCounterComponent::update(float dt) {
 }
 
 FpsCounterComponent::~FpsCounterComponent() {
-	Component::~Component();
 	delete text;
 }

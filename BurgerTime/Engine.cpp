@@ -70,14 +70,6 @@ SDL_Renderer* Engine::getRenderer() {
 	return this->renderer;
 }
 
-void Engine::destroy() {
-	SDL_DestroyRenderer(this->renderer);
-	SDL_DestroyWindow(this->window);
-
-	TTF_Quit();
-	SDL_Quit();
-}
-
 void Engine::handleEvents() {
 	SDL_Event event;
 	if (SDL_PollEvent(&event)) {
@@ -106,4 +98,12 @@ void Engine::fpsLimitSleep() {
 	this->frameRate = delta != 0 ? 1000 / delta : 1000;
 
 	this->previousFrameEndTime = getElapsedTime();
+}
+
+Engine::~Engine() {
+	SDL_DestroyRenderer(this->renderer);
+	SDL_DestroyWindow(this->window);
+
+	TTF_Quit();
+	SDL_Quit();
 }

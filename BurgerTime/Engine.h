@@ -20,6 +20,7 @@ class Engine {
 
 public:
 	bool init(Game* game, int width, int height);
+
 	bool update();
 	void stop();
 	void setFpsLimit(int limit);
@@ -27,7 +28,8 @@ public:
 	int getFrameRate();
 	bool getKeyStatus(SDL_Keycode key);
 	SDL_Renderer* getRenderer();
-	void destroy();
+
+	~Engine();
 
 private:
 	void handleEvents();

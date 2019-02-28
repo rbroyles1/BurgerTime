@@ -20,5 +20,6 @@ public:
 	virtual ~Game();
 
 private:
+	void createGameComponents();
 	void createFpsCounter();
 };

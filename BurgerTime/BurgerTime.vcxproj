@@ -127,6 +127,7 @@
     <ClInclude Include="Entity.h" />
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="InputComponent.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />
   </ItemGroup>
@@ -137,6 +138,7 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FpsCounterComponent.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />

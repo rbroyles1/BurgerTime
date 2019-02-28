@@ -3,6 +3,7 @@
 #include "Entity.h"
 #include "Text.h"
 #include "FpsCounterComponent.h"
+#include "InputComponent.h"
 
 Game::Game(Engine* engine) {
 	this->engine = engine;
@@ -11,6 +12,7 @@ Game::Game(Engine* engine) {
 
 void Game::init() {
 	this->createFpsCounter();
+	this->createGameComponents();
 
 	Entity::init();
 }
@@ -27,6 +29,10 @@ void Game::addEntity(Entity* entity) {
 	this->entities->push_back(entity);
 }
 
+void Game::createGameComponents() {
+	this->addComponent(new InputComponent(this->engine, this));
+}
+
 void Game::createFpsCounter() {
 	Entity* fpsCounter = new Entity(Coordinate(20, 20));
 	Text* text = new Text(this->engine->getRenderer(), "space_invaders.ttf", 25);
@@ -36,8 +42,6 @@ void Game::createFpsCounter() {
 }
 
 Game::~Game() {
-	Entity::~Entity();
-
 	for (auto it = this->entities->begin(); it != this->entities->end(); it++) {
 		delete *it;
 	}
