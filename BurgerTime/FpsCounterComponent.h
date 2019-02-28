@@ -8,17 +8,9 @@ class FpsCounterComponent : public Component {
 	Text* text;
 
 public:
-	FpsCounterComponent(Engine* engine, Entity* entity, Text* text) : Component(engine, entity) {
-		this->text = text;
-	}
+	FpsCounterComponent(Engine* engine, Entity* entity, Text* text);
 
-	virtual void update(float dt) {
-		const char* message = /*std::to_string(engine->getFrameRate()).c_str()*/ "60";
-		this->text->draw(this->entity->getPosition(), message);
-	}
+	virtual void update(float dt);
 
-	virtual ~FpsCounterComponent() {
-		Component::~Component();
-		delete text;
-	}
+	virtual ~FpsCounterComponent();
 };

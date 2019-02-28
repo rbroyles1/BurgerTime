@@ -1,5 +1,4 @@
 #pragma once
-#include "Engine.h"
 #include "Entity.h"
 
 class Engine;
@@ -12,14 +11,11 @@ protected:
 	Entity* entity;
 
 public:
-	Component(Engine* engine, Entity* entity) {
-		this->engine = engine;
-		this->entity = entity;
-	}
+	Component(Engine* engine, Entity* entity);
 
-	virtual void init() { }
-	virtual void update(float dt) { }
-	virtual void receive(Message message) { }
+	virtual void init();
+	virtual void update(float dt);
+	virtual void receive(Message message);
 	
-	virtual ~Component() { }
+	virtual ~Component();
 };

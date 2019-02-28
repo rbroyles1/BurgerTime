@@ -22,6 +22,15 @@
     <Filter Include="Header Files\Surface">
       <UniqueIdentifier>{61680b2c-561e-4053-b0c1-da0bd457b0b2}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\Component">
+      <UniqueIdentifier>{68a30165-6250-400c-a9e7-292d3308ad03}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Entity">
+      <UniqueIdentifier>{2fbbbfed-9419-4f5f-a094-b5a91a6952ed}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Surface">
+      <UniqueIdentifier>{0fd1bf3a-6c8b-47df-82e5-bd958ae0e5e6}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Engine.h">
@@ -51,6 +60,30 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Component.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="FpsCounterComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="Entity.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Game.cpp">
+      <Filter>Source Files\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="Sprite.cpp">
+      <Filter>Source Files\Surface</Filter>
+    </ClCompile>
+    <ClCompile Include="Text.cpp">
+      <Filter>Source Files\Surface</Filter>
+    </ClCompile>
+    <ClCompile Include="Coordinate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Engine.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

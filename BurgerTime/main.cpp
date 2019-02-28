@@ -6,7 +6,7 @@ void processInput(Engine& engine);
 
 int main(int argc, char* argv[]) {
 	Engine engine;
-	Game game(&engine, engine.getRenderer());
+	Game game(&engine);
 
 	engine.init(&game, 512, 512);
 	engine.setFpsLimit(60);
