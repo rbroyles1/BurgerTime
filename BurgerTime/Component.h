@@ -2,6 +2,10 @@
 #include "Engine.h"
 #include "Entity.h"
 
+class Engine;
+class Entity;
+enum Message;
+
 class Component {
 protected:
 	Engine* engine;

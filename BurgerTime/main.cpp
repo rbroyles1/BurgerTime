@@ -1,17 +1,18 @@
 #include <string>
 #include "Engine.h"
+#include "Game.h"
 
 void processInput(Engine& engine);
 
 int main(int argc, char* argv[]) {
 	Engine engine;
+	Game game(&engine, engine.getRenderer());
 
-	engine.init(512, 512);
+	engine.init(&game, 512, 512);
 	engine.setFpsLimit(60);
 	
 	while (engine.update()) {
 		processInput(engine);
-		engine.drawText(25, 25, std::to_string(engine.getFrameRate()).c_str());
 	}
 	
 	engine.destroy();
