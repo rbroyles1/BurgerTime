@@ -8,6 +8,6 @@ class RenderComponent : public Component {
 public:
 	RenderComponent(Engine* engine, Entity* entity, Sprite* sprite);
 
-	virtual void update(float dt);
+	virtual void update(double dt);
 };
 

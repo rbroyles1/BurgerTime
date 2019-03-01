@@ -32,7 +32,7 @@ bool Engine::update() {
 
 	SDL_RenderClear(this->renderer);
 
-	this->game->update(delta / 1000.f);
+	this->game->update(delta / 1000.0);
 
 	SDL_RenderPresent(this->renderer);
 	this->fpsLimitSleep();

@@ -5,7 +5,7 @@ FpsCounterComponent::FpsCounterComponent(Engine* engine, Entity* entity, Text* t
 	this->text = text;
 }
 
-void FpsCounterComponent::update(float dt) {
+void FpsCounterComponent::update(double dt) {
 	std::string message = std::to_string(engine->getFrameRate());
 	this->text->draw(this->entity->getPosition(), message.c_str());
 }

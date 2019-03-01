@@ -10,7 +10,7 @@ class FpsCounterComponent : public Component {
 public:
 	FpsCounterComponent(Engine* engine, Entity* entity, Text* text);
 
-	virtual void update(float dt);
+	virtual void update(double dt);
 
 	virtual ~FpsCounterComponent();
 };

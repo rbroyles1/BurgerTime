@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include "SDL.h"
+#include "Receiver.h"
 #include "Entity.h"
 #include "Game.h"
 

@@ -4,6 +4,6 @@ RenderComponent::RenderComponent(Engine* engine, Entity* entity, Sprite* sprite)
 	this->sprite = sprite;
 }
 
-void RenderComponent::update(float dt) {
+void RenderComponent::update(double dt) {
 	this->sprite->draw(entity->getPosition()->x, entity->getPosition()->y);
 }

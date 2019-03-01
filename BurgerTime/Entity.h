@@ -1,15 +1,15 @@
 #pragma once
 #include <vector>
+#include "Receiver.h"
 #include "Component.h"
 #include "Coordinate.h"
 
-enum Message { HIT };
 class Component;
 
-class Entity {
+class Entity : public Receiver {
 private:
 	std::vector<Component*>* components;
-	std::vector<Entity*>* receivers;
+	std::vector<Receiver*>* receivers;
 
 protected:
 	unsigned int id;
@@ -21,9 +21,9 @@ public:
 	Entity();
 
 	virtual void init();
-	virtual void update(float dt);
+	virtual void update(double dt);
 	virtual void addComponent(Component* component);
-	virtual void addReceiver(Entity *entity);
+	virtual void addReceiver(Receiver* receiver);
 	virtual void send(Message message);
 	virtual void receive(Message message);
 

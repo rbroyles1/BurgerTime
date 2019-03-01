@@ -129,7 +129,10 @@
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="PlayerRigidBodyComponent.h" />
+    <ClInclude Include="Receiver.h" />
     <ClInclude Include="RenderComponent.h" />
+    <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />
   </ItemGroup>
@@ -142,7 +145,9 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="PlayerRigidBodyComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
+    <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
   </ItemGroup>

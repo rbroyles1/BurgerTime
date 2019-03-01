@@ -14,7 +14,8 @@ public:
 	Game(Engine* engine);
 
 	virtual void init();
-	virtual void update(float dt);
+	virtual void update(double dt);
+	virtual void receive(Message message);
 	void addEntity(Entity* entity);
 	
 	virtual ~Game();

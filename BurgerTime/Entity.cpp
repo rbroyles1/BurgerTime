@@ -4,7 +4,7 @@ Entity::Entity(Coordinate position) {
 	this->id = 0;
 	this->position = new Coordinate();
 	this->components = new std::vector<Component*>();
-	this->receivers = new std::vector<Entity*>();
+	this->receivers = new std::vector<Receiver*>();
 
 	this->position->x = position.x;
 	this->position->y = position.y;
@@ -18,7 +18,7 @@ void Entity::init() {
 	}
 }
 
-void Entity::update(float dt) {
+void Entity::update(double dt) {
 	for (auto it = this->components->begin(); it != this->components->end(); it++) {
 		(*it)->update(dt);
 	}
@@ -28,8 +28,8 @@ void Entity::addComponent(Component* component) {
 	this->components->push_back(component);
 }
 
-void Entity::addReceiver(Entity *entity) {
-	this->receivers->push_back(entity);
+void Entity::addReceiver(Receiver* receiver) {
+	this->receivers->push_back(receiver);
 }
 
 void Entity::send(Message message) {
@@ -37,6 +37,8 @@ void Entity::send(Message message) {
 		(*it)->receive(message);
 	}
 }
+
+void Entity::receive(Message message) { }
 
 Coordinate* Entity::getPosition() {
 	return this->position;
@@ -47,14 +49,8 @@ void Entity::setPosition(Coordinate& position) {
 	this->position->y = position.y;
 }
 
-void Entity::receive(Message message) { }
-
 Entity::~Entity() {
 	for (auto it = this->components->begin(); it != this->components->end(); it++) {
-		delete *it;
-	}
-
-	for (auto it = this->receivers->begin(); it != this->receivers->end(); it++) {
 		delete *it;
 	}
 

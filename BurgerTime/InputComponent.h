@@ -6,6 +6,6 @@ class InputComponent : public Component {
 public:
 	InputComponent(Engine* engine, Entity* entity);
 
-	virtual void update(float dt);
+	virtual void update(double dt);
 };
 

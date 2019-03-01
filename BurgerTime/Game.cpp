@@ -5,6 +5,7 @@
 #include "FpsCounterComponent.h"
 #include "InputComponent.h"
 #include "RenderComponent.h"
+#include "PlayerRigidBodyComponent.h"
 
 Game::Game(Engine* engine) {
 	this->engine = engine;
@@ -19,11 +20,19 @@ void Game::init() {
 	Entity::init();
 }
 
-void Game::update(float dt) {
+void Game::update(double dt) {
 	Entity::update(dt);
 
 	for (auto it = this->entities->begin(); it != this->entities->end(); it++) {
 		(*it)->update(dt);
+	}
+}
+
+void Game::receive(Message message) {
+	this->send(message);
+
+	if (message == EXIT) {
+		this->engine->stop();
 	}
 }
 
@@ -45,9 +54,14 @@ void Game::createFpsCounter() {
 
 void Game::createPlayerEntity() {
 	Entity* player = new Entity(Coordinate(100, 800));
-	player->addComponent(new RenderComponent(this->engine, player,
-		new Sprite(this->engine->getRenderer(), "resources/sprites/cook (1).bmp")));
+	PlayerRigidBodyComponent* rigidBodyComponent = new PlayerRigidBodyComponent(this->engine, player);
+	RenderComponent* renderComponent = new RenderComponent(this->engine, player,
+		new Sprite(this->engine->getRenderer(), "resources/sprites/cook (1).bmp"));
 
+	player->addComponent(rigidBodyComponent);
+	player->addComponent(renderComponent);
+
+	this->addReceiver(rigidBodyComponent);
 	this->addEntity(player);
 }
 
