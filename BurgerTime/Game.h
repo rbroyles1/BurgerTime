@@ -22,4 +22,5 @@ public:
 private:
 	void createGameComponents();
 	void createFpsCounter();
+	void createPlayerEntity();
 };

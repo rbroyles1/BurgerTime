@@ -4,6 +4,7 @@
 #include "Text.h"
 #include "FpsCounterComponent.h"
 #include "InputComponent.h"
+#include "RenderComponent.h"
 
 Game::Game(Engine* engine) {
 	this->engine = engine;
@@ -13,6 +14,7 @@ Game::Game(Engine* engine) {
 void Game::init() {
 	this->createFpsCounter();
 	this->createGameComponents();
+	this->createPlayerEntity();
 
 	Entity::init();
 }
@@ -39,6 +41,14 @@ void Game::createFpsCounter() {
 
 	fpsCounter->addComponent(new FpsCounterComponent(this->engine, fpsCounter, text));
 	this->addEntity(fpsCounter);
+}
+
+void Game::createPlayerEntity() {
+	Entity* player = new Entity(Coordinate(100, 800));
+	player->addComponent(new RenderComponent(this->engine, player,
+		new Sprite(this->engine->getRenderer(), "resources/sprites/cook (1).bmp")));
+
+	this->addEntity(player);
 }
 
 Game::~Game() {

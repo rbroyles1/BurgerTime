@@ -6,7 +6,9 @@ class Sprite {
 	SDL_Texture * texture;
 
 public:
-	Sprite(SDL_Renderer * renderer, SDL_Texture * texture);
+	Sprite(SDL_Renderer* renderer, const char* spritePath);
+
 	void draw(int x, int y);
-	void destroy();
+
+	~Sprite();
 };

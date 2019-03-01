@@ -1,8 +1,13 @@
 #include "Sprite.h"
+#include "Constants.h"
 
-Sprite::Sprite(SDL_Renderer * renderer, SDL_Texture * texture) {
+Sprite::Sprite(SDL_Renderer* renderer, const char* spritePath) {
+	SDL_Surface* spriteSurface = SDL_LoadBMP(spritePath);
+	
 	this->renderer = renderer;
-	this->texture = texture;
+	this->texture = SDL_CreateTextureFromSurface(this->renderer, spriteSurface);
+
+	SDL_FreeSurface(spriteSurface);
 }
 
 void Sprite::draw(int x, int y) {
@@ -12,9 +17,13 @@ void Sprite::draw(int x, int y) {
 	spritePosition.y = y;
 
 	SDL_QueryTexture(this->texture, nullptr, nullptr, &spritePosition.w, &spritePosition.h);
+
+	spritePosition.w *= RESOLUTION_MULTIPLIER;
+	spritePosition.h *= RESOLUTION_MULTIPLIER;
+
 	SDL_RenderCopy(this->renderer, this->texture, nullptr, &spritePosition);
 }
 
-void Sprite::destroy() {
+Sprite::~Sprite() {
 	SDL_DestroyTexture(this->texture);
 }
