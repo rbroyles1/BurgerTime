@@ -56,7 +56,7 @@ void Game::createPlayerEntity() {
 	Entity* player = new Entity(Coordinate(100, 800));
 	PlayerRigidBodyComponent* rigidBodyComponent = new PlayerRigidBodyComponent(this->engine, player);
 	RenderComponent* renderComponent = new RenderComponent(this->engine, player,
-		new Sprite(this->engine->getRenderer(), "resources/sprites/cook (1).bmp"));
+		new Sprite(this->engine->getRenderer(), "resources/sprites/cook (%d).bmp", 4, 6));
 
 	player->addComponent(rigidBodyComponent);
 	player->addComponent(renderComponent);
