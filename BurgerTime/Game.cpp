@@ -45,7 +45,7 @@ void Game::createGameComponents() {
 }
 
 void Game::createFpsCounter() {
-	Entity* fpsCounter = new Entity(Coordinate(20, 20));
+	Entity* fpsCounter = new Entity(Coordinate(10, 10));
 	Text* text = new Text(this->engine->getRenderer(), "space_invaders.ttf", 25);
 
 	fpsCounter->addComponent(new FpsCounterComponent(this->engine, fpsCounter, text));
@@ -53,7 +53,7 @@ void Game::createFpsCounter() {
 }
 
 void Game::createPlayerEntity() {
-	Entity* player = new Entity(Coordinate(100, 800));
+	Entity* player = new Entity(Coordinate(24, 200));
 	PlayerRigidBodyComponent* rigidBodyComponent = new PlayerRigidBodyComponent(this->engine, player);
 	RenderComponent* renderComponent = new RenderComponent(this->engine, player,
 		new Sprite(this->engine->getRenderer(), "resources/sprites/cook (%d).bmp", 4, 6));

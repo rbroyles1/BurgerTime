@@ -6,8 +6,7 @@ Entity::Entity(Coordinate position) {
 	this->components = new std::vector<Component*>();
 	this->receivers = new std::vector<Receiver*>();
 
-	this->position->x = position.x;
-	this->position->y = position.y;
+	this->position->copyFrom(position);
 }
 
 Entity::Entity() : Entity(Coordinate(0, 0)) {}
@@ -45,8 +44,7 @@ Coordinate* Entity::getPosition() {
 }
 
 void Entity::setPosition(Coordinate& position) {
-	this->position->x = position.x;
-	this->position->y = position.y;
+	this->position->copyFrom(position);
 }
 
 Entity::~Entity() {

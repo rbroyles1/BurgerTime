@@ -1,10 +1,10 @@
 #pragma once
 
 class Coordinate {
-public:
 	double x;
 	double y;
 
+public:
 	Coordinate(double x, double y);
 	Coordinate();
 
@@ -15,4 +15,13 @@ public:
 	Coordinate operator*(const double& rhs);
 
 	double dotProduct(const Coordinate& rhs);
+	void copyFrom(const Coordinate& source);
+
+	double getX();
+	double getY();
+	void setX(double x);
+	void setY(double y);
+
+private:
+	Coordinate(double x, double y, bool useSetter);
 };
