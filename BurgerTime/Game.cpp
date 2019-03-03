@@ -4,12 +4,12 @@
 #include "Text.h"
 #include "FpsCounterComponent.h"
 #include "InputComponent.h"
-#include "PlayerRenderComponent.h"
-#include "PlayerRigidBodyComponent.h"
+#include "BoxCollideComponent.h"
+#include "PlayerEntity.h"
 
-Game::Game(Engine* engine) {
-	this->engine = engine;
+Game::Game(Engine* engine) : Entity(engine) {
 	this->entities = new std::vector<Entity*>();
+	this->colliders = new std::vector<BoxCollideComponent*>();
 }
 
 void Game::init() {
@@ -45,7 +45,7 @@ void Game::createGameComponents() {
 }
 
 void Game::createFpsCounter() {
-	Entity* fpsCounter = new Entity(Coordinate(10, 10));
+	Entity* fpsCounter = new Entity(this->engine, Coordinate(10, 10));
 	Text* text = new Text(this->engine->getRenderer(), "space_invaders.ttf", 25);
 
 	fpsCounter->addComponent(new FpsCounterComponent(this->engine, fpsCounter, text));
@@ -53,16 +53,21 @@ void Game::createFpsCounter() {
 }
 
 void Game::createPlayerEntity() {
-	Entity* player = new Entity(Coordinate(24, 200));
-	PlayerRigidBodyComponent* rigidBodyComponent = new PlayerRigidBodyComponent(this->engine, player);
-	PlayerRenderComponent* renderComponent = new PlayerRenderComponent(this->engine, player);
+	PlayerEntity* player = new PlayerEntity(this->engine, Coordinate(24, 200));
+	BoxCollideComponent* playerBox = new BoxCollideComponent(this->engine, player, new Coordinate(16, 16), FLOOR_BOUND_COLLISION, this->colliders);
 
-	player->addComponent(rigidBodyComponent);
-	player->addComponent(renderComponent);
+	PlayerEntity* test = new PlayerEntity(this->engine, Coordinate(60, 200));
+	BoxCollideComponent* testBox = new BoxCollideComponent(this->engine, test, new Coordinate(16, 16), FLOOR_BOUND_COLLISION, this->colliders);
 
-	this->addReceiver(rigidBodyComponent);
-	this->addReceiver(renderComponent);
+	this->colliders->push_back(playerBox);
+	this->colliders->push_back(testBox);
+
+	player->addComponent(playerBox);
+	test->addComponent(testBox);
+
+	this->addReceiver(player);
 	this->addEntity(player);
+	this->addEntity(test);
 }
 
 Game::~Game() {
@@ -71,4 +76,5 @@ Game::~Game() {
 	}
 
 	delete this->entities;
+	delete this->colliders;
 }

@@ -1,10 +1,11 @@
 #pragma once
 #include <vector>
+#include "Coordinate.h"
 #include "Receiver.h"
 #include "Component.h"
-#include "Coordinate.h"
 
 class Component;
+class Engine;
 
 class Entity : public Receiver {
 private:
@@ -14,11 +15,12 @@ private:
 protected:
 	unsigned int id;
 	Coordinate* position;
+	Engine* engine;
 
 public:
 
-	Entity(Coordinate position);
-	Entity();
+	Entity(Engine* engine, Coordinate position);
+	Entity(Engine* engine);
 
 	virtual void init();
 	virtual void update(double dt);

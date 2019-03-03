@@ -1,13 +1,15 @@
 #pragma once
 #include <vector>
+#include "BoxCollideComponent.h"
 #include "Entity.h"
 
 class Engine;
 class Entity;
+class BoxCollideComponent;
 
 class Game : public Entity {
-	Engine* engine;
 	std::vector<Entity*>* entities;
+	std::vector<BoxCollideComponent*>* colliders;
 
 public:
 

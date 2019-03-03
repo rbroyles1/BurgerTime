@@ -1,7 +1,8 @@
 #include "Entity.h"
 
-Entity::Entity(Coordinate position) {
+Entity::Entity(Engine* engine, Coordinate position) {
 	this->id = 0;
+	this->engine = engine;
 	this->position = new Coordinate();
 	this->components = new std::vector<Component*>();
 	this->receivers = new std::vector<Receiver*>();
@@ -9,7 +10,7 @@ Entity::Entity(Coordinate position) {
 	this->position->copyFrom(position);
 }
 
-Entity::Entity() : Entity(Coordinate(0, 0)) {}
+Entity::Entity(Engine* engine) : Entity(engine, Coordinate(0, 0)) {}
 
 void Entity::init() {
 	for (auto it = this->components->begin(); it != this->components->end(); it++) {

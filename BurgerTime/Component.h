@@ -16,6 +16,6 @@ public:
 	virtual void init();
 	virtual void update(double dt);
 	virtual void receive(Message message);
-	
+
 	virtual ~Component();
 };
