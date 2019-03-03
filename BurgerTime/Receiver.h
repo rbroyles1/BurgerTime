@@ -1,6 +1,6 @@
 #pragma once
 
-enum Message { EXIT, MOVE_LEFT, MOVE_RIGHT };
+enum Message { NULL_MESSAGE, EXIT, MOVE_LEFT, MOVE_RIGHT };
 
 class Receiver {
 public:

@@ -9,5 +9,7 @@ public:
 	RenderComponent(Engine* engine, Entity* entity, Sprite* sprite);
 
 	virtual void update(double dt);
+
+	~RenderComponent();
 };
 

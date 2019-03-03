@@ -7,3 +7,7 @@ RenderComponent::RenderComponent(Engine* engine, Entity* entity, Sprite* sprite)
 void RenderComponent::update(double dt) {
 	this->sprite->draw(entity->getPosition()->getX(), entity->getPosition()->getY(), dt);
 }
+
+RenderComponent::~RenderComponent() {
+	delete this->sprite;
+}
