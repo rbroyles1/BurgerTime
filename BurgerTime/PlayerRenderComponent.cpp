@@ -7,6 +7,9 @@ PlayerRenderComponent::PlayerRenderComponent(Engine* engine, Entity* entity) : C
 	this->walkingRight = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_right (%d).bmp", 1, 3);
 
 	this->lastReceived = NULL_MESSAGE;
+
+	engine->getMessageDispatcher()->subscribe(MOVE_LEFT, this);
+	engine->getMessageDispatcher()->subscribe(MOVE_RIGHT, this);
 }
 
 void PlayerRenderComponent::update(double dt) {

@@ -5,7 +5,6 @@ Entity::Entity(Engine* engine, Coordinate position) {
 	this->engine = engine;
 	this->position = new Coordinate();
 	this->components = new std::vector<Component*>();
-	this->receivers = new std::vector<Receiver*>();
 
 	this->position->copyFrom(position);
 }
@@ -28,16 +27,6 @@ void Entity::addComponent(Component* component) {
 	this->components->push_back(component);
 }
 
-void Entity::addReceiver(Receiver* receiver) {
-	this->receivers->push_back(receiver);
-}
-
-void Entity::send(Message message) {
-	for (auto it = this->receivers->begin(); it != this->receivers->end(); it++) {
-		(*it)->receive(message);
-	}
-}
-
 void Entity::receive(Message message) { }
 
 Coordinate* Entity::getPosition() {
@@ -55,5 +44,4 @@ Entity::~Entity() {
 
 	delete this->position;
 	delete this->components;
-	delete this->receivers;
 }

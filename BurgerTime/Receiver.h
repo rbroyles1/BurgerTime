@@ -1,6 +1,7 @@
 #pragma once
+#include "MessageDispatcher.h"
 
-enum Message { NULL_MESSAGE, EXIT, MOVE_LEFT, MOVE_RIGHT, FLOOR_BOUND_COLLISION };
+enum Message;
 
 class Receiver {
 public:

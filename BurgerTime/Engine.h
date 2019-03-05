@@ -1,6 +1,7 @@
 #pragma once
 #include <map>
 #include "SDL.h"
+#include "MessageDispatcher.h"
 #include "Receiver.h"
 #include "Entity.h"
 #include "Game.h"
@@ -8,9 +9,10 @@
 class Game;
 
 class Engine {
+	Game* game;
 	SDL_Window * window;
 	SDL_Renderer * renderer;
-	Game* game;
+	MessageDispatcher* messageDispatcher;
 	std::map<SDL_Keycode, bool> keyStatus;
 
 	int millisecondsPerFrame;
@@ -29,6 +31,7 @@ public:
 	int getFrameRate();
 	bool getKeyStatus(SDL_Keycode key);
 	SDL_Renderer* getRenderer();
+	MessageDispatcher* getMessageDispatcher();
 
 	~Engine();
 

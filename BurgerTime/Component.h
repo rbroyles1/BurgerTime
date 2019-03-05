@@ -3,7 +3,6 @@
 
 class Engine;
 class Entity;
-enum Message;
 
 class Component : public Receiver {
 protected:

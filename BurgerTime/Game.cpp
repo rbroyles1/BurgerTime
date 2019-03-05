@@ -5,7 +5,8 @@
 #include "FpsCounterComponent.h"
 #include "InputComponent.h"
 #include "BoxCollideComponent.h"
-#include "PlayerEntity.h"
+#include "PlayerRigidBodyComponent.h"
+#include "PlayerRenderComponent.h"
 
 Game::Game(Engine* engine) : Entity(engine) {
 	this->entities = new std::vector<Entity*>();
@@ -13,6 +14,8 @@ Game::Game(Engine* engine) : Entity(engine) {
 }
 
 void Game::init() {
+	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
+
 	this->createFpsCounter();
 	this->createGameComponents();
 	this->createPlayerEntity();
@@ -29,8 +32,6 @@ void Game::update(double dt) {
 }
 
 void Game::receive(Message message) {
-	this->send(message);
-
 	if (message == EXIT) {
 		this->engine->stop();
 	}
@@ -53,21 +54,17 @@ void Game::createFpsCounter() {
 }
 
 void Game::createPlayerEntity() {
-	PlayerEntity* player = new PlayerEntity(this->engine, Coordinate(24, 200));
+	Entity* player = new Entity(this->engine, Coordinate(24, 200));
+
+	PlayerRenderComponent* renderComponent = new PlayerRenderComponent(this->engine, player);
+	PlayerRigidBodyComponent* rigidBodyComponent = new PlayerRigidBodyComponent(this->engine, player);
 	BoxCollideComponent* playerBox = new BoxCollideComponent(this->engine, player, new Coordinate(16, 16), FLOOR_BOUND_COLLISION, this->colliders);
 
-	PlayerEntity* test = new PlayerEntity(this->engine, Coordinate(60, 200));
-	BoxCollideComponent* testBox = new BoxCollideComponent(this->engine, test, new Coordinate(16, 16), FLOOR_BOUND_COLLISION, this->colliders);
-
-	this->colliders->push_back(playerBox);
-	this->colliders->push_back(testBox);
-
+	player->addComponent(renderComponent);
+	player->addComponent(rigidBodyComponent);
 	player->addComponent(playerBox);
-	test->addComponent(testBox);
 
-	this->addReceiver(player);
 	this->addEntity(player);
-	this->addEntity(test);
 }
 
 Game::~Game() {

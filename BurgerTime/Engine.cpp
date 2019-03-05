@@ -16,6 +16,7 @@ bool Engine::init(Game* game, int width, int height) {
 	this->previousUpdateTime = 0;
 	this->keepRendering = true;
 	this->game = game;
+	this->messageDispatcher = new MessageDispatcher();
 
 	this->game->init();
 
@@ -68,6 +69,10 @@ bool Engine::getKeyStatus(SDL_Keycode key) {
 
 SDL_Renderer* Engine::getRenderer() {
 	return this->renderer;
+}
+
+MessageDispatcher * Engine::getMessageDispatcher() {
+	return this->messageDispatcher;
 }
 
 void Engine::handleEvents() {
