@@ -11,7 +11,7 @@ class Sprite {
 
 public:
 	Sprite(SDL_Renderer* renderer, const char* spritePath);
-	Sprite(SDL_Renderer* renderer, const char* spritePattern, int indexStart, int indexEnd, int millisecsPerFrame = ANIMATIONS_MILLISECS_PER_FRAME);
+	Sprite(SDL_Renderer* renderer, const char* spritePattern, int indexStart, int indexEnd, int millisecsPerFrame);
 
 	void draw(int x, int y, double dt);
 	void resetAnimation();

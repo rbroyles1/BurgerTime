@@ -3,32 +3,57 @@
 #include "PlayerRigidBodyComponent.h"
 #include "Engine.h"
 
-PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position, std::vector<Entity*>* leftFloorsLimits, std::vector<Entity*>* rightFloorsLimits) : Entity(engine, position) {
+PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position) : Entity(engine, position) {
 	PlayerRenderComponent* renderComponent = new PlayerRenderComponent(this->engine, this);
 	PlayerRigidBodyComponent* rigidBodyComponent = new PlayerRigidBodyComponent(this->engine, this);
-	BoxCollideComponent* playerBoxLeft = new BoxCollideComponent(this->engine, this, LIMIT_LEFT, leftFloorsLimits);
-	BoxCollideComponent* playerBoxRight = new BoxCollideComponent(this->engine, this, LIMIT_RIGHT, rightFloorsLimits);
 
 	this->addComponent(renderComponent);
 	this->addComponent(rigidBodyComponent);
-	this->addComponent(playerBoxLeft);
-	this->addComponent(playerBoxRight);
 
 	this->setBoundingBox(new BoundingBox(new Coordinate(16, 16)));
+	this->action = NO_ACTION;
 
 	this->engine->getMessageDispatcher()->subscribe(MOVE_LEFT, this);
 	this->engine->getMessageDispatcher()->subscribe(MOVE_RIGHT, this);
+	this->engine->getMessageDispatcher()->subscribe(MOVE_UP, this);
+	this->engine->getMessageDispatcher()->subscribe(MOVE_DOWN, this);
+}
+
+void PlayerEntity::setPlayerColliders(std::vector<Entity*>* floors, std::vector<Entity*>* leftFloorsLimits, std::vector<Entity*>* rightFloorsLimits,
+	std::vector<Entity*>* stairs, std::vector<Entity*>* upStairsLimits, std::vector<Entity*>* downStairsLimits) {
+	
+	BoxCollideComponent* floorBox = new BoxCollideComponent(this->engine, this, INTERSECT_FLOOR, floors);
+	BoxCollideComponent* leftBox = new BoxCollideComponent(this->engine, this, INTERSECT_LIMIT_LEFT, leftFloorsLimits);
+	BoxCollideComponent* rightBox = new BoxCollideComponent(this->engine, this, INTERSECT_LIMIT_RIGHT, rightFloorsLimits);
+	BoxCollideComponent* stairsBox = new BoxCollideComponent(this->engine, this, INTERSECT_STAIRS, stairs);
+	BoxCollideComponent* upStairsBox = new BoxCollideComponent(this->engine, this, INTERSECT_UP_STAIRS, upStairsLimits);
+	BoxCollideComponent* downStairsBox = new BoxCollideComponent(this->engine, this, INTERSECT_DOWN_STAIRS, downStairsLimits);
+
+	this->addComponent(floorBox);
+	this->addComponent(leftBox);
+	this->addComponent(rightBox);
+	this->addComponent(stairsBox);
+	this->addComponent(upStairsBox);
+	this->addComponent(downStairsBox);
 }
 
 void PlayerEntity::update(double dt) {
 	Entity::update(dt);
 	this->action = NO_ACTION;
 
-	if (this->hasReceived(MOVE_LEFT) && !this->hasReceived(LIMIT_LEFT)) {
-		this->action = WALK_LEFT;
+	if (this->hasReceived(INTERSECT_FLOOR) && (!this->hasReceived(INTERSECT_STAIRS) || this->hasReceived(INTERSECT_UP_STAIRS) || this->hasReceived(INTERSECT_DOWN_STAIRS))) {
+		if (this->hasReceived(MOVE_LEFT) && !this->hasReceived(INTERSECT_LIMIT_LEFT)) {
+			this->action = WALK_LEFT;
+		}
+		else if (this->hasReceived(MOVE_RIGHT) && !this->hasReceived(INTERSECT_LIMIT_RIGHT)) {
+			this->action = WALK_RIGHT;
+		}
 	}
-	else if (this->hasReceived(MOVE_RIGHT) && !this->hasReceived(LIMIT_RIGHT)) {
-		this->action = WALK_RIGHT;
+	if (this->hasReceived(MOVE_UP) && this->hasReceived(INTERSECT_STAIRS) && !this->hasReceived(INTERSECT_UP_STAIRS)) {
+		this->action = GO_UPSTAIRS;
+	}
+	if (this->hasReceived(MOVE_DOWN) && this->hasReceived(INTERSECT_STAIRS) && !this->hasReceived(INTERSECT_DOWN_STAIRS)) {
+		this->action = GO_DOWNSTAIRS;
 	}
 
 	this->clearMessages();

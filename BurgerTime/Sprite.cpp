@@ -32,6 +32,8 @@ void Sprite::draw(int x, int y, double dt) {
 
 	spritePosition.w *= RESOLUTION_MULTIPLIER;
 	spritePosition.h *= RESOLUTION_MULTIPLIER;
+	spritePosition.x = x - spritePosition.w / 2;
+	spritePosition.y = y - spritePosition.h / 2;
 
 	SDL_RenderCopy(this->renderer, texture, nullptr, &spritePosition);
 

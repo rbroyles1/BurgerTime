@@ -6,6 +6,9 @@
 PlayerRigidBodyComponent::PlayerRigidBodyComponent(Engine * engine, Entity * entity) : RigidBodyComponent(engine, entity) { }
 
 void PlayerRigidBodyComponent::update(double dt) {
+	this->velocity->setX(0);
+	this->velocity->setY(0);
+
 	switch (((PlayerEntity*)this->entity)->getAction()) {
 		case WALK_LEFT:
 			this->velocity->setX(-PLAYER_HORIZONTAL_VELOCITY);
@@ -13,9 +16,11 @@ void PlayerRigidBodyComponent::update(double dt) {
 		case WALK_RIGHT:
 			this->velocity->setX(PLAYER_HORIZONTAL_VELOCITY);
 			break;
-		default:
-			this->velocity->setX(0);
-			this->velocity->setY(0);
+		case GO_UPSTAIRS:
+			this->velocity->setY(-PLAYER_VERTICAL_VELOCITY);
+			break;
+		case GO_DOWNSTAIRS:
+			this->velocity->setY(PLAYER_VERTICAL_VELOCITY);
 			break;
 	}
 	

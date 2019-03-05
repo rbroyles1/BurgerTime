@@ -6,6 +6,8 @@ class PlayerRenderComponent : public Component {
 	Sprite* standingStill;
 	Sprite* walkingLeft;
 	Sprite* walkingRight;
+	Sprite* upStairs;
+	Sprite* downStairs;
 
 public:
 	PlayerRenderComponent(Engine* engine, Entity* entity);

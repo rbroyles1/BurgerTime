@@ -4,8 +4,10 @@
 
 PlayerRenderComponent::PlayerRenderComponent(Engine* engine, Entity* entity) : Component(engine, entity) {
 	this->standingStill = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_downstairs (2).bmp");
-	this->walkingLeft = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_left (%d).bmp", 1, 3);
-	this->walkingRight = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_right (%d).bmp", 1, 3);
+	this->walkingLeft = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_left (%d).bmp", 1, 3, WALKING_ANIMATION_MILLISECS);
+	this->walkingRight = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_right (%d).bmp", 1, 3, WALKING_ANIMATION_MILLISECS);
+	this->upStairs = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_upstairs (%d).bmp", 1, 3, STAIRS_ANIMATION_MILLISECS);
+	this->downStairs = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_downstairs (%d).bmp", 1, 3, STAIRS_ANIMATION_MILLISECS);
 }
 
 void PlayerRenderComponent::update(double dt) {
@@ -14,16 +16,18 @@ void PlayerRenderComponent::update(double dt) {
 	switch (((PlayerEntity*)this->entity)->getAction()) {
 		case WALK_LEFT:
 			sprite = this->walkingLeft;
-			this->walkingRight->resetAnimation();
 			break;
 		case WALK_RIGHT:
 			sprite = this->walkingRight;
-			this->walkingLeft->resetAnimation();
+			break;
+		case GO_UPSTAIRS:
+			sprite = this->upStairs;
+			break;
+		case GO_DOWNSTAIRS:
+			sprite = this->downStairs;
 			break;
 		default:
 			sprite = this->standingStill;
-			this->walkingLeft->resetAnimation();
-			this->walkingRight->resetAnimation();
 			break;
 	}
 
@@ -34,4 +38,6 @@ PlayerRenderComponent::~PlayerRenderComponent() {
 	delete this->standingStill;
 	delete this->walkingLeft;
 	delete this->walkingRight;
+	delete this->upStairs;
+	delete this->downStairs;
 }

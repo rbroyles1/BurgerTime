@@ -9,8 +9,12 @@ class BoxCollideComponent;
 
 class Game : public Entity {
 	std::vector<Entity*>* entities;
+	std::vector<Entity*>* floors;
 	std::vector<Entity*>* leftFloorsLimits;
 	std::vector<Entity*>* rightFloorsLimits;
+	std::vector<Entity*>* stairs;
+	std::vector<Entity*>* upStairsLimits;
+	std::vector<Entity*>* downStairsLimits;
 
 public:
 
