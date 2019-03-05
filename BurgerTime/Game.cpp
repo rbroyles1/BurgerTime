@@ -7,6 +7,7 @@
 #include "BoxCollideComponent.h"
 #include "PlayerEntity.h"
 #include "PlayerRigidBodyComponent.h"
+#include "RenderComponent.h"
 #include "PlayerRenderComponent.h"
 
 Game::Game(Engine* engine) : Entity(engine) {
@@ -65,11 +66,18 @@ void Game::createPlayerEntity() {
 }
 
 void Game::createFloors() {
+	for (int i = 0; i < 5; i++) {
+		Entity* floor = new Entity(this->engine, new Coordinate(66 + 16 * i, 216));
+		Sprite* floorSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/floor.bmp");
+
+		floor->addComponent(new RenderComponent(this->engine, floor, floorSprite));
+		this->addEntity(floor);
+	}
 }
 
 void Game::createFloorsLimits() {
 	Entity* leftLimit = new Entity(this->engine, new Coordinate(50, 200));
-	Entity* rightLimit = new Entity(this->engine, new Coordinate(150, 200));
+	Entity* rightLimit = new Entity(this->engine, new Coordinate(146, 200));
 
 	leftLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 16)));
 	rightLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 16)));
