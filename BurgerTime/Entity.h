@@ -1,8 +1,10 @@
 #pragma once
 #include <vector>
+#include <unordered_set>
 #include "Coordinate.h"
 #include "Receiver.h"
 #include "Component.h"
+#include "BoundingBox.h"
 
 class Component;
 class Engine;
@@ -10,15 +12,16 @@ class Engine;
 class Entity : public Receiver {
 private:
 	std::vector<Component*>* components;
+	std::unordered_set<Message>* receivedMessages;
 
 protected:
-	unsigned int id;
-	Coordinate* position;
 	Engine* engine;
+	Coordinate* position;
+	BoundingBox* boundingBox;
 
 public:
 
-	Entity(Engine* engine, Coordinate position);
+	Entity(Engine* engine, Coordinate* position);
 	Entity(Engine* engine);
 
 	virtual void init();
@@ -26,8 +29,14 @@ public:
 	virtual void addComponent(Component* component);
 	virtual void receive(Message message);
 
+	bool hasReceived(Message message);
+	void clearMessages();
+
 	Coordinate* getPosition();
 	void setPosition(Coordinate& position);
+
+	BoundingBox* getBoundingBox();
+	void setBoundingBox(BoundingBox* boundingBox);
 
 	virtual ~Entity();
 };

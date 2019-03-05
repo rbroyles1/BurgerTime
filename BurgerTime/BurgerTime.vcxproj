@@ -121,6 +121,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="BoundingBox.h" />
     <ClInclude Include="BoxCollideComponent.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Coordinate.h" />
@@ -131,6 +132,7 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="MessageDispatcher.h" />
+    <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="PlayerRenderComponent.h" />
     <ClInclude Include="PlayerRigidBodyComponent.h" />
     <ClInclude Include="Receiver.h" />
@@ -140,6 +142,7 @@
     <ClInclude Include="Text.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="BoundingBox.cpp" />
     <ClCompile Include="BoxCollideComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Coordinate.cpp" />
@@ -150,6 +153,7 @@
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessageDispatcher.cpp" />
+    <ClCompile Include="PlayerEntity.cpp" />
     <ClCompile Include="PlayerRenderComponent.cpp" />
     <ClCompile Include="PlayerRigidBodyComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />

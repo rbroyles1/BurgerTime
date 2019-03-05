@@ -1,25 +1,20 @@
 #include "BoxCollideComponent.h"
+#include "BoundingBox.h"
 #include <cmath>
 
-BoxCollideComponent::BoxCollideComponent(Engine * engine, Entity * entity, Coordinate* boxSize, Message message, std::vector<BoxCollideComponent*>* colliders) : Component(engine, entity) {
-	this->boxSize = boxSize;
-	this->colliders = colliders;
+BoxCollideComponent::BoxCollideComponent(Engine* engine, Entity* entity, Message message, std::vector<Entity*>* potentialColliders) : Component(engine, entity) {
+	this->colliders = potentialColliders;
 	this->message = message;
 }
 
 void BoxCollideComponent::update(double dt) {
-	for (BoxCollideComponent* collider : *this->colliders) {
-		if (this != collider) {
-			Coordinate* thisCenter = this->entity->getPosition();
-			Coordinate* otherCenter = collider->entity->getPosition();
-			Coordinate* thisBox = this->boxSize;
-			Coordinate* otherBox = collider->boxSize;
+	for (Entity* collider : *this->colliders) {
+		if (this->entity != collider) {
+			BoundingBox* thisBox = this->entity->getBoundingBox();
+			BoundingBox* otherBox = collider->getBoundingBox();
 
-			bool intersection = abs(thisCenter->getX() - otherCenter->getX()) * 2 < thisBox->getX() + thisBox->getX()
-				&& abs(thisCenter->getY() - otherCenter->getY()) * 2 < thisBox->getY() + thisBox->getY();
-
-			if (intersection) {
-				this->engine->getMessageDispatcher()->send(this->message);
+			if (thisBox->isIntersecting(this->entity->getPosition(), collider->getPosition(), otherBox)) {
+				this->entity->receive(this->message);
 			}
 		}
 	}
