@@ -9,7 +9,8 @@ class BoxCollideComponent;
 
 class Game : public Entity {
 	std::vector<Entity*>* entities;
-	std::vector<BoxCollideComponent*>* colliders;
+	std::vector<BoxCollideComponent*>* leftFloorsLimitsColliders;
+	std::vector<BoxCollideComponent*>* rightFloorsLimitsColliders;
 
 public:
 
@@ -26,4 +27,7 @@ private:
 	void createGameComponents();
 	void createFpsCounter();
 	void createPlayerEntity();
+	void createFloors();
+	void createFloorsLimits();
+	void createStairs();
 };

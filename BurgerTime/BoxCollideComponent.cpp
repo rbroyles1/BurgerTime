@@ -19,8 +19,7 @@ void BoxCollideComponent::update(double dt) {
 				&& abs(thisCenter->getY() - otherCenter->getY()) * 2 < thisBox->getY() + thisBox->getY();
 
 			if (intersection) {
-				this->entity->receive(this->message);
-				collider->entity->receive(this->message);
+				this->engine->getMessageDispatcher()->send(this->message);
 			}
 		}
 	}

@@ -7,36 +7,44 @@ PlayerRenderComponent::PlayerRenderComponent(Engine* engine, Entity* entity) : C
 	this->walkingRight = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_right (%d).bmp", 1, 3);
 
 	this->lastReceived = NULL_MESSAGE;
+	this->canWalk = true;
 
 	engine->getMessageDispatcher()->subscribe(MOVE_LEFT, this);
 	engine->getMessageDispatcher()->subscribe(MOVE_RIGHT, this);
+	engine->getMessageDispatcher()->subscribe(LIMIT_LEFT, this);
+	engine->getMessageDispatcher()->subscribe(LIMIT_RIGHT, this);
 }
 
 void PlayerRenderComponent::update(double dt) {
 	Sprite* sprite = nullptr;
 
-	switch (this->lastReceived) {
-		case MOVE_LEFT:
-			sprite = this->walkingLeft;
-			this->walkingRight->resetAnimation();
-			break;
-		case MOVE_RIGHT:
-			sprite = this->walkingRight;
-			this->walkingLeft->resetAnimation();
-			break;
-		default:
-			sprite = this->standingStill;
-			this->walkingLeft->resetAnimation();
-			this->walkingRight->resetAnimation();
-			break;
+	if (this->lastReceived == MOVE_LEFT && this->canWalk) {
+		sprite = this->walkingLeft;
+		this->walkingRight->resetAnimation();
+	}
+	else if (this->lastReceived == MOVE_RIGHT && this->canWalk) {
+		sprite = this->walkingRight;
+		this->walkingLeft->resetAnimation();
+	}
+	else {
+		sprite = this->standingStill;
+		this->walkingLeft->resetAnimation();
+		this->walkingRight->resetAnimation();
 	}
 
 	sprite->draw(entity->getPosition()->getX(), entity->getPosition()->getY(), dt);
+	
 	this->lastReceived = NULL_MESSAGE;
+	this->canWalk = true;
 }
 
 void PlayerRenderComponent::receive(Message message) {
-	this->lastReceived = message;
+	if (message == MOVE_LEFT || message == MOVE_RIGHT) {
+		this->lastReceived = message;
+	}
+	else if (message == LIMIT_LEFT || message == LIMIT_RIGHT) {
+		this->canWalk = false;
+	}
 }
 
 PlayerRenderComponent::~PlayerRenderComponent() {

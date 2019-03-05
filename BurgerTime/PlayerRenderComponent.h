@@ -9,6 +9,8 @@ class PlayerRenderComponent : public Component {
 	Sprite* walkingLeft;
 	Sprite* walkingRight;
 
+	bool canWalk;
+
 public:
 	PlayerRenderComponent(Engine* engine, Entity* entity);
 
