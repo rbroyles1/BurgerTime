@@ -21,7 +21,4 @@ public:
 	double getY();
 	void setX(double x);
 	void setY(double y);
-
-private:
-	Coordinate(double x, double y, bool useSetter);
 };

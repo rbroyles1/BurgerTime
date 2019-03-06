@@ -22,8 +22,6 @@ Sprite::Sprite(SDL_Renderer * renderer, const char* spritePattern, int indexStar
 
 void Sprite::draw(int x, int y, double dt) {
 	SDL_Rect spritePosition;
-	spritePosition.x = x;
-	spritePosition.y = y;
 
 	int frameIndex = this->millisecsPerFrame > 0 ? (this->millisecsElapsed / this->millisecsPerFrame) % this->textures->size() : 0;
 	SDL_Texture* texture = this->textures->at(frameIndex);
@@ -32,8 +30,8 @@ void Sprite::draw(int x, int y, double dt) {
 
 	spritePosition.w *= RESOLUTION_MULTIPLIER;
 	spritePosition.h *= RESOLUTION_MULTIPLIER;
-	spritePosition.x = x - spritePosition.w / 2;
-	spritePosition.y = y - spritePosition.h / 2;
+	spritePosition.x = x * RESOLUTION_MULTIPLIER - spritePosition.w / 2;
+	spritePosition.y = y * RESOLUTION_MULTIPLIER - spritePosition.h / 2;
 
 	SDL_RenderCopy(this->renderer, texture, nullptr, &spritePosition);
 
