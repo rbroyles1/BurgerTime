@@ -29,6 +29,9 @@ void LevelManager::loadLevel(const char* levelPath) {
 			else if (strcmp(type, "STAIR") == 0) {
 				this->game->createStair(new Coordinate(position));
 			}
+			else if (strcmp(type, "PLAYER") == 0) {
+				this->game->createPlayer(new Coordinate(position));
+			}
 		}
 	}
 

@@ -11,7 +11,13 @@
 #include "PlayerRenderComponent.h"
 #include "LevelManager.h"
 
-// TODO to probably fix being able to walk while colliding with middle-level floors, implement invisible roofs over each floor and check if colliding with both to be able to walk
+/* TODO
+	- To probably fix being able to walk while colliding with middle-level floors, implement invisible roofs over each floor
+	and check if colliding with both to be able to walk. For it to properly work, it should be checked if the roof corresponds
+	to the correct floor.
+		* Another (probably better) option, is to create a FloorCollideComponent, and check in that the entities positions
+	- Update condition for newUnit. Also if the next item is more than 16px away, then it is a new unit
+*/
 Game::Game(Engine* engine) : Entity(engine) {
 	this->entities = new std::vector<Entity*>();
 	this->floors = new std::vector<Entity*>();
@@ -29,7 +35,6 @@ void Game::init() {
 	this->createFpsCounter();
 	this->createGameComponents();
 	this->createLevel();
-	this->createPlayerEntity();
 
 	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
 
@@ -69,15 +74,8 @@ void Game::createFpsCounter() {
 void Game::createLevel() {
 	LevelManager manager(this);
 
-	manager.loadLevel("resources/levels/test.bgtm");
+	manager.loadLevel("resources/levels/default.bgtm");
 	this->addEndingLimit();
-}
-
-void Game::createPlayerEntity() {
-	PlayerEntity* player = new PlayerEntity(this->engine, new Coordinate(100, 208));
-	player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
-
-	this->addEntity(player);
 }
 
 void Game::createFloor(Coordinate* position, int type) {
@@ -104,6 +102,13 @@ void Game::createStair(Coordinate* position) {
 	this->addEntity(stair);
 
 	this->updateLimits(STAIR, position);
+}
+
+void Game::createPlayer(Coordinate* position) {
+	PlayerEntity* player = new PlayerEntity(this->engine, position);
+	player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
+
+	this->addEntity(player);
 }
 
 void Game::updateLimits(Field newField, Coordinate* position) {

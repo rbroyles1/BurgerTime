@@ -32,6 +32,7 @@ public:
 
 	void createFloor(Coordinate* position, int type);
 	void createStair(Coordinate* position);
+	void createPlayer(Coordinate* position);
 	
 	virtual ~Game();
 
@@ -39,7 +40,6 @@ private:
 	void createGameComponents();
 	void createFpsCounter();
 	void createLevel();
-	void createPlayerEntity();
 
 	void updateLimits(Field newField, Coordinate* position);
 	void addStartingLimit(Field newField, Coordinate* position);
