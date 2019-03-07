@@ -131,6 +131,7 @@
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="InputComponent.h" />
+    <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MessageDispatcher.h" />
     <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="PlayerRenderComponent.h" />
@@ -151,6 +152,7 @@
     <ClCompile Include="FpsCounterComponent.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="InputComponent.cpp" />
+    <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessageDispatcher.cpp" />
     <ClCompile Include="PlayerEntity.cpp" />

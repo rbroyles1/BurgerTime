@@ -7,6 +7,8 @@ class Engine;
 class Entity;
 class BoxCollideComponent;
 
+enum Field {FLOOR, STAIR, NO_FIELD};
+
 class Game : public Entity {
 	std::vector<Entity*>* entities;
 	std::vector<Entity*>* floors;
@@ -16,6 +18,9 @@ class Game : public Entity {
 	std::vector<Entity*>* upStairsLimits;
 	std::vector<Entity*>* downStairsLimits;
 
+	Field previousField;
+	Coordinate* previousFieldPosition;
+
 public:
 
 	Game(Engine* engine);
@@ -24,14 +29,22 @@ public:
 	virtual void update(double dt);
 	virtual void receive(Message message);
 	void addEntity(Entity* entity);
+
+	void createFloor(Coordinate* position, int type);
+	void createStair(Coordinate* position);
 	
 	virtual ~Game();
 
 private:
 	void createGameComponents();
 	void createFpsCounter();
+	void createLevel();
 	void createPlayerEntity();
-	void createFloors();
-	void createFloorsLimits();
-	void createStairs();
+
+	void updateLimits(Field newField, Coordinate* position);
+	void addStartingLimit(Field newField, Coordinate* position);
+	void addEndingLimit();
+
+	void createFloorLimit(Coordinate* position, int type);
+	void createStairLimit(Coordinate* position, int type);
 };

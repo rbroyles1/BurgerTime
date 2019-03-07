@@ -6,6 +6,8 @@ Coordinate:: Coordinate(double x, double y) {
 	this->y = y;
 }
 
+Coordinate::Coordinate(int* arr) : Coordinate(arr[0], arr[1]) { }
+
 Coordinate::Coordinate() : Coordinate(0, 0) { }
 
 Coordinate Coordinate::operator+(const Coordinate& rhs) {

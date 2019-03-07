@@ -6,6 +6,7 @@ class Coordinate {
 
 public:
 	Coordinate(double x, double y);
+	Coordinate(int* arr);
 	Coordinate();
 
 	Coordinate operator+(const Coordinate& rhs);

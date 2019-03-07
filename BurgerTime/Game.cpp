@@ -9,7 +9,9 @@
 #include "PlayerRigidBodyComponent.h"
 #include "RenderComponent.h"
 #include "PlayerRenderComponent.h"
+#include "LevelManager.h"
 
+// TODO to probably fix being able to walk while colliding with middle-level floors, implement invisible roofs over each floor and check if colliding with both to be able to walk
 Game::Game(Engine* engine) : Entity(engine) {
 	this->entities = new std::vector<Entity*>();
 	this->floors = new std::vector<Entity*>();
@@ -18,17 +20,18 @@ Game::Game(Engine* engine) : Entity(engine) {
 	this->stairs = new std::vector<Entity*>();
 	this->upStairsLimits = new std::vector<Entity*>();
 	this->downStairsLimits = new std::vector<Entity*>();
+
+	this->previousField = NO_FIELD;
+	this->previousFieldPosition = new Coordinate();
 }
 
 void Game::init() {
-	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
-
 	this->createFpsCounter();
 	this->createGameComponents();
-	this->createStairs();
-	this->createFloors();
-	this->createFloorsLimits();
+	this->createLevel();
 	this->createPlayerEntity();
+
+	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
 
 	Entity::init();
 }
@@ -63,6 +66,13 @@ void Game::createFpsCounter() {
 	this->addEntity(fpsCounter);
 }
 
+void Game::createLevel() {
+	LevelManager manager(this);
+
+	manager.loadLevel("resources/levels/test.bgtm");
+	this->addEndingLimit();
+}
+
 void Game::createPlayerEntity() {
 	PlayerEntity* player = new PlayerEntity(this->engine, new Coordinate(100, 208));
 	player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
@@ -70,67 +80,92 @@ void Game::createPlayerEntity() {
 	this->addEntity(player);
 }
 
-void Game::createFloors() {
-	for (int i = 0; i < 5; i++) {
-		Entity* floor = new Entity(this->engine, new Coordinate(66 + 16 * i, 216));
-		Sprite* floorSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/floor.bmp");
+void Game::createFloor(Coordinate* position, int type) {
+	Entity* floor = new Entity(this->engine, position);
+	Sprite* floorSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/floor.bmp");
 
-		floor->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
-		floor->addComponent(new RenderComponent(this->engine, floor, floorSprite));
+	floor->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
+	floor->addComponent(new RenderComponent(this->engine, floor, floorSprite));
 
-		this->floors->push_back(floor);
-		this->addEntity(floor);
+	this->floors->push_back(floor);
+	this->addEntity(floor);
+
+	this->updateLimits(FLOOR, position);
+}
+
+void Game::createStair(Coordinate* position) {
+	Entity* stair = new Entity(this->engine, position);
+	Sprite* stairSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/stairs.bmp");
+
+	stair->setBoundingBox(new BoundingBox(new Coordinate(1, 16)));
+	stair->addComponent(new RenderComponent(this->engine, stair, stairSprite));
+
+	this->stairs->push_back(stair);
+	this->addEntity(stair);
+
+	this->updateLimits(STAIR, position);
+}
+
+void Game::updateLimits(Field newField, Coordinate* position) {
+	bool isNewUnit = (newField != this->previousField)
+		|| (newField == FLOOR && position->getY() != this->previousFieldPosition->getY())
+		|| (newField == STAIR && position->getX() != this->previousFieldPosition->getX());
+
+	if (isNewUnit) {
+		this->addStartingLimit(newField, position);
+		this->addEndingLimit();
 	}
 
-	for (int i = 0; i < 5; i++) {
-		Entity* floor = new Entity(this->engine, new Coordinate(90 + 16 * i, 168));
-		Sprite* floorSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/floor.bmp");
+	this->previousField = newField;
 
-		floor->setBoundingBox(new BoundingBox(new Coordinate(16, 3)));
-		floor->addComponent(new RenderComponent(this->engine, floor, floorSprite));
+	this->previousFieldPosition->setX(position->getX());
+	this->previousFieldPosition->setY(position->getY());
+}
 
-		this->floors->push_back(floor);
-		this->addEntity(floor);
+void Game::addStartingLimit(Field newField, Coordinate * position) {
+	if (newField == FLOOR) {
+		Coordinate* limitPosition = new Coordinate(position->getX() - 16, position->getY());
+		this->createFloorLimit(limitPosition, 0);
+	}
+	else if (newField == STAIR) {
+		Coordinate* limitPosition = new Coordinate(position->getX(), position->getY() - 24);
+		this->createStairLimit(limitPosition, 0);
 	}
 }
 
-void Game::createFloorsLimits() {
-	Entity* upLeftLimit = new Entity(this->engine, new Coordinate(74, 168));
-	Entity* upRightLimit = new Entity(this->engine, new Coordinate(170, 168));
-	Entity* downLeftLimit = new Entity(this->engine, new Coordinate(50, 216));
-	Entity* downRightLimit = new Entity(this->engine, new Coordinate(146, 216));
-
-	upLeftLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
-	upRightLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
-	downLeftLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
-	downRightLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
-
-	this->leftFloorsLimits->push_back(downLeftLimit);
-	this->leftFloorsLimits->push_back(upLeftLimit);
-	this->rightFloorsLimits->push_back(downRightLimit);
-	this->rightFloorsLimits->push_back(upRightLimit);
+void Game::addEndingLimit() {
+	if (this->previousField == FLOOR) {
+		Coordinate* limitPosition = new Coordinate(this->previousFieldPosition->getX() + 16, this->previousFieldPosition->getY());
+		this->createFloorLimit(limitPosition, 1);
+	}
+	else if (this->previousField == STAIR) {
+		Coordinate* limitPosition = new Coordinate(this->previousFieldPosition->getX(), this->previousFieldPosition->getY() + 9);
+		this->createStairLimit(limitPosition, 1);
+	}
 }
 
-void Game::createStairs() {
-	for (int i = 0; i < 3; i++) {
-		Entity* stair = new Entity(this->engine, new Coordinate(100, 207 - 16 * i));
-		Sprite* stairSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/stairs.bmp");
+void Game::createFloorLimit(Coordinate* position, int type) {
+	Entity* limit = new Entity(this->engine, position);
+	limit->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
 
-		stair->setBoundingBox(new BoundingBox(new Coordinate(1, 16)));
-		stair->addComponent(new RenderComponent(this->engine, stair, stairSprite));
-
-		this->stairs->push_back(stair);
-		this->addEntity(stair);
+	if (type == 0) {
+		this->leftFloorsLimits->push_back(limit);
 	}
+	else {
+		this->rightFloorsLimits->push_back(limit);
+	}
+}
 
-	Entity* upStairLimit = new Entity(this->engine, new Coordinate(100, 151));
-	upStairLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
+void Game::createStairLimit(Coordinate* position, int type) {
+	Entity* stairLimit = new Entity(this->engine, position);
+	stairLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
 
-	Entity* downStairLimit = new Entity(this->engine, new Coordinate(100, 216));
-	downStairLimit->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
-
-	this->upStairsLimits->push_back(upStairLimit);
-	this->downStairsLimits->push_back(downStairLimit);
+	if (type == 0) {
+		this->upStairsLimits->push_back(stairLimit);
+	}
+	else {
+		this->downStairsLimits->push_back(stairLimit);
+	}
 }
 
 Game::~Game() {
@@ -145,4 +180,6 @@ Game::~Game() {
 	delete this->stairs;
 	delete this->upStairsLimits;
 	delete this->downStairsLimits;
+
+	delete this->previousFieldPosition;
 }
