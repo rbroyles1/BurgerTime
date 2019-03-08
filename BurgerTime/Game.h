@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include "BoxCollideComponent.h"
-#include "Entity.h"
+#include "PlayerEntity.h"
 
 class Engine;
 class Entity;
@@ -18,6 +18,7 @@ class Game : public Entity {
 	std::vector<Entity*>* upStairsLimits;
 	std::vector<Entity*>* downStairsLimits;
 
+	PlayerEntity* player;
 	Field previousField;
 	Coordinate* previousFieldPosition;
 
@@ -47,4 +48,6 @@ private:
 
 	void createFloorLimit(Coordinate* position, int type);
 	void createStairLimit(Coordinate* position, int type);
+
+	void testIngredients();
 };

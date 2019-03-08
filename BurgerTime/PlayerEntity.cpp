@@ -23,7 +23,7 @@ PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position) : Entity(engine
 void PlayerEntity::setPlayerColliders(std::vector<Entity*>* floors, std::vector<Entity*>* leftFloorsLimits, std::vector<Entity*>* rightFloorsLimits,
 	std::vector<Entity*>* stairs, std::vector<Entity*>* upStairsLimits, std::vector<Entity*>* downStairsLimits) {
 	
-	FloorCollideComponent* floorBox = new FloorCollideComponent(this->engine, this, floors);
+	FloorCollideComponent* floorBox = new FloorCollideComponent(this->engine, this, ON_FLOOR, floors);
 	BoxCollideComponent* leftBox = new BoxCollideComponent(this->engine, this, INTERSECT_LIMIT_LEFT, leftFloorsLimits);
 	BoxCollideComponent* rightBox = new BoxCollideComponent(this->engine, this, INTERSECT_LIMIT_RIGHT, rightFloorsLimits);
 	BoxCollideComponent* stairsBox = new BoxCollideComponent(this->engine, this, INTERSECT_STAIRS, stairs);

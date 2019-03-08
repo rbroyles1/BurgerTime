@@ -10,7 +10,9 @@
 #include "RenderComponent.h"
 #include "PlayerRenderComponent.h"
 #include "LevelManager.h"
+#include "IngredientEntity.h"
 
+// TODO reconsider if Receiver.h is really necessary
 Game::Game(Engine* engine) : Entity(engine) {
 	this->entities = new std::vector<Entity*>();
 	this->floors = new std::vector<Entity*>();
@@ -20,6 +22,7 @@ Game::Game(Engine* engine) : Entity(engine) {
 	this->upStairsLimits = new std::vector<Entity*>();
 	this->downStairsLimits = new std::vector<Entity*>();
 
+	this->player = nullptr;
 	this->previousField = NO_FIELD;
 	this->previousFieldPosition = new Coordinate();
 }
@@ -28,6 +31,7 @@ void Game::init() {
 	this->createFpsCounter();
 	this->createGameComponents();
 	this->createLevel();
+	this->testIngredients();
 
 	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
 
@@ -98,10 +102,10 @@ void Game::createStair(Coordinate* position) {
 }
 
 void Game::createPlayer(Coordinate* position) {
-	PlayerEntity* player = new PlayerEntity(this->engine, position);
-	player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
+	this->player = new PlayerEntity(this->engine, position);
+	this->player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
 
-	this->addEntity(player);
+	this->addEntity(this->player);
 }
 
 void Game::updateLimits(Field newField, Coordinate* position) {
@@ -175,6 +179,11 @@ void Game::createStairLimit(Coordinate* position, int type) {
 	}
 
 	//this->addEntity(stairLimit);
+}
+
+void Game::testIngredients() {
+	IngredientEntity* ingredient = new IngredientEntity(this->engine, new Coordinate(56, 192), this->player, BREAD_BOTTOM);
+	this->addEntity(ingredient);
 }
 
 Game::~Game() {

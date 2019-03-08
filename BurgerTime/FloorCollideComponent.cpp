@@ -1,8 +1,14 @@
 #include "FloorCollideComponent.h"
 
-FloorCollideComponent::FloorCollideComponent(Engine * engine, Entity * entity, std::vector<Entity*>* floors) : Component(engine, entity) {
+FloorCollideComponent::FloorCollideComponent(Engine * engine, Entity * entity, Message message, std::vector<Entity*>* floors, Entity * additionalEntity) : Component(engine, entity) {
+	this->message = message;
 	this->floors = floors;
+	this->additionalEntity = additionalEntity;
 }
+
+FloorCollideComponent::FloorCollideComponent(Engine * engine, Entity * entity, Message message, std::vector<Entity*>* floors) 
+	: FloorCollideComponent(engine, entity, message, floors, nullptr) { }
+
 
 void FloorCollideComponent::update(double dt) {
 	for (Entity* floor : *this->floors) {
@@ -14,7 +20,11 @@ void FloorCollideComponent::update(double dt) {
 			&& heightDiff > 6.5 && heightDiff < 9.5;
 
 		if (onFloor) {
-			this->entity->receive(ON_FLOOR);
+			this->entity->receive(this->message);
+
+			if (this->additionalEntity != nullptr) {
+				this->additionalEntity->receive(this->message);
+			}
 		}
 	}
 }

@@ -131,6 +131,7 @@
     <ClInclude Include="FloorCollideComponent.h" />
     <ClInclude Include="FpsCounterComponent.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="IngredientEntity.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="MessageDispatcher.h" />
@@ -154,6 +155,7 @@
     <ClCompile Include="FloorCollideComponent.cpp" />
     <ClCompile Include="FpsCounterComponent.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="IngredientEntity.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="LevelManager.cpp" />
     <ClCompile Include="main.cpp" />
