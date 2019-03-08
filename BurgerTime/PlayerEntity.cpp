@@ -1,6 +1,7 @@
 #include "PlayerEntity.h"
 #include "PlayerRenderComponent.h"
 #include "PlayerRigidBodyComponent.h"
+#include "FloorCollideComponent.h"
 #include "Engine.h"
 
 PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position) : Entity(engine, position) {
@@ -22,7 +23,7 @@ PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position) : Entity(engine
 void PlayerEntity::setPlayerColliders(std::vector<Entity*>* floors, std::vector<Entity*>* leftFloorsLimits, std::vector<Entity*>* rightFloorsLimits,
 	std::vector<Entity*>* stairs, std::vector<Entity*>* upStairsLimits, std::vector<Entity*>* downStairsLimits) {
 	
-	BoxCollideComponent* floorBox = new BoxCollideComponent(this->engine, this, INTERSECT_FLOOR, floors);
+	FloorCollideComponent* floorBox = new FloorCollideComponent(this->engine, this, floors);
 	BoxCollideComponent* leftBox = new BoxCollideComponent(this->engine, this, INTERSECT_LIMIT_LEFT, leftFloorsLimits);
 	BoxCollideComponent* rightBox = new BoxCollideComponent(this->engine, this, INTERSECT_LIMIT_RIGHT, rightFloorsLimits);
 	BoxCollideComponent* stairsBox = new BoxCollideComponent(this->engine, this, INTERSECT_STAIRS, stairs);
@@ -41,7 +42,7 @@ void PlayerEntity::update(double dt) {
 	Entity::update(dt);
 	this->action = NO_ACTION;
 
-	if (this->hasReceived(INTERSECT_FLOOR) && (!this->hasReceived(INTERSECT_STAIRS) || this->hasReceived(INTERSECT_UP_STAIRS) || this->hasReceived(INTERSECT_DOWN_STAIRS))) {
+	if (this->hasReceived(ON_FLOOR)) {
 		if (this->hasReceived(MOVE_LEFT) && !this->hasReceived(INTERSECT_LIMIT_LEFT)) {
 			this->action = WALK_LEFT;
 		}
