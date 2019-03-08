@@ -33,7 +33,7 @@ public:
 	void clearMessages();
 
 	Coordinate* getPosition();
-	void setPosition(Coordinate& position);
+	virtual void setPosition(Coordinate& position);
 
 	BoundingBox* getBoundingBox();
 	void setBoundingBox(BoundingBox* boundingBox);

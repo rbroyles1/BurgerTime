@@ -5,14 +5,17 @@
 #include "Engine.h"
 #include "RenderComponent.h"
 #include "FloorCollideComponent.h"
+#include "IngredientRigidBodyComponent.h"
+#include "FloorIngredientCollideComponent.h"
 #include <string>
 
-IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient) : Entity(engine, position) {
+IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, std::vector<Entity*>* floors) : Entity(engine, position) {
 	char spritePattern[1000];
 
 	this->player = player;
 	this->ingredientEntities = new std::vector<Entity*>();
 	this->pushedDown = new bool[4]();
+	this->falling = false;
 
 	this->getSpritePattern(spritePattern, ingredient);
 
@@ -23,7 +26,7 @@ IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerE
 
 		snprintf(spritePath, 1000, spritePattern, i + 1);
 		Sprite* partSprite = new Sprite(engine->getRenderer(), spritePath);
-		ingredientPart->addComponent(new RenderComponent(engine, ingredientPart, partSprite, new Coordinate(0, 2)));
+		ingredientPart->addComponent(new RenderComponent(engine, ingredientPart, partSprite, new Coordinate(0, -2)));
 
 		std::vector<Entity*>* wrappedPart = new std::vector<Entity*>();
 		wrappedPart->push_back(ingredientPart);
@@ -33,6 +36,11 @@ IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerE
 
 		this->ingredientEntities->push_back(ingredientPart);
 	}
+
+	this->setBoundingBox(new BoundingBox(new Coordinate(32, 2)));
+
+	this->addComponent(new IngredientRigidBodyComponent(engine, this));
+	this->addComponent(new FloorIngredientCollideComponent(engine, this, floors));
 }
 
 void IngredientEntity::update(double dt) {
@@ -46,12 +54,24 @@ void IngredientEntity::update(double dt) {
 void IngredientEntity::receive(Message message) {
 	int i = message - ON_INGREDIENT_1;
 
-	if (i >= 0 && i < 4 && !this->pushedDown[i]) {
-		Coordinate* position = this->ingredientEntities->at(i)->getPosition();
-
-		this->pushedDown[i] = true;
-		position->setY(position->getY() + 1);
+	if (message >= ON_INGREDIENT_1 && message <= ON_INGREDIENT_4) {
+		this->onPlayerStep(message - ON_INGREDIENT_1);
 	}
+	else if (message == INGREDIENT_ON_FLOOR) {
+		this->onFloorHit();
+	}
+}
+
+void IngredientEntity::setPosition(Coordinate& position) {
+	Entity::setPosition(position);
+
+	for (int i = 0; i < 4; i++) {
+		this->ingredientEntities->at(i)->getPosition()->setY(position.getY() + (this->pushedDown[i]? 1 : 0));
+	}
+}
+
+bool IngredientEntity::isFalling() {
+	return this->falling;
 }
 
 void IngredientEntity::getSpritePattern(char * destinationBuffer, Ingredient ingredient) {
@@ -75,6 +95,28 @@ void IngredientEntity::getSpritePattern(char * destinationBuffer, Ingredient ing
 			strcpy(destinationBuffer, "resources/sprites/tomato (%d).bmp");
 			break;
 		}
+}
+
+void IngredientEntity::onPlayerStep(int i) {
+	if (i >= 0 && i < 4 && !this->pushedDown[i]) {
+		this->pushedDown[i] = true;
+	}
+
+	bool allPushedDown = true;
+
+	for (int i = 0; i < 4; i++) {
+		allPushedDown = allPushedDown && this->pushedDown[i];
+	}
+
+	this->falling = allPushedDown;
+}
+
+void IngredientEntity::onFloorHit() {
+	this->falling = false;
+	
+	for (int i = 0; i < 4; i++) {
+		this->pushedDown[i] = false;
+	}
 }
 
 IngredientEntity::~IngredientEntity() {

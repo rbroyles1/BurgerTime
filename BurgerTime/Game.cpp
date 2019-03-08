@@ -34,6 +34,7 @@ void Game::init() {
 	this->testIngredients();
 
 	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
+	this->addEntity(this->player);
 
 	Entity::init();
 }
@@ -104,8 +105,6 @@ void Game::createStair(Coordinate* position) {
 void Game::createPlayer(Coordinate* position) {
 	this->player = new PlayerEntity(this->engine, position);
 	this->player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
-
-	this->addEntity(this->player);
 }
 
 void Game::updateLimits(Field newField, Coordinate* position) {
@@ -182,7 +181,7 @@ void Game::createStairLimit(Coordinate* position, int type) {
 }
 
 void Game::testIngredients() {
-	IngredientEntity* ingredient = new IngredientEntity(this->engine, new Coordinate(56, 192), this->player, BREAD_BOTTOM);
+	IngredientEntity* ingredient = new IngredientEntity(this->engine, new Coordinate(56, 160), this->player, BREAD_BOTTOM, this->floors);
 	this->addEntity(ingredient);
 }
 
