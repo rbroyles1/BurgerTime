@@ -112,6 +112,9 @@
       <Filter>Header Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="FloorIngredientCollideComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="DishFakeFloorEntity.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -183,6 +186,9 @@
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="FloorIngredientCollideComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="DishFakeFloorEntity.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

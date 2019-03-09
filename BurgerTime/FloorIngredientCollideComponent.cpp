@@ -16,6 +16,8 @@ void FloorIngredientCollideComponent::update(double dt) {
 		if (onFloor) {
 			this->entity->receive(INGREDIENT_ON_FLOOR);
 			this->entity->setPosition(*floor->getPosition());
+
+			floor->receive(INGREDIENT_ON_FLOOR);
 		}
 	}
 }

@@ -11,6 +11,7 @@
 #include "PlayerRenderComponent.h"
 #include "LevelManager.h"
 #include "IngredientEntity.h"
+#include "DishFakeFloorEntity.h"
 
 // TODO reconsider if Receiver.h is really necessary
 Game::Game(Engine* engine) : Entity(engine) {
@@ -182,6 +183,13 @@ void Game::createStairLimit(Coordinate* position, int type) {
 }
 
 void Game::testIngredients() {
+	Entity* dish = new Entity(this->engine, new Coordinate(40, 232));
+
+	Sprite* sprite = new Sprite(engine->getRenderer(), "resources/sprites/dish.bmp");
+	dish->addComponent(new RenderComponent(engine, dish, sprite));
+
+	DishFakeFloorEntity* fakeFloor = new DishFakeFloorEntity(this->engine, new Coordinate(40, 232));
+
 	IngredientEntity* ingredient1 = new IngredientEntity(this->engine, new Coordinate(40, 80), this->player, BREAD_TOP, this->ingredients, this->floors);
 	IngredientEntity* ingredient2 = new IngredientEntity(this->engine, new Coordinate(40, 112), this->player, LETTUCE, this->ingredients, this->floors);
 	IngredientEntity* ingredient3 = new IngredientEntity(this->engine, new Coordinate(40, 160), this->player, MEAT, this->ingredients, this->floors);
@@ -192,6 +200,9 @@ void Game::testIngredients() {
 	this->ingredients->push_back(ingredient3);
 	this->ingredients->push_back(ingredient4);
 
+	this->floors->push_back(fakeFloor);
+
+	this->addEntity(dish);
 	this->addEntity(ingredient1);
 	this->addEntity(ingredient2);
 	this->addEntity(ingredient3);

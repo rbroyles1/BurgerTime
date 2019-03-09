@@ -125,6 +125,7 @@
     <ClInclude Include="BoxCollideComponent.h" />
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Coordinate.h" />
+    <ClInclude Include="DishFakeFloorEntity.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
@@ -152,6 +153,7 @@
     <ClCompile Include="BoxCollideComponent.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Coordinate.cpp" />
+    <ClCompile Include="DishFakeFloorEntity.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FloorCollideComponent.cpp" />
