@@ -17,6 +17,7 @@ class Game : public Entity {
 	std::vector<Entity*>* stairs;
 	std::vector<Entity*>* upStairsLimits;
 	std::vector<Entity*>* downStairsLimits;
+	std::vector<Entity*>* ingredients;
 
 	PlayerEntity* player;
 	Field previousField;

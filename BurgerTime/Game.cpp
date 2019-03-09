@@ -21,6 +21,7 @@ Game::Game(Engine* engine) : Entity(engine) {
 	this->stairs = new std::vector<Entity*>();
 	this->upStairsLimits = new std::vector<Entity*>();
 	this->downStairsLimits = new std::vector<Entity*>();
+	this->ingredients = new std::vector<Entity*>();
 
 	this->player = nullptr;
 	this->previousField = NO_FIELD;
@@ -181,8 +182,20 @@ void Game::createStairLimit(Coordinate* position, int type) {
 }
 
 void Game::testIngredients() {
-	IngredientEntity* ingredient = new IngredientEntity(this->engine, new Coordinate(56, 160), this->player, BREAD_BOTTOM, this->floors);
-	this->addEntity(ingredient);
+	IngredientEntity* ingredient1 = new IngredientEntity(this->engine, new Coordinate(40, 80), this->player, BREAD_TOP, this->ingredients, this->floors);
+	IngredientEntity* ingredient2 = new IngredientEntity(this->engine, new Coordinate(40, 112), this->player, LETTUCE, this->ingredients, this->floors);
+	IngredientEntity* ingredient3 = new IngredientEntity(this->engine, new Coordinate(40, 160), this->player, MEAT, this->ingredients, this->floors);
+	IngredientEntity* ingredient4 = new IngredientEntity(this->engine, new Coordinate(40, 192), this->player, BREAD_BOTTOM, this->ingredients, this->floors);
+	
+	this->ingredients->push_back(ingredient1);
+	this->ingredients->push_back(ingredient2);
+	this->ingredients->push_back(ingredient3);
+	this->ingredients->push_back(ingredient4);
+
+	this->addEntity(ingredient1);
+	this->addEntity(ingredient2);
+	this->addEntity(ingredient3);
+	this->addEntity(ingredient4);
 }
 
 Game::~Game() {

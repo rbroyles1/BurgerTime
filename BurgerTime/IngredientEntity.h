@@ -11,7 +11,7 @@ class IngredientEntity : public Entity {
 	bool falling;
 
 public:
-	IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, std::vector<Entity*>* floors);
+	IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, std::vector<Entity*>* ingredients, std::vector<Entity*>* floors);
 
 	virtual void update(double dt);
 	virtual void receive(Message message);
@@ -25,5 +25,6 @@ private:
 	void getSpritePattern(char* destinationBuffer, Ingredient ingredient);
 	void onPlayerStep(int i);
 	void onFloorHit();
+	void onIngredientHit();
 };
 

@@ -9,7 +9,7 @@
 #include "FloorIngredientCollideComponent.h"
 #include <string>
 
-IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, std::vector<Entity*>* floors) : Entity(engine, position) {
+IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, std::vector<Entity*>* ingredients, std::vector<Entity*>* floors) : Entity(engine, position) {
 	char spritePattern[1000];
 
 	this->player = player;
@@ -40,6 +40,7 @@ IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerE
 	this->setBoundingBox(new BoundingBox(new Coordinate(32, 2)));
 
 	this->addComponent(new IngredientRigidBodyComponent(engine, this));
+	this->addComponent(new BoxCollideComponent(engine, this, INGREDIENT_INGREDIENT_HIT, ingredients));
 	this->addComponent(new FloorIngredientCollideComponent(engine, this, floors));
 }
 
@@ -59,6 +60,9 @@ void IngredientEntity::receive(Message message) {
 	}
 	else if (message == INGREDIENT_ON_FLOOR) {
 		this->onFloorHit();
+	}
+	else if (message == INGREDIENT_INGREDIENT_HIT) {
+		this->onIngredientHit();
 	}
 }
 
@@ -117,6 +121,17 @@ void IngredientEntity::onFloorHit() {
 	for (int i = 0; i < 4; i++) {
 		this->pushedDown[i] = false;
 	}
+}
+
+void IngredientEntity::onIngredientHit() {
+	if (this->falling) {
+		Coordinate* position = this->getPosition();
+		position->setY(position->getY() - 4);
+
+		this->setPosition(*position);
+	}
+
+	this->falling = true;
 }
 
 IngredientEntity::~IngredientEntity() {

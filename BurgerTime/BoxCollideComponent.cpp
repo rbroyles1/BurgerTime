@@ -15,6 +15,7 @@ void BoxCollideComponent::update(double dt) {
 
 			if (thisBox->isIntersecting(this->entity->getPosition(), collider->getPosition(), otherBox)) {
 				this->entity->receive(this->message);
+				collider->receive(this->message);
 			}
 		}
 	}
