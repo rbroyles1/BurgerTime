@@ -8,6 +8,7 @@ class PlayerRenderComponent : public Component {
 	Sprite* walkingRight;
 	Sprite* upStairs;
 	Sprite* downStairs;
+	Sprite* celebrate;
 
 public:
 	PlayerRenderComponent(Engine* engine, Entity* entity);

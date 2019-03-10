@@ -8,6 +8,7 @@ PlayerRenderComponent::PlayerRenderComponent(Engine* engine, Entity* entity) : C
 	this->walkingRight = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_right (%d).bmp", 1, 3, WALKING_ANIMATION_MILLISECS);
 	this->upStairs = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_upstairs (%d).bmp", 1, 3, STAIRS_ANIMATION_MILLISECS);
 	this->downStairs = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_downstairs (%d).bmp", 1, 3, STAIRS_ANIMATION_MILLISECS);
+	this->celebrate = new Sprite(this->engine->getRenderer(), "resources/sprites/cook_celebrate (%d).bmp", 1, 2, COOK_CELEBRATE_ANIMATION_MILLISECS);
 }
 
 void PlayerRenderComponent::update(double dt) {
@@ -25,6 +26,9 @@ void PlayerRenderComponent::update(double dt) {
 			break;
 		case GO_DOWNSTAIRS:
 			sprite = this->downStairs;
+			break;
+		case CELEBRATE_VICTORY:
+			sprite = this->celebrate;
 			break;
 		default:
 			sprite = this->standingStill;

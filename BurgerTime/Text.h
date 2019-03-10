@@ -9,6 +9,6 @@ class Text {
 
 public:
 	Text(SDL_Renderer* renderer, const char* fontPath, int fontSize);
-	void draw(Coordinate* coordinate, const char *message);
+	void draw(Coordinate* coordinate, const char *message, Uint8 red = 255, Uint8 green = 255, Uint8 blue = 255);
 	~Text();
 };

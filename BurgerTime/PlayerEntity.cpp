@@ -18,6 +18,7 @@ PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position) : Entity(engine
 	this->engine->getMessageDispatcher()->subscribe(MOVE_RIGHT, this);
 	this->engine->getMessageDispatcher()->subscribe(MOVE_UP, this);
 	this->engine->getMessageDispatcher()->subscribe(MOVE_DOWN, this);
+	this->engine->getMessageDispatcher()->subscribe(GAME_VICTORY, this);
 }
 
 void PlayerEntity::setPlayerColliders(std::vector<Entity*>* floors, std::vector<Entity*>* leftFloorsLimits, std::vector<Entity*>* rightFloorsLimits,
@@ -40,21 +41,27 @@ void PlayerEntity::setPlayerColliders(std::vector<Entity*>* floors, std::vector<
 
 void PlayerEntity::update(double dt) {
 	Entity::update(dt);
-	this->action = NO_ACTION;
 
-	if (this->hasReceived(ON_FLOOR)) {
-		if (this->hasReceived(MOVE_LEFT) && !this->hasReceived(INTERSECT_LIMIT_LEFT)) {
-			this->action = WALK_LEFT;
+	if (this->action != CELEBRATE_VICTORY) {
+		this->action = NO_ACTION;
+
+		if (this->hasReceived(ON_FLOOR)) {
+			if (this->hasReceived(MOVE_LEFT) && !this->hasReceived(INTERSECT_LIMIT_LEFT)) {
+				this->action = WALK_LEFT;
+			}
+			else if (this->hasReceived(MOVE_RIGHT) && !this->hasReceived(INTERSECT_LIMIT_RIGHT)) {
+				this->action = WALK_RIGHT;
+			}
 		}
-		else if (this->hasReceived(MOVE_RIGHT) && !this->hasReceived(INTERSECT_LIMIT_RIGHT)) {
-			this->action = WALK_RIGHT;
+		if (this->hasReceived(MOVE_UP) && this->hasReceived(INTERSECT_STAIRS) && !this->hasReceived(INTERSECT_UP_STAIRS)) {
+			this->action = GO_UPSTAIRS;
 		}
-	}
-	if (this->hasReceived(MOVE_UP) && this->hasReceived(INTERSECT_STAIRS) && !this->hasReceived(INTERSECT_UP_STAIRS)) {
-		this->action = GO_UPSTAIRS;
-	}
-	if (this->hasReceived(MOVE_DOWN) && this->hasReceived(INTERSECT_STAIRS) && !this->hasReceived(INTERSECT_DOWN_STAIRS)) {
-		this->action = GO_DOWNSTAIRS;
+		if (this->hasReceived(MOVE_DOWN) && this->hasReceived(INTERSECT_STAIRS) && !this->hasReceived(INTERSECT_DOWN_STAIRS)) {
+			this->action = GO_DOWNSTAIRS;
+		}
+		if (this->hasReceived(GAME_VICTORY)) {
+			this->action = CELEBRATE_VICTORY;
+		}
 	}
 
 	this->clearMessages();

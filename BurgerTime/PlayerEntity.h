@@ -1,7 +1,7 @@
 #pragma once
 #include "Entity.h"
 
-enum PlayerAction {WALK_LEFT, WALK_RIGHT, GO_UPSTAIRS, GO_DOWNSTAIRS, NO_ACTION};
+enum PlayerAction {WALK_LEFT, WALK_RIGHT, GO_UPSTAIRS, GO_DOWNSTAIRS, NO_ACTION, CELEBRATE_VICTORY};
 
 class PlayerEntity : public Entity {
 	PlayerAction action;

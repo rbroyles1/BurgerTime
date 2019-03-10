@@ -2,17 +2,17 @@
 
 #include "IngredientEntity.h"
 #include "Sprite.h"
-#include "Engine.h"
 #include "RenderComponent.h"
 #include "FloorCollideComponent.h"
 #include "IngredientRigidBodyComponent.h"
 #include "FloorIngredientCollideComponent.h"
 #include <string>
 
-IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, std::vector<Entity*>* ingredients, std::vector<Entity*>* floors) : Entity(engine, position) {
+IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, Game* game, std::vector<Entity*>* ingredients, std::vector<Entity*>* floors) : Entity(engine, position) {
 	char spritePattern[1000];
 
 	this->player = player;
+	this->game = game;
 	this->ingredientEntities = new std::vector<Entity*>();
 	this->pushedDown = new bool[4]();
 	this->falling = false;
@@ -121,6 +121,8 @@ void IngredientEntity::onFloorHit() {
 	for (int i = 0; i < 4; i++) {
 		this->pushedDown[i] = false;
 	}
+
+	this->game->increaseScore(50);
 }
 
 void IngredientEntity::onIngredientHit() {

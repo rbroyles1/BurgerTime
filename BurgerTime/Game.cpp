@@ -11,6 +11,7 @@
 #include "PlayerRenderComponent.h"
 #include "LevelManager.h"
 #include "DishFakeFloorEntity.h"
+#include "ScoreCounterComponent.h"
 
 // TODO reconsider if Receiver.h is really necessary
 Game::Game(Engine* engine) : Entity(engine) {
@@ -23,13 +24,19 @@ Game::Game(Engine* engine) : Entity(engine) {
 	this->downStairsLimits = new std::vector<Entity*>();
 	this->ingredients = new std::vector<Entity*>();
 
+	this->input = new InputComponent(this->engine, this);
 	this->player = nullptr;
 	this->previousField = NO_FIELD;
 	this->previousFieldPosition = new Coordinate();
+
+	this->score = 0;
+	this->totalIngredients = 0;
+	this->currentFinishedIngredients = 0;
 }
 
 void Game::init() {
-	this->createFpsCounter();
+	this->createHUD();
+	//this->createFpsCounter();
 	this->createGameComponents();
 	this->createPlayer();
 	this->createLevel();
@@ -64,15 +71,22 @@ void Game::createPlayer() {
 }
 
 void Game::createGameComponents() {
-	this->addComponent(new InputComponent(this->engine, this));
+	this->addComponent(this->input);
 }
 
 void Game::createFpsCounter() {
 	Entity* fpsCounter = new Entity(this->engine, new Coordinate(10, 10));
-	Text* text = new Text(this->engine->getRenderer(), "space_invaders.ttf", 25);
+	Text* text = new Text(this->engine->getRenderer(), "space_invaders.ttf", 8);
 
 	fpsCounter->addComponent(new FpsCounterComponent(this->engine, fpsCounter, text));
 	this->addEntity(fpsCounter);
+}
+
+void Game::createHUD() {
+	Entity* scoreText = new Entity(this->engine, new Coordinate(24, 0));
+	
+	scoreText->addComponent(new ScoreCounterComponent(this->engine, scoreText, this));
+	this->addEntity(scoreText);
 }
 
 void Game::createLevel() {
@@ -109,8 +123,9 @@ void Game::addStair(Coordinate* position) {
 }
 
 void Game::addIngredient(Coordinate* position, Ingredient ingredient) {
-	IngredientEntity* ingredient1 = new IngredientEntity(this->engine, position, this->player, ingredient, this->ingredients, this->floors);
+	IngredientEntity* ingredient1 = new IngredientEntity(this->engine, position, this->player, ingredient, this, this->ingredients, this->floors);
 
+	this->totalIngredients++;
 	this->ingredients->push_back(ingredient1);
 	this->addEntity(ingredient1);
 }
@@ -120,7 +135,7 @@ void Game::addDish(Coordinate* position) {
 	Sprite* sprite = new Sprite(engine->getRenderer(), "resources/sprites/dish.bmp");
 
 	Coordinate* fakeFloorPosition = new Coordinate(position->getX(), position->getY());
-	DishFakeFloorEntity* fakeFloor = new DishFakeFloorEntity(this->engine, fakeFloorPosition);
+	DishFakeFloorEntity* fakeFloor = new DishFakeFloorEntity(this->engine, fakeFloorPosition, this);
 
 	dish->addComponent(new RenderComponent(engine, dish, sprite));
 
@@ -130,6 +145,22 @@ void Game::addDish(Coordinate* position) {
 
 void Game::addPlayer(Coordinate* position) {
 	this->player->setPosition(*position);
+}
+
+void Game::ingredientFinished() {
+	this->currentFinishedIngredients++;
+
+	if (this->currentFinishedIngredients >= this->totalIngredients) {
+		this->victory();
+	}
+}
+
+void Game::increaseScore(int increase) {
+	this->score += increase;
+}
+
+int Game::getScore() {
+	return this->score;
 }
 
 void Game::updateLimits(Field newField, Coordinate* position) {
@@ -203,6 +234,11 @@ void Game::createStairLimit(Coordinate* position, int type) {
 	}
 
 	//this->addEntity(stairLimit);
+}
+
+void Game::victory() {
+	this->input->setEnabled(false);
+	this->engine->getMessageDispatcher()->send(GAME_VICTORY);
 }
 
 Game::~Game() {

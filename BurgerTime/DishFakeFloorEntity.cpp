@@ -2,13 +2,16 @@
 #include "RenderComponent.h"
 #include "Engine.h"
 
-DishFakeFloorEntity::DishFakeFloorEntity(Engine* engine, Coordinate* position) : Entity(engine, position) {
+DishFakeFloorEntity::DishFakeFloorEntity(Engine* engine, Coordinate* position, Game* game) : Entity(engine, position) {
 	this->setBoundingBox(new BoundingBox(new Coordinate(32, 2)));
+	this->game = game;
 }
 
 void DishFakeFloorEntity::receive(Message message) {
 	if (message == INGREDIENT_ON_FLOOR) {
 		Coordinate* position = this->getPosition();
 		position->setY(position->getY() - 8);
+
+		this->game->ingredientFinished();
 	}
 }

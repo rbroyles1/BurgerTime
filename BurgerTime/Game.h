@@ -3,12 +3,14 @@
 #include "BoxCollideComponent.h"
 #include "PlayerEntity.h"
 #include "IngredientEntity.h"
+#include "InputComponent.h"
 
 class Engine;
 class Entity;
 class BoxCollideComponent;
 
 enum Field {FLOOR, STAIR, NO_FIELD};
+enum Ingredient;
 
 class Game : public Entity {
 	std::vector<Entity*>* entities;
@@ -21,8 +23,13 @@ class Game : public Entity {
 	std::vector<Entity*>* ingredients;
 
 	PlayerEntity* player;
+	InputComponent* input;
 	Field previousField;
 	Coordinate* previousFieldPosition;
+
+	int score;
+	int totalIngredients;
+	int currentFinishedIngredients;
 
 public:
 	Game(Engine* engine);
@@ -37,6 +44,10 @@ public:
 	void addIngredient(Coordinate* position, Ingredient ingredient);
 	void addDish(Coordinate* position);
 	void addPlayer(Coordinate* position);
+
+	void ingredientFinished();
+	void increaseScore(int increase);
+	int getScore();
 	
 	virtual ~Game();
 
@@ -44,6 +55,7 @@ private:
 	void createPlayer();
 	void createGameComponents();
 	void createFpsCounter();
+	void createHUD();
 	void createLevel();
 
 	void updateLimits(Field newField, Coordinate* position);
@@ -52,4 +64,6 @@ private:
 
 	void createFloorLimit(Coordinate* position, int type);
 	void createStairLimit(Coordinate* position, int type);
+
+	void victory();
 };
