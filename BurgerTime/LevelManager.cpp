@@ -4,6 +4,7 @@
 #include "LevelManager.h"
 #include "RenderComponent.h"
 #include "Sprite.h"
+#include "IngredientEntity.h"
 #include <cstdio>
 
 LevelManager::LevelManager(Game * game) {
@@ -24,13 +25,34 @@ void LevelManager::loadLevel(const char* levelPath) {
 
 		if (strcmp(type, "") != 0) {
 			if (strcmp(type, "FLOOR") == 0) {
-				this->game->createFloor(new Coordinate(position), extra);
+				this->game->addFloor(new Coordinate(position), extra);
 			}
 			else if (strcmp(type, "STAIR") == 0) {
-				this->game->createStair(new Coordinate(position));
+				this->game->addStair(new Coordinate(position));
 			}
 			else if (strcmp(type, "PLAYER") == 0) {
-				this->game->createPlayer(new Coordinate(position));
+				this->game->addPlayer(new Coordinate(position));
+			}
+			else if (strcmp(type, "DISH") == 0) {
+				this->game->addDish(new Coordinate(position));
+			}
+			else if (strcmp(type, "BREAD_BOTTOM") == 0) {
+				this->game->addIngredient(new Coordinate(position), BREAD_BOTTOM);
+			}
+			else if (strcmp(type, "BREAD_TOP") == 0) {
+				this->game->addIngredient(new Coordinate(position), BREAD_TOP);
+			}
+			else if (strcmp(type, "CHEESE") == 0) {
+				this->game->addIngredient(new Coordinate(position), CHEESE);
+			}
+			else if (strcmp(type, "LETTUCE") == 0) {
+				this->game->addIngredient(new Coordinate(position), LETTUCE);
+			}
+			else if (strcmp(type, "MEAT") == 0) {
+				this->game->addIngredient(new Coordinate(position), MEAT);
+			}
+			else if (strcmp(type, "TOMATO") == 0) {
+				this->game->addIngredient(new Coordinate(position), TOMATO);
 			}
 		}
 	}

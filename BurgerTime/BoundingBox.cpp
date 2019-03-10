@@ -7,7 +7,7 @@ BoundingBox::BoundingBox(Coordinate * boxSize) {
 
 bool BoundingBox::isIntersecting(Coordinate* thisCenter, Coordinate* targetCenter, BoundingBox * boundingBox) {
 	return abs(thisCenter->getX() - targetCenter->getX()) * 2 < this->boxSize->getX() + boundingBox->boxSize->getX()
-		&& abs(thisCenter->getY() - targetCenter->getY()) * 2 < this->boxSize->getY() + boundingBox->boxSize->getY();;
+		&& abs(thisCenter->getY() - targetCenter->getY()) * 2 < this->boxSize->getY() + boundingBox->boxSize->getY();
 }
 
 BoundingBox::~BoundingBox() {

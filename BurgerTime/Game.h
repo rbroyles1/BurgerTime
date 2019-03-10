@@ -2,6 +2,7 @@
 #include <vector>
 #include "BoxCollideComponent.h"
 #include "PlayerEntity.h"
+#include "IngredientEntity.h"
 
 class Engine;
 class Entity;
@@ -24,7 +25,6 @@ class Game : public Entity {
 	Coordinate* previousFieldPosition;
 
 public:
-
 	Game(Engine* engine);
 
 	virtual void init();
@@ -32,13 +32,16 @@ public:
 	virtual void receive(Message message);
 	void addEntity(Entity* entity);
 
-	void createFloor(Coordinate* position, int type);
-	void createStair(Coordinate* position);
-	void createPlayer(Coordinate* position);
+	void addFloor(Coordinate* position, int type);
+	void addStair(Coordinate* position);
+	void addIngredient(Coordinate* position, Ingredient ingredient);
+	void addDish(Coordinate* position);
+	void addPlayer(Coordinate* position);
 	
 	virtual ~Game();
 
 private:
+	void createPlayer();
 	void createGameComponents();
 	void createFpsCounter();
 	void createLevel();
@@ -49,6 +52,4 @@ private:
 
 	void createFloorLimit(Coordinate* position, int type);
 	void createStairLimit(Coordinate* position, int type);
-
-	void testIngredients();
 };

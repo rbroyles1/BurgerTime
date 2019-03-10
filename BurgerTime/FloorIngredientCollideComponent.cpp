@@ -17,6 +17,8 @@ void FloorIngredientCollideComponent::update(double dt) {
 			this->entity->receive(INGREDIENT_ON_FLOOR);
 			this->entity->setPosition(*floor->getPosition());
 
+			ingredientBox->isIntersecting(this->entity->getPosition(), floor->getPosition(), floorBox);
+
 			floor->receive(INGREDIENT_ON_FLOOR);
 		}
 	}

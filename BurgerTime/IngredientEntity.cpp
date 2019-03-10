@@ -67,7 +67,7 @@ void IngredientEntity::receive(Message message) {
 }
 
 void IngredientEntity::setPosition(Coordinate& position) {
-	Entity::setPosition(position);
+	this->position->setY(position.getY());
 
 	for (int i = 0; i < 4; i++) {
 		this->ingredientEntities->at(i)->getPosition()->setY(position.getY() + (this->pushedDown[i]? 1 : 0));

@@ -10,7 +10,6 @@
 #include "RenderComponent.h"
 #include "PlayerRenderComponent.h"
 #include "LevelManager.h"
-#include "IngredientEntity.h"
 #include "DishFakeFloorEntity.h"
 
 // TODO reconsider if Receiver.h is really necessary
@@ -32,8 +31,8 @@ Game::Game(Engine* engine) : Entity(engine) {
 void Game::init() {
 	this->createFpsCounter();
 	this->createGameComponents();
+	this->createPlayer();
 	this->createLevel();
-	this->testIngredients();
 
 	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
 	this->addEntity(this->player);
@@ -59,6 +58,11 @@ void Game::addEntity(Entity* entity) {
 	this->entities->push_back(entity);
 }
 
+void Game::createPlayer() {
+	this->player = new PlayerEntity(this->engine, position);
+	this->player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
+}
+
 void Game::createGameComponents() {
 	this->addComponent(new InputComponent(this->engine, this));
 }
@@ -78,7 +82,7 @@ void Game::createLevel() {
 	this->addEndingLimit();
 }
 
-void Game::createFloor(Coordinate* position, int type) {
+void Game::addFloor(Coordinate* position, int type) {
 	Entity* floor = new Entity(this->engine, position);
 	Sprite* floorSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/floor.bmp");
 
@@ -91,7 +95,7 @@ void Game::createFloor(Coordinate* position, int type) {
 	this->updateLimits(FLOOR, position);
 }
 
-void Game::createStair(Coordinate* position) {
+void Game::addStair(Coordinate* position) {
 	Entity* stair = new Entity(this->engine, position);
 	Sprite* stairSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/stairs.bmp");
 
@@ -104,9 +108,28 @@ void Game::createStair(Coordinate* position) {
 	this->updateLimits(STAIR, position);
 }
 
-void Game::createPlayer(Coordinate* position) {
-	this->player = new PlayerEntity(this->engine, position);
-	this->player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
+void Game::addIngredient(Coordinate* position, Ingredient ingredient) {
+	IngredientEntity* ingredient1 = new IngredientEntity(this->engine, position, this->player, ingredient, this->ingredients, this->floors);
+
+	this->ingredients->push_back(ingredient1);
+	this->addEntity(ingredient1);
+}
+
+void Game::addDish(Coordinate* position) {
+	Entity* dish = new Entity(this->engine, position);
+	Sprite* sprite = new Sprite(engine->getRenderer(), "resources/sprites/dish.bmp");
+
+	Coordinate* fakeFloorPosition = new Coordinate(position->getX(), position->getY());
+	DishFakeFloorEntity* fakeFloor = new DishFakeFloorEntity(this->engine, fakeFloorPosition);
+
+	dish->addComponent(new RenderComponent(engine, dish, sprite));
+
+	this->floors->push_back(fakeFloor);
+	this->addEntity(dish);
+}
+
+void Game::addPlayer(Coordinate* position) {
+	this->player->setPosition(*position);
 }
 
 void Game::updateLimits(Field newField, Coordinate* position) {
@@ -180,33 +203,6 @@ void Game::createStairLimit(Coordinate* position, int type) {
 	}
 
 	//this->addEntity(stairLimit);
-}
-
-void Game::testIngredients() {
-	Entity* dish = new Entity(this->engine, new Coordinate(40, 232));
-
-	Sprite* sprite = new Sprite(engine->getRenderer(), "resources/sprites/dish.bmp");
-	dish->addComponent(new RenderComponent(engine, dish, sprite));
-
-	DishFakeFloorEntity* fakeFloor = new DishFakeFloorEntity(this->engine, new Coordinate(40, 232));
-
-	IngredientEntity* ingredient1 = new IngredientEntity(this->engine, new Coordinate(40, 80), this->player, BREAD_TOP, this->ingredients, this->floors);
-	IngredientEntity* ingredient2 = new IngredientEntity(this->engine, new Coordinate(40, 112), this->player, LETTUCE, this->ingredients, this->floors);
-	IngredientEntity* ingredient3 = new IngredientEntity(this->engine, new Coordinate(40, 160), this->player, MEAT, this->ingredients, this->floors);
-	IngredientEntity* ingredient4 = new IngredientEntity(this->engine, new Coordinate(40, 192), this->player, BREAD_BOTTOM, this->ingredients, this->floors);
-	
-	this->ingredients->push_back(ingredient1);
-	this->ingredients->push_back(ingredient2);
-	this->ingredients->push_back(ingredient3);
-	this->ingredients->push_back(ingredient4);
-
-	this->floors->push_back(fakeFloor);
-
-	this->addEntity(dish);
-	this->addEntity(ingredient1);
-	this->addEntity(ingredient2);
-	this->addEntity(ingredient3);
-	this->addEntity(ingredient4);
 }
 
 Game::~Game() {
