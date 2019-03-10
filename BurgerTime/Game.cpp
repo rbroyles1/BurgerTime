@@ -12,6 +12,7 @@
 #include "LevelManager.h"
 #include "DishFakeFloorEntity.h"
 #include "ScoreCounterComponent.h"
+#include "LivesTrackerEntity.h"
 
 // TODO reconsider if Receiver.h is really necessary
 Game::Game(Engine* engine) : Entity(engine) {
@@ -32,6 +33,7 @@ Game::Game(Engine* engine) : Entity(engine) {
 	this->score = 0;
 	this->totalIngredients = 0;
 	this->currentFinishedIngredients = 0;
+	this->lives = INITIAL_LIVES;
 }
 
 void Game::init() {
@@ -84,9 +86,12 @@ void Game::createFpsCounter() {
 
 void Game::createHUD() {
 	Entity* scoreText = new Entity(this->engine, new Coordinate(24, 0));
+	LivesTrackerEntity* livesTracker = new LivesTrackerEntity(this->engine, new Coordinate(8, 232), this);
 	
 	scoreText->addComponent(new ScoreCounterComponent(this->engine, scoreText, this));
+
 	this->addEntity(scoreText);
+	this->addEntity(livesTracker);
 }
 
 void Game::createLevel() {
@@ -161,6 +166,16 @@ void Game::increaseScore(int increase) {
 
 int Game::getScore() {
 	return this->score;
+}
+
+void Game::increaseLives() {
+	if (this->lives < MAX_LIVES) {
+		this->lives++;
+	}
+}
+
+int Game::getLives() {
+	return this->lives;
 }
 
 void Game::updateLimits(Field newField, Coordinate* position) {

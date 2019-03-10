@@ -137,6 +137,7 @@
     <ClInclude Include="IngredientRigidBodyComponent.h" />
     <ClInclude Include="InputComponent.h" />
     <ClInclude Include="LevelManager.h" />
+    <ClInclude Include="LivesTrackerEntity.h" />
     <ClInclude Include="MessageDispatcher.h" />
     <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="PlayerRenderComponent.h" />
@@ -165,6 +166,7 @@
     <ClCompile Include="IngredientRigidBodyComponent.cpp" />
     <ClCompile Include="InputComponent.cpp" />
     <ClCompile Include="LevelManager.cpp" />
+    <ClCompile Include="LivesTrackerEntity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessageDispatcher.cpp" />
     <ClCompile Include="PlayerEntity.cpp" />

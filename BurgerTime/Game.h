@@ -28,6 +28,7 @@ class Game : public Entity {
 	Coordinate* previousFieldPosition;
 
 	int score;
+	int lives;
 	int totalIngredients;
 	int currentFinishedIngredients;
 
@@ -48,6 +49,8 @@ public:
 	void ingredientFinished();
 	void increaseScore(int increase);
 	int getScore();
+	void increaseLives();
+	int getLives();
 	
 	virtual ~Game();
 
