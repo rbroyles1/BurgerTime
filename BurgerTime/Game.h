@@ -21,8 +21,10 @@ class Game : public Entity {
 	std::vector<Entity*>* upStairsLimits;
 	std::vector<Entity*>* downStairsLimits;
 	std::vector<Entity*>* ingredients;
+	std::vector<Entity*>* enemies;
 
 	PlayerEntity* player;
+	Entity* gameOverText;
 	InputComponent* input;
 	Field previousField;
 	Coordinate* previousFieldPosition;
@@ -32,6 +34,8 @@ class Game : public Entity {
 	int totalIngredients;
 	int currentFinishedIngredients;
 
+	bool reset;
+
 public:
 	Game(Engine* engine);
 
@@ -39,6 +43,7 @@ public:
 	virtual void update(double dt);
 	virtual void receive(Message message);
 	void addEntity(Entity* entity);
+	void clear();
 
 	void addFloor(Coordinate* position, int type);
 	void addStair(Coordinate* position);
@@ -46,10 +51,7 @@ public:
 	void addDish(Coordinate* position);
 	void addPlayer(Coordinate* position);
 
-	void ingredientFinished();
-	void increaseScore(int increase);
 	int getScore();
-	void increaseLives();
 	int getLives();
 	
 	virtual ~Game();
@@ -61,6 +63,8 @@ private:
 	void createHUD();
 	void createLevel();
 
+	void setWalkingEntityColliders(Entity* entity);
+
 	void updateLimits(Field newField, Coordinate* position);
 	void addStartingLimit(Field newField, Coordinate* position);
 	void addEndingLimit();
@@ -68,5 +72,11 @@ private:
 	void createFloorLimit(Coordinate* position, int type);
 	void createStairLimit(Coordinate* position, int type);
 
+	void increaseScore(int increase);
+	void increaseLives();
+	void ingredientFinished();
+	void playerDied();
 	void victory();
+
+	void testEnemies();
 };

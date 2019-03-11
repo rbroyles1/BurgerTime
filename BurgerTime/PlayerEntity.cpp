@@ -2,41 +2,27 @@
 #include "PlayerRenderComponent.h"
 #include "PlayerRigidBodyComponent.h"
 #include "FloorCollideComponent.h"
+#include "BoxCollideComponent.h"
 #include "Engine.h"
 
-PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position) : Entity(engine, position) {
+PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position, std::vector<Entity*>* enemies) : Entity(engine, position) {
 	PlayerRenderComponent* renderComponent = new PlayerRenderComponent(this->engine, this);
 	PlayerRigidBodyComponent* rigidBodyComponent = new PlayerRigidBodyComponent(this->engine, this);
 
 	this->addComponent(renderComponent);
 	this->addComponent(rigidBodyComponent);
+	this->addComponent(new BoxCollideComponent(this->engine, this, ENEMY_ATTACK, enemies));
 
 	this->setBoundingBox(new BoundingBox(new Coordinate(16, 16)));
+	
 	this->action = NO_ACTION;
+	this->initialPosition = new Coordinate(position->getX(), position->getY());
 
 	this->engine->getMessageDispatcher()->subscribe(MOVE_LEFT, this);
 	this->engine->getMessageDispatcher()->subscribe(MOVE_RIGHT, this);
 	this->engine->getMessageDispatcher()->subscribe(MOVE_UP, this);
 	this->engine->getMessageDispatcher()->subscribe(MOVE_DOWN, this);
 	this->engine->getMessageDispatcher()->subscribe(GAME_VICTORY, this);
-}
-
-void PlayerEntity::setPlayerColliders(std::vector<Entity*>* floors, std::vector<Entity*>* leftFloorsLimits, std::vector<Entity*>* rightFloorsLimits,
-	std::vector<Entity*>* stairs, std::vector<Entity*>* upStairsLimits, std::vector<Entity*>* downStairsLimits) {
-	
-	FloorCollideComponent* floorBox = new FloorCollideComponent(this->engine, this, ON_FLOOR, floors);
-	BoxCollideComponent* leftBox = new BoxCollideComponent(this->engine, this, INTERSECT_LIMIT_LEFT, leftFloorsLimits);
-	BoxCollideComponent* rightBox = new BoxCollideComponent(this->engine, this, INTERSECT_LIMIT_RIGHT, rightFloorsLimits);
-	BoxCollideComponent* stairsBox = new BoxCollideComponent(this->engine, this, INTERSECT_STAIRS, stairs);
-	BoxCollideComponent* upStairsBox = new BoxCollideComponent(this->engine, this, INTERSECT_UP_STAIRS, upStairsLimits);
-	BoxCollideComponent* downStairsBox = new BoxCollideComponent(this->engine, this, INTERSECT_DOWN_STAIRS, downStairsLimits);
-
-	this->addComponent(floorBox);
-	this->addComponent(leftBox);
-	this->addComponent(rightBox);
-	this->addComponent(stairsBox);
-	this->addComponent(upStairsBox);
-	this->addComponent(downStairsBox);
 }
 
 void PlayerEntity::update(double dt) {
@@ -62,9 +48,22 @@ void PlayerEntity::update(double dt) {
 		if (this->hasReceived(GAME_VICTORY)) {
 			this->action = CELEBRATE_VICTORY;
 		}
+		if (this->hasReceived(ENEMY_ATTACK)) {
+			this->action = DIE;
+		}
 	}
 
 	this->clearMessages();
+}
+
+void PlayerEntity::setInitialPosition(Coordinate* position) {
+	this->setPosition(*position);
+	this->initialPosition->copyFrom(*position);
+}
+
+void PlayerEntity::reset() {
+	this->action = NO_ACTION;
+	this->setPosition(*this->initialPosition);
 }
 
 PlayerAction PlayerEntity::getAction() {

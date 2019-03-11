@@ -13,6 +13,7 @@ class Entity : public Receiver {
 private:
 	std::vector<Component*>* components;
 	std::unordered_set<Message>* receivedMessages;
+	bool enabled;
 
 protected:
 	Engine* engine;
@@ -37,6 +38,8 @@ public:
 
 	BoundingBox* getBoundingBox();
 	void setBoundingBox(BoundingBox* boundingBox);
+
+	void setEnabled(bool enabled);
 
 	virtual ~Entity();
 };

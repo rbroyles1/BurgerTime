@@ -13,6 +13,8 @@
 #include "DishFakeFloorEntity.h"
 #include "ScoreCounterComponent.h"
 #include "LivesTrackerEntity.h"
+#include "FloorCollideComponent.h"
+#include "TextRenderComponent.h"
 
 // TODO reconsider if Receiver.h is really necessary
 Game::Game(Engine* engine) : Entity(engine) {
@@ -24,27 +26,29 @@ Game::Game(Engine* engine) : Entity(engine) {
 	this->upStairsLimits = new std::vector<Entity*>();
 	this->downStairsLimits = new std::vector<Entity*>();
 	this->ingredients = new std::vector<Entity*>();
+	this->enemies = new std::vector<Entity*>();
 
 	this->input = new InputComponent(this->engine, this);
 	this->player = nullptr;
-	this->previousField = NO_FIELD;
-	this->previousFieldPosition = new Coordinate();
-
-	this->score = 0;
-	this->totalIngredients = 0;
-	this->currentFinishedIngredients = 0;
-	this->lives = INITIAL_LIVES;
+	
+	this->clear();
 }
 
 void Game::init() {
-	this->createHUD();
 	//this->createFpsCounter();
 	this->createGameComponents();
 	this->createPlayer();
 	this->createLevel();
+	this->createHUD();
+	this->testEnemies();
+
+	this->addEntity(this->player);
+	this->input->setEnabled(true);
 
 	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
-	this->addEntity(this->player);
+	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FLOOR_HIT, this);
+	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FINISHED, this);
+	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
 
 	Entity::init();
 }
@@ -52,14 +56,32 @@ void Game::init() {
 void Game::update(double dt) {
 	Entity::update(dt);
 
+	/*if (this->reset) { 
+		this->clear();
+		this->createHUD();
+		this->createLevel();
+		this->addEntity(this->player);
+		this->testEnemies();
+	}
+	*/
 	for (auto it = this->entities->begin(); it != this->entities->end(); it++) {
 		(*it)->update(dt);
 	}
 }
 
 void Game::receive(Message message) {
-	if (message == EXIT) {
-		this->engine->stop();
+	switch (message) {
+		case EXIT:
+			this->engine->stop();
+			break;
+		case INGREDIENT_FLOOR_HIT:
+			this->increaseScore(50);
+			break;
+		case INGREDIENT_FINISHED:
+			this->ingredientFinished();
+			break;
+		case PLAYER_DIED:
+			this->playerDied();
 	}
 }
 
@@ -67,9 +89,30 @@ void Game::addEntity(Entity* entity) {
 	this->entities->push_back(entity);
 }
 
+void Game::clear() {
+	this->entities->clear();
+	this->floors->clear();
+	this->leftFloorsLimits->clear();
+	this->rightFloorsLimits->clear();
+	this->stairs->clear();
+	this->upStairsLimits->clear();
+	this->downStairsLimits->clear();
+	this->ingredients->clear();
+	this->enemies->clear();
+
+	this->previousField = NO_FIELD;
+	this->previousFieldPosition = new Coordinate();
+
+	this->score = 0;
+	this->totalIngredients = 0;
+	this->currentFinishedIngredients = 0;
+	this->lives = INITIAL_LIVES;
+	this->reset = false;
+}
+
 void Game::createPlayer() {
-	this->player = new PlayerEntity(this->engine, position);
-	this->player->setPlayerColliders(this->floors, this->leftFloorsLimits, this->rightFloorsLimits, this->stairs, this->upStairsLimits, this->downStairsLimits);
+	this->player = new PlayerEntity(this->engine, new Coordinate(), this->enemies);
+	this->setWalkingEntityColliders(this->player);
 }
 
 void Game::createGameComponents() {
@@ -87,9 +130,15 @@ void Game::createFpsCounter() {
 void Game::createHUD() {
 	Entity* scoreText = new Entity(this->engine, new Coordinate(24, 0));
 	LivesTrackerEntity* livesTracker = new LivesTrackerEntity(this->engine, new Coordinate(8, 232), this);
+	this->gameOverText = new Entity(this->engine, new Coordinate(70, 120));
 	
 	scoreText->addComponent(new ScoreCounterComponent(this->engine, scoreText, this));
+	
+	this->gameOverText->addComponent(new TextRenderComponent(this->engine, this->gameOverText, new std::string("GAME OVER"),
+		new Text(this->engine->getRenderer(), "space_invaders.ttf", 16)));
+	this->gameOverText->setEnabled(false);
 
+	this->addEntity(this->gameOverText);
 	this->addEntity(scoreText);
 	this->addEntity(livesTracker);
 }
@@ -99,6 +148,22 @@ void Game::createLevel() {
 
 	manager.loadLevel("resources/levels/default.bgtm");
 	this->addEndingLimit();
+}
+
+void Game::setWalkingEntityColliders(Entity* entity) {
+	FloorCollideComponent* floorBox = new FloorCollideComponent(this->engine, entity, ON_FLOOR, floors);
+	BoxCollideComponent* leftBox = new BoxCollideComponent(this->engine, entity, INTERSECT_LIMIT_LEFT, leftFloorsLimits);
+	BoxCollideComponent* rightBox = new BoxCollideComponent(this->engine, entity, INTERSECT_LIMIT_RIGHT, rightFloorsLimits);
+	BoxCollideComponent* stairsBox = new BoxCollideComponent(this->engine, entity, INTERSECT_STAIRS, stairs);
+	BoxCollideComponent* upStairsBox = new BoxCollideComponent(this->engine, entity, INTERSECT_UP_STAIRS, upStairsLimits);
+	BoxCollideComponent* downStairsBox = new BoxCollideComponent(this->engine, entity, INTERSECT_DOWN_STAIRS, downStairsLimits);
+
+	entity->addComponent(floorBox);
+	entity->addComponent(leftBox);
+	entity->addComponent(rightBox);
+	entity->addComponent(stairsBox);
+	entity->addComponent(upStairsBox);
+	entity->addComponent(downStairsBox);
 }
 
 void Game::addFloor(Coordinate* position, int type) {
@@ -128,7 +193,7 @@ void Game::addStair(Coordinate* position) {
 }
 
 void Game::addIngredient(Coordinate* position, Ingredient ingredient) {
-	IngredientEntity* ingredient1 = new IngredientEntity(this->engine, position, this->player, ingredient, this, this->ingredients, this->floors);
+	IngredientEntity* ingredient1 = new IngredientEntity(this->engine, position, this->player, ingredient, this->ingredients, this->floors);
 
 	this->totalIngredients++;
 	this->ingredients->push_back(ingredient1);
@@ -140,7 +205,7 @@ void Game::addDish(Coordinate* position) {
 	Sprite* sprite = new Sprite(engine->getRenderer(), "resources/sprites/dish.bmp");
 
 	Coordinate* fakeFloorPosition = new Coordinate(position->getX(), position->getY());
-	DishFakeFloorEntity* fakeFloor = new DishFakeFloorEntity(this->engine, fakeFloorPosition, this);
+	DishFakeFloorEntity* fakeFloor = new DishFakeFloorEntity(this->engine, fakeFloorPosition);
 
 	dish->addComponent(new RenderComponent(engine, dish, sprite));
 
@@ -149,7 +214,7 @@ void Game::addDish(Coordinate* position) {
 }
 
 void Game::addPlayer(Coordinate* position) {
-	this->player->setPosition(*position);
+	this->player->setInitialPosition(position);
 }
 
 void Game::ingredientFinished() {
@@ -157,6 +222,22 @@ void Game::ingredientFinished() {
 
 	if (this->currentFinishedIngredients >= this->totalIngredients) {
 		this->victory();
+	}
+}
+
+void Game::playerDied() {
+	this->lives--;
+	this->player->reset();
+
+	for (Entity* enemy : *this->enemies) {
+		((EnemyEntity*)enemy)->reset();
+	}
+
+	//this->reset = this->lives <= 0;
+
+	if (this->lives <= 0) {
+		this->input->setEnabled(false);
+		this->gameOverText->setEnabled(true);
 	}
 }
 
@@ -254,6 +335,13 @@ void Game::createStairLimit(Coordinate* position, int type) {
 void Game::victory() {
 	this->input->setEnabled(false);
 	this->engine->getMessageDispatcher()->send(GAME_VICTORY);
+}
+
+void Game::testEnemies() {
+	EnemyEntity* enemy = new EnemyEntity(this->engine, new Coordinate(152, 152), SAUSAGE, this->player);
+
+	this->enemies->push_back(enemy);
+	this->addEntity(enemy);
 }
 
 Game::~Game() {

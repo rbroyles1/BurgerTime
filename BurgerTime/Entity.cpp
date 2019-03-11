@@ -6,6 +6,7 @@ Entity::Entity(Engine* engine, Coordinate* position) {
 	this->components = new std::vector<Component*>();
 	this->receivedMessages = new std::unordered_set<Message>();
 	this->boundingBox = nullptr;
+	this->enabled = true;
 }
 
 Entity::Entity(Engine* engine) : Entity(engine, new Coordinate(0, 0)) {}
@@ -17,8 +18,10 @@ void Entity::init() {
 }
 
 void Entity::update(double dt) {
-	for (auto it = this->components->begin(); it != this->components->end(); it++) {
-		(*it)->update(dt);
+	if (this->enabled) {
+		for (auto it = this->components->begin(); it != this->components->end(); it++) {
+			(*it)->update(dt);
+		}
 	}
 }
 
@@ -52,6 +55,10 @@ BoundingBox * Entity::getBoundingBox() {
 
 void Entity::setBoundingBox(BoundingBox * boundingBox) {
 	this->boundingBox = boundingBox;
+}
+
+void Entity::setEnabled(bool enabled) {
+	this->enabled = enabled;
 }
 
 Entity::~Entity() {

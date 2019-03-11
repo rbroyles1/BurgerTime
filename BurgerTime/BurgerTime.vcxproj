@@ -126,6 +126,8 @@
     <ClInclude Include="Constants.h" />
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="DishFakeFloorEntity.h" />
+    <ClInclude Include="EnemyEntity.h" />
+    <ClInclude Include="EnemyRenderComponent.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Entity.h" />
@@ -149,6 +151,7 @@
     <ClInclude Include="ScoreCounterComponent.h" />
     <ClInclude Include="Sprite.h" />
     <ClInclude Include="Text.h" />
+    <ClInclude Include="TextRenderComponent.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="BoundingBox.cpp" />
@@ -156,6 +159,8 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="DishFakeFloorEntity.cpp" />
+    <ClCompile Include="EnemyEntity.cpp" />
+    <ClCompile Include="EnemyRenderComponent.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="FloorCollideComponent.cpp" />
@@ -177,6 +182,7 @@
     <ClCompile Include="ScoreCounterComponent.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
+    <ClCompile Include="TextRenderComponent.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="BurgerTime.rc" />

@@ -8,11 +8,10 @@
 #include "FloorIngredientCollideComponent.h"
 #include <string>
 
-IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, Game* game, std::vector<Entity*>* ingredients, std::vector<Entity*>* floors) : Entity(engine, position) {
+IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerEntity* player, Ingredient ingredient, std::vector<Entity*>* ingredients, std::vector<Entity*>* floors) : Entity(engine, position) {
 	char spritePattern[1000];
 
 	this->player = player;
-	this->game = game;
 	this->ingredientEntities = new std::vector<Entity*>();
 	this->pushedDown = new bool[4]();
 	this->falling = false;
@@ -122,7 +121,7 @@ void IngredientEntity::onFloorHit() {
 		this->pushedDown[i] = false;
 	}
 
-	this->game->increaseScore(50);
+	this->engine->getMessageDispatcher()->send(INGREDIENT_FLOOR_HIT);
 }
 
 void IngredientEntity::onIngredientHit() {

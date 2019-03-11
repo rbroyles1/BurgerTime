@@ -9,6 +9,9 @@ class PlayerRenderComponent : public Component {
 	Sprite* upStairs;
 	Sprite* downStairs;
 	Sprite* celebrate;
+	Sprite* die1;
+	Sprite* die2;
+	int deadMillisecs;
 
 public:
 	PlayerRenderComponent(Engine* engine, Entity* entity);

@@ -1,18 +1,19 @@
 #pragma once
 #include "Entity.h"
+#include "EnemyEntity.h"
 
-enum PlayerAction {WALK_LEFT, WALK_RIGHT, GO_UPSTAIRS, GO_DOWNSTAIRS, NO_ACTION, CELEBRATE_VICTORY};
+enum PlayerAction {WALK_LEFT, WALK_RIGHT, GO_UPSTAIRS, GO_DOWNSTAIRS, NO_ACTION, DIE, CELEBRATE_VICTORY};
 
 class PlayerEntity : public Entity {
 	PlayerAction action;
+	Coordinate* initialPosition;
 
 public:
-	PlayerEntity(Engine* engine, Coordinate* position);
-
-	void setPlayerColliders(std::vector<Entity*>* floors, std::vector<Entity*>* leftFloorsLimits, std::vector<Entity*>* rightFloorsLimits, 
-		std::vector<Entity*>* stairs, std::vector<Entity*>* upStairsLimits, std::vector<Entity*>* downStairsLimits);
+	PlayerEntity(Engine* engine, Coordinate* position, std::vector<Entity*>* enemies);
 
 	virtual void update(double dt);
+	void setInitialPosition(Coordinate* position);
+	void reset();
 
 	PlayerAction getAction();
 };
