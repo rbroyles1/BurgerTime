@@ -66,6 +66,6 @@ void PlayerEntity::reset() {
 	this->setPosition(*this->initialPosition);
 }
 
-PlayerAction PlayerEntity::getAction() {
+CharacterAction PlayerEntity::getAction() {
 	return this->action;
 }

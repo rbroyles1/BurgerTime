@@ -49,6 +49,7 @@ void Game::init() {
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FLOOR_HIT, this);
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FINISHED, this);
 	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
+	this->engine->getMessageDispatcher()->subscribe(ENEMY_SQUASHED, this);
 
 	Entity::init();
 }
@@ -79,6 +80,9 @@ void Game::receive(Message message) {
 			break;
 		case INGREDIENT_FINISHED:
 			this->ingredientFinished();
+			break;
+		case ENEMY_SQUASHED:
+			this->increaseScore(100);
 			break;
 		case PLAYER_DIED:
 			this->playerDied();
@@ -338,7 +342,7 @@ void Game::victory() {
 }
 
 void Game::testEnemies() {
-	EnemyEntity* enemy = new EnemyEntity(this->engine, new Coordinate(152, 152), SAUSAGE, this->player);
+	EnemyEntity* enemy = new EnemyEntity(this->engine, new Coordinate(152, 152), SAUSAGE, this->player, this->ingredients);
 
 	this->enemies->push_back(enemy);
 	this->addEntity(enemy);

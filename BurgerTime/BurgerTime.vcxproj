@@ -127,6 +127,7 @@
     <ClInclude Include="Coordinate.h" />
     <ClInclude Include="DishFakeFloorEntity.h" />
     <ClInclude Include="EnemyEntity.h" />
+    <ClInclude Include="EnemyIngredientCollideComponent.h" />
     <ClInclude Include="EnemyRenderComponent.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Component.h" />
@@ -160,6 +161,7 @@
     <ClCompile Include="Coordinate.cpp" />
     <ClCompile Include="DishFakeFloorEntity.cpp" />
     <ClCompile Include="EnemyEntity.cpp" />
+    <ClCompile Include="EnemyIngredientCollideComponent.cpp" />
     <ClCompile Include="EnemyRenderComponent.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Entity.cpp" />

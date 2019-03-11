@@ -6,6 +6,8 @@
 #include "Component.h"
 #include "BoundingBox.h"
 
+enum CharacterAction { WALK_LEFT, WALK_RIGHT, GO_UPSTAIRS, GO_DOWNSTAIRS, NO_ACTION, DIE, CELEBRATE_VICTORY };
+
 class Component;
 class Engine;
 

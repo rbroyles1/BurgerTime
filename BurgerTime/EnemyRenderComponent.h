@@ -8,6 +8,9 @@ class EnemyRenderComponent : public Component {
 	Sprite* walkingRight;
 	Sprite* upStairs;
 	Sprite* downStairs;
+	Sprite* squashed;
+
+	int deadMillisecs;
 
 public:
 	EnemyRenderComponent(Engine* engine, Entity* entity, EnemyType enemyType);

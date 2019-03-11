@@ -130,7 +130,10 @@
       <Filter>Header Files\Component</Filter>
     </ClInclude>
     <ClInclude Include="TextRenderComponent.h">
-      <Filter>Header Files</Filter>
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
+    <ClInclude Include="EnemyIngredientCollideComponent.h">
+      <Filter>Header Files\Component</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -219,7 +222,10 @@
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="TextRenderComponent.cpp">
-      <Filter>Source Files</Filter>
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyIngredientCollideComponent.cpp">
+      <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
