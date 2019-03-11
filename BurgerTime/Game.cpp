@@ -20,6 +20,8 @@
 // TODO maybe allow the player to control one enemy
 // TODO reconsider if Receiver.h is really necessary
 // TODO change all int millisecs to double secs
+// TODO reduce enemies bounding box
+// TODO fix enemies are able to kill you when they are stunned
 Game::Game(Engine* engine) : Entity(engine) {
 	this->entities = new std::vector<Entity*>();
 	this->floors = new std::vector<Entity*>();

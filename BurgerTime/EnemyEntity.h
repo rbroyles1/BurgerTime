@@ -8,6 +8,8 @@ enum EnemyType { SAUSAGE, EGG, CUCUMBER };
 class EnemyEntity : public Entity {
 	Coordinate* initialPosition;
 	CharacterAction action;
+	PlayerEntity* player;
+
 	int deadMillisecs;
 	bool hasMoved;
 	bool canMove;

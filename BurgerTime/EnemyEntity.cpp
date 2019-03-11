@@ -5,12 +5,14 @@
 #include "WalkingRigidBodyComponent.h"
 #include <cstdlib>
 
+// TODO put AI in component
 EnemyEntity::EnemyEntity(Engine* engine, Coordinate* position, EnemyType enemyType, PlayerEntity* player, std::vector<Entity*>* ingredients) : Entity(engine, position) {
 	this->initialPosition = new Coordinate(position->getX(), position->getY());
 	this->action = NO_ACTION;
 	this->deadMillisecs = 0;
 	this->hasMoved = false;
 	this->canMove = true;
+	this->player = player;
 
 	std::vector<Entity*>* pepperVector = new std::vector<Entity*>();
 	pepperVector->push_back(player->getPepper());
@@ -72,25 +74,47 @@ CharacterAction EnemyEntity::getAction() {
 void EnemyEntity::move() {
 	if (this->canMove) {
 		std::vector<CharacterAction> possibleMoves = std::vector<CharacterAction>();
+		std::vector<int> movesProbabilities = std::vector<int>();
+		int currentProbability = 0;
+
+		int diffX = this->player->getPosition()->getX() - this->position->getX();
+		int diffY = this->player->getPosition()->getY() - this->position->getY();
 
 		if (this->isInIntersection() || !this->hasMoved) {
 			if (!this->hasReceived(INTERSECT_LIMIT_LEFT)) {
+				currentProbability += diffX < 0 ? -diffX : 1;
+
 				possibleMoves.push_back(WALK_LEFT);
+				movesProbabilities.push_back(currentProbability);
 			}
 			if (!this->hasReceived(INTERSECT_LIMIT_RIGHT)) {
+				currentProbability += diffX > 0 ? diffX : 1;
+
 				possibleMoves.push_back(WALK_RIGHT);
+				movesProbabilities.push_back(currentProbability);
 			}
 
 			if (this->hasReceived(INTERSECT_STAIRS)) {
 				if (!this->hasReceived(INTERSECT_UP_STAIRS)) {
+					currentProbability += diffY < 0 ? -diffY : 1;
+
 					possibleMoves.push_back(GO_UPSTAIRS);
+					movesProbabilities.push_back(currentProbability);
 				}
 				if (!this->hasReceived(INTERSECT_DOWN_STAIRS)) {
+					currentProbability += diffY > 0 ? diffY : 1;
 					possibleMoves.push_back(GO_DOWNSTAIRS);
+
+					movesProbabilities.push_back(currentProbability);
 				}
 			}
 
-			this->action = possibleMoves.at(rand() % possibleMoves.size());
+			int random = rand() % currentProbability;
+			int index = 0;
+
+			for (index = 0; movesProbabilities.at(index) <= random; index++);
+
+			this->action = possibleMoves.at(index);
 			this->hasMoved = this->action != NO_ACTION;
 		}
 	}
