@@ -33,6 +33,15 @@ void EnemyRenderComponent::update(double dt) {
 		case WALK_LEFT:
 			sprite = this->walkingLeft;
 			break;
+		case WALK_RIGHT:
+			sprite = this->walkingRight;
+			break;
+		case GO_UPSTAIRS:
+			sprite = this->upStairs;
+			break;
+		case GO_DOWNSTAIRS:
+			sprite = this->downStairs;
+			break;
 		case STUNNED:
 			sprite = this->stunned;
 			this->stunnedMillisecs += dt * 1000;

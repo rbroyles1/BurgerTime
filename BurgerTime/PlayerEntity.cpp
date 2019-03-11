@@ -1,6 +1,6 @@
 #include "PlayerEntity.h"
 #include "PlayerRenderComponent.h"
-#include "PlayerRigidBodyComponent.h"
+#include "WalkingRigidBodyComponent.h"
 #include "FloorCollideComponent.h"
 #include "BoxCollideComponent.h"
 #include "RenderComponent.h"
@@ -10,7 +10,7 @@ PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position, std::vector<Ent
 	this->game = game;
 	
 	PlayerRenderComponent* renderComponent = new PlayerRenderComponent(this->engine, this);
-	PlayerRigidBodyComponent* rigidBodyComponent = new PlayerRigidBodyComponent(this->engine, this);
+	WalkingRigidBodyComponent* rigidBodyComponent = new WalkingRigidBodyComponent(this->engine, this, true);
 
 	this->addComponent(renderComponent);
 	this->addComponent(rigidBodyComponent);
@@ -79,7 +79,7 @@ void PlayerEntity::setInitialPosition(Coordinate* position) {
 	this->initialPosition->copyFrom(*position);
 }
 
-void PlayerEntity::reset() {
+void PlayerEntity::respawn() {
 	this->action = NO_ACTION;
 	this->setPosition(*this->initialPosition);
 }

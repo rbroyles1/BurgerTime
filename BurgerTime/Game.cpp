@@ -6,7 +6,6 @@
 #include "InputComponent.h"
 #include "BoxCollideComponent.h"
 #include "PlayerEntity.h"
-#include "PlayerRigidBodyComponent.h"
 #include "RenderComponent.h"
 #include "PlayerRenderComponent.h"
 #include "LevelManager.h"
@@ -17,6 +16,8 @@
 #include "TextRenderComponent.h"
 #include "PepperCounterComponent.h"
 
+// TODO change floor color
+// TODO maybe allow the player to control one enemy
 // TODO reconsider if Receiver.h is really necessary
 Game::Game(Engine* engine) : Entity(engine) {
 	this->entities = new std::vector<Entity*>();
@@ -247,17 +248,19 @@ void Game::pepperThrown() {
 
 void Game::playerDied() {
 	this->lives--;
-	this->player->reset();
-
-	for (Entity* enemy : *this->enemies) {
-		((EnemyEntity*)enemy)->reset();
-	}
 
 	//this->reset = this->lives <= 0;
 
 	if (this->lives <= 0) {
 		this->input->setEnabled(false);
 		this->gameOverText->setEnabled(true);
+	}
+	else {
+		this->player->respawn();
+
+		for (Entity* enemy : *this->enemies) {
+			((EnemyEntity*)enemy)->respawn();
+		}
 	}
 }
 
@@ -364,6 +367,7 @@ void Game::victory() {
 void Game::testEnemies() {
 	EnemyEntity* enemy = new EnemyEntity(this->engine, new Coordinate(152, 152), SAUSAGE, this->player, this->ingredients);
 
+	this->setWalkingEntityColliders(enemy);
 	this->enemies->push_back(enemy);
 	this->addEntity(enemy);
 }

@@ -18,7 +18,7 @@ public:
 
 	virtual void update(double dt);
 	void setInitialPosition(Coordinate* position);
-	void reset();
+	void respawn();
 
 	CharacterAction getAction();
 	Entity* getPepper();

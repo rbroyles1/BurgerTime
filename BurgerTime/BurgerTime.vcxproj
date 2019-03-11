@@ -145,10 +145,9 @@
     <ClInclude Include="PepperCounterComponent.h" />
     <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="PlayerRenderComponent.h" />
-    <ClInclude Include="PlayerRigidBodyComponent.h" />
+    <ClInclude Include="WalkingRigidBodyComponent.h" />
     <ClInclude Include="Receiver.h" />
     <ClInclude Include="RenderComponent.h" />
-    <ClInclude Include="resource.h" />
     <ClInclude Include="RigidBodyComponent.h" />
     <ClInclude Include="ScoreCounterComponent.h" />
     <ClInclude Include="Sprite.h" />
@@ -180,16 +179,13 @@
     <ClCompile Include="PepperCounterComponent.cpp" />
     <ClCompile Include="PlayerEntity.cpp" />
     <ClCompile Include="PlayerRenderComponent.cpp" />
-    <ClCompile Include="PlayerRigidBodyComponent.cpp" />
+    <ClCompile Include="WalkingRigidBodyComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />
     <ClCompile Include="ScoreCounterComponent.cpp" />
     <ClCompile Include="Sprite.cpp" />
     <ClCompile Include="Text.cpp" />
     <ClCompile Include="TextRenderComponent.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ResourceCompile Include="BurgerTime.rc" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

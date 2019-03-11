@@ -43,7 +43,10 @@ void PlayerRenderComponent::update(double dt) {
 
 				if (this->deadMillisecs >= COOK_CELEBRATE_ANIMATION_MILLISECS * 6) {
 					this->engine->getMessageDispatcher()->send(PLAYER_DIED);
-					this->deadMillisecs = 0;
+
+					if (((PlayerEntity*)this->entity)->getAction() == NO_ACTION) {
+						this->deadMillisecs = 0;
+					}
 				}
 			}
 			break;
