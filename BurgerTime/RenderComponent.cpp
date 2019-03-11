@@ -12,6 +12,10 @@ void RenderComponent::update(double dt) {
 		entity->getPosition()->getY() + offset->getY(), dt);
 }
 
+Sprite * RenderComponent::getSprite() {
+	return this->sprite;
+}
+
 RenderComponent::~RenderComponent() {
 	delete this->sprite;
 }

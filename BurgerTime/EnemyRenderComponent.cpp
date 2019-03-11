@@ -5,6 +5,8 @@
 EnemyRenderComponent::EnemyRenderComponent(Engine* engine, Entity* entity, EnemyType enemyType) : Component(engine, entity) {
 	char enemyPattern[200];
 
+	this->deadMillisecs = this->stunnedMillisecs = 0;
+
 	this->writeSpritePattern(enemyPattern, "resources/sprites/%s_left (%%d).bmp", enemyType);
 	this->walkingLeft = new Sprite(engine->getRenderer(), enemyPattern, 1, 2, ENEMY_WALKING_ANIMATION_MILLISECS);
 	
@@ -19,6 +21,9 @@ EnemyRenderComponent::EnemyRenderComponent(Engine* engine, Entity* entity, Enemy
 
 	this->writeSpritePattern(enemyPattern, "resources/sprites/%s_squashed (%%d).bmp", enemyType);
 	this->squashed = new Sprite(engine->getRenderer(), enemyPattern, 1, 4, ENEMY_SQUASHED_ANIMATION_MILLISECS);
+
+	this->writeSpritePattern(enemyPattern, "resources/sprites/%s_stunned (%%d).bmp", enemyType);
+	this->stunned = new Sprite(engine->getRenderer(), enemyPattern, 1, 2, ENEMY_STUNNED_ANIMATION_MILLISECS);
 }
 
 void EnemyRenderComponent::update(double dt) {
@@ -28,6 +33,15 @@ void EnemyRenderComponent::update(double dt) {
 		case WALK_LEFT:
 			sprite = this->walkingLeft;
 			break;
+		case STUNNED:
+			sprite = this->stunned;
+			this->stunnedMillisecs += dt * 1000;
+
+			if (this->stunnedMillisecs >= ENEMY_STUNNED_ANIMATION_MILLISECS * 16) {
+				this->stunnedMillisecs = 0;
+				this->entity->receive(ENEMY_UNPEPPERED);
+			}
+			break;
 		case DIE:
 			sprite = this->squashed;
 			this->deadMillisecs += dt * 1000;
@@ -35,6 +49,7 @@ void EnemyRenderComponent::update(double dt) {
 			if (this->deadMillisecs >= ENEMY_SQUASHED_ANIMATION_MILLISECS * 4) {
 				this->entity->setEnabled(false);
 				this->deadMillisecs = 0;
+				this->stunnedMillisecs = 0;
 			}
 			break;
 		default:

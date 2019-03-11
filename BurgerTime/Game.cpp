@@ -15,6 +15,7 @@
 #include "LivesTrackerEntity.h"
 #include "FloorCollideComponent.h"
 #include "TextRenderComponent.h"
+#include "PepperCounterComponent.h"
 
 // TODO reconsider if Receiver.h is really necessary
 Game::Game(Engine* engine) : Entity(engine) {
@@ -43,11 +44,13 @@ void Game::init() {
 	this->testEnemies();
 
 	this->addEntity(this->player);
+	this->addEntity(this->player->getPepper());
 	this->input->setEnabled(true);
 
 	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FLOOR_HIT, this);
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FINISHED, this);
+	this->engine->getMessageDispatcher()->subscribe(PEPPER_THROWN, this);
 	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_SQUASHED, this);
 
@@ -81,11 +84,15 @@ void Game::receive(Message message) {
 		case INGREDIENT_FINISHED:
 			this->ingredientFinished();
 			break;
+		case PEPPER_THROWN:
+			this->pepperThrown();
+			break;
 		case ENEMY_SQUASHED:
 			this->increaseScore(100);
 			break;
 		case PLAYER_DIED:
 			this->playerDied();
+			break;
 	}
 }
 
@@ -111,11 +118,12 @@ void Game::clear() {
 	this->totalIngredients = 0;
 	this->currentFinishedIngredients = 0;
 	this->lives = INITIAL_LIVES;
+	this->pepper = INITIAL_PEPPER;
 	this->reset = false;
 }
 
 void Game::createPlayer() {
-	this->player = new PlayerEntity(this->engine, new Coordinate(), this->enemies);
+	this->player = new PlayerEntity(this->engine, new Coordinate(), this->enemies, this);
 	this->setWalkingEntityColliders(this->player);
 }
 
@@ -133,18 +141,22 @@ void Game::createFpsCounter() {
 
 void Game::createHUD() {
 	Entity* scoreText = new Entity(this->engine, new Coordinate(24, 0));
-	LivesTrackerEntity* livesTracker = new LivesTrackerEntity(this->engine, new Coordinate(8, 232), this);
-	this->gameOverText = new Entity(this->engine, new Coordinate(70, 120));
-	
 	scoreText->addComponent(new ScoreCounterComponent(this->engine, scoreText, this));
-	
+	this->addEntity(scoreText);
+
+	LivesTrackerEntity* livesTracker = new LivesTrackerEntity(this->engine, new Coordinate(8, 232), this);
+	this->addEntity(livesTracker);
+
+	Entity* pepperText = new Entity(this->engine, new Coordinate(200, 0));
+	pepperText->addComponent(new PepperCounterComponent(this->engine, pepperText, this));
+	this->addEntity(pepperText);
+
+	this->gameOverText = new Entity(this->engine, new Coordinate(70, 120));
 	this->gameOverText->addComponent(new TextRenderComponent(this->engine, this->gameOverText, new std::string("GAME OVER"),
 		new Text(this->engine->getRenderer(), "space_invaders.ttf", 16)));
 	this->gameOverText->setEnabled(false);
 
 	this->addEntity(this->gameOverText);
-	this->addEntity(scoreText);
-	this->addEntity(livesTracker);
 }
 
 void Game::createLevel() {
@@ -229,6 +241,10 @@ void Game::ingredientFinished() {
 	}
 }
 
+void Game::pepperThrown() {
+	this->pepper--;
+}
+
 void Game::playerDied() {
 	this->lives--;
 	this->player->reset();
@@ -261,6 +277,10 @@ void Game::increaseLives() {
 
 int Game::getLives() {
 	return this->lives;
+}
+
+int Game::getPepper() {
+	return this->pepper;
 }
 
 void Game::updateLimits(Field newField, Coordinate* position) {

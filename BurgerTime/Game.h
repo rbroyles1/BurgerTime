@@ -31,6 +31,7 @@ class Game : public Entity {
 
 	int score;
 	int lives;
+	int pepper;
 	int totalIngredients;
 	int currentFinishedIngredients;
 
@@ -53,6 +54,7 @@ public:
 
 	int getScore();
 	int getLives();
+	int getPepper();
 	
 	virtual ~Game();
 
@@ -75,6 +77,7 @@ private:
 	void increaseScore(int increase);
 	void increaseLives();
 	void ingredientFinished();
+	void pepperThrown();
 	void playerDied();
 	void victory();
 

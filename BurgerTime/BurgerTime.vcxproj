@@ -142,6 +142,7 @@
     <ClInclude Include="LevelManager.h" />
     <ClInclude Include="LivesTrackerEntity.h" />
     <ClInclude Include="MessageDispatcher.h" />
+    <ClInclude Include="PepperCounterComponent.h" />
     <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="PlayerRenderComponent.h" />
     <ClInclude Include="PlayerRigidBodyComponent.h" />
@@ -176,6 +177,7 @@
     <ClCompile Include="LivesTrackerEntity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessageDispatcher.cpp" />
+    <ClCompile Include="PepperCounterComponent.cpp" />
     <ClCompile Include="PlayerEntity.cpp" />
     <ClCompile Include="PlayerRenderComponent.cpp" />
     <ClCompile Include="PlayerRigidBodyComponent.cpp" />

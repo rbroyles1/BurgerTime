@@ -6,7 +6,7 @@
 #include "Component.h"
 #include "BoundingBox.h"
 
-enum CharacterAction { WALK_LEFT, WALK_RIGHT, GO_UPSTAIRS, GO_DOWNSTAIRS, NO_ACTION, DIE, CELEBRATE_VICTORY };
+enum CharacterAction { WALK_LEFT, WALK_RIGHT, GO_UPSTAIRS, GO_DOWNSTAIRS, STUNNED, DIE, CELEBRATE_VICTORY, NO_ACTION};
 
 class Component;
 class Engine;
@@ -31,6 +31,8 @@ public:
 	virtual void update(double dt);
 	virtual void addComponent(Component* component);
 	virtual void receive(Message message);
+
+	Component* getComponent(int index);
 
 	bool hasReceived(Message message);
 	void clearMessages();

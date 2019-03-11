@@ -33,6 +33,10 @@ void Entity::receive(Message message) {
 	this->receivedMessages->insert(message);
 }
 
+Component * Entity::getComponent(int index) {
+	return this->components->at(index);
+}
+
 bool Entity::hasReceived(Message message) {
 	return this->receivedMessages->count(message) > 0;
 }

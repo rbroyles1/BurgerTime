@@ -11,6 +11,7 @@ public:
 	RenderComponent(Engine* engine, Entity* entity, Sprite* sprite, Coordinate* offset);
 
 	virtual void update(double dt);
+	Sprite* getSprite();
 
 	~RenderComponent();
 };

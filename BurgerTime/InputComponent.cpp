@@ -13,6 +13,8 @@ void InputComponent::update(double dt) {
 		if (engine->getKeyStatus(SDLK_d) || engine->getKeyStatus(SDLK_RIGHT)) this->engine->getMessageDispatcher()->send(MOVE_RIGHT);
 		if (engine->getKeyStatus(SDLK_w) || engine->getKeyStatus(SDLK_UP)) this->engine->getMessageDispatcher()->send(MOVE_UP);
 		if (engine->getKeyStatus(SDLK_s) || engine->getKeyStatus(SDLK_DOWN)) this->engine->getMessageDispatcher()->send(MOVE_DOWN);
+		
+		if (engine->getKeyStatus(SDLK_SPACE)) this->engine->getMessageDispatcher()->send(MAIN_ACTION);
 	}
 }
 

@@ -7,9 +7,13 @@ EnemyEntity::EnemyEntity(Engine* engine, Coordinate* position, EnemyType enemyTy
 	this->initialPosition = new Coordinate(position->getX(), position->getY());
 	this->action = WALK_LEFT;
 	this->deadMillisecs = 0;
+
+	std::vector<Entity*>* pepperVector = new std::vector<Entity*>();
+	pepperVector->push_back(player->getPepper());
 	
 	this->setBoundingBox(new BoundingBox(new Coordinate(2, 2)));
 	this->addComponent(new EnemyRenderComponent(engine, this, enemyType));
+	this->addComponent(new BoxCollideComponent(engine, this, ENEMY_PEPPERED, pepperVector));
 	this->addComponent(new EnemyIngredientCollideComponent(engine, this, ingredients));
 }
 
@@ -19,6 +23,12 @@ void EnemyEntity::update(double dt) {
 	if (this->hasReceived(ENEMY_SQUASHED)) {
 		this->action = DIE;
 		this->engine->getMessageDispatcher()->send(ENEMY_SQUASHED);
+	}
+	if (this->hasReceived(ENEMY_PEPPERED) || this->action == STUNNED) {
+		this->action = STUNNED;
+	}
+	if (this->hasReceived(ENEMY_UNPEPPERED)) {
+		this->action = WALK_LEFT;
 	}
 	if (this->action == DIE) {
 		this->deadMillisecs += dt * 1000;

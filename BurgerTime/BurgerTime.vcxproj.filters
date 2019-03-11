@@ -135,6 +135,9 @@
     <ClInclude Include="EnemyIngredientCollideComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="PepperCounterComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -225,6 +228,9 @@
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="EnemyIngredientCollideComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="PepperCounterComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>
