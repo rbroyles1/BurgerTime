@@ -35,8 +35,6 @@ class Game : public Entity {
 	int totalIngredients;
 	int currentFinishedIngredients;
 
-	bool reset;
-
 public:
 	Game(Engine* engine);
 
@@ -50,6 +48,7 @@ public:
 	void addStair(Coordinate* position);
 	void addIngredient(Coordinate* position, Ingredient ingredient);
 	void addDish(Coordinate* position);
+	void addEnemy(Coordinate* position, EnemyType enemyType);
 	void addPlayer(Coordinate* position);
 
 	int getScore();
@@ -80,6 +79,4 @@ private:
 	void pepperThrown();
 	void playerDied();
 	void victory();
-
-	void testEnemies();
 };

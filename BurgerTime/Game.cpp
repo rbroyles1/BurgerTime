@@ -19,6 +19,7 @@
 // TODO change floor color
 // TODO maybe allow the player to control one enemy
 // TODO reconsider if Receiver.h is really necessary
+// TODO change all int millisecs to double secs
 Game::Game(Engine* engine) : Entity(engine) {
 	this->entities = new std::vector<Entity*>();
 	this->floors = new std::vector<Entity*>();
@@ -42,11 +43,9 @@ void Game::init() {
 	this->createPlayer();
 	this->createLevel();
 	this->createHUD();
-	this->testEnemies();
 
 	this->addEntity(this->player);
 	this->addEntity(this->player->getPepper());
-	this->input->setEnabled(true);
 
 	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FLOOR_HIT, this);
@@ -61,14 +60,6 @@ void Game::init() {
 void Game::update(double dt) {
 	Entity::update(dt);
 
-	/*if (this->reset) { 
-		this->clear();
-		this->createHUD();
-		this->createLevel();
-		this->addEntity(this->player);
-		this->testEnemies();
-	}
-	*/
 	for (auto it = this->entities->begin(); it != this->entities->end(); it++) {
 		(*it)->update(dt);
 	}
@@ -120,7 +111,6 @@ void Game::clear() {
 	this->currentFinishedIngredients = 0;
 	this->lives = INITIAL_LIVES;
 	this->pepper = INITIAL_PEPPER;
-	this->reset = false;
 }
 
 void Game::createPlayer() {
@@ -230,6 +220,14 @@ void Game::addDish(Coordinate* position) {
 	this->addEntity(dish);
 }
 
+void Game::addEnemy(Coordinate* position, EnemyType enemyType) {
+	EnemyEntity* enemy = new EnemyEntity(this->engine, position, enemyType, this->player, this->ingredients);
+
+	this->setWalkingEntityColliders(enemy);
+	this->enemies->push_back(enemy);
+	this->addEntity(enemy);
+}
+
 void Game::addPlayer(Coordinate* position) {
 	this->player->setInitialPosition(position);
 }
@@ -248,8 +246,6 @@ void Game::pepperThrown() {
 
 void Game::playerDied() {
 	this->lives--;
-
-	//this->reset = this->lives <= 0;
 
 	if (this->lives <= 0) {
 		this->input->setEnabled(false);
@@ -364,14 +360,6 @@ void Game::victory() {
 	this->engine->getMessageDispatcher()->send(GAME_VICTORY);
 }
 
-void Game::testEnemies() {
-	EnemyEntity* enemy = new EnemyEntity(this->engine, new Coordinate(152, 152), SAUSAGE, this->player, this->ingredients);
-
-	this->setWalkingEntityColliders(enemy);
-	this->enemies->push_back(enemy);
-	this->addEntity(enemy);
-}
-
 Game::~Game() {
 	for (auto it = this->entities->begin(); it != this->entities->end(); it++) {
 		delete *it;
@@ -384,6 +372,8 @@ Game::~Game() {
 	delete this->stairs;
 	delete this->upStairsLimits;
 	delete this->downStairsLimits;
+	delete this->ingredients;
+	delete this->enemies;
 
 	delete this->previousFieldPosition;
 }

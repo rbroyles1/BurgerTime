@@ -5,6 +5,7 @@
 #include "RenderComponent.h"
 #include "Sprite.h"
 #include "IngredientEntity.h"
+#include "EnemyEntity.h"
 #include <cstdio>
 
 LevelManager::LevelManager(Game * game) {
@@ -53,6 +54,15 @@ void LevelManager::loadLevel(const char* levelPath) {
 			}
 			else if (strcmp(type, "TOMATO") == 0) {
 				this->game->addIngredient(new Coordinate(position), TOMATO);
+			}
+			else if (strcmp(type, "SAUSAGE") == 0) {
+				this->game->addEnemy(new Coordinate(position), SAUSAGE);
+			}
+			else if (strcmp(type, "EGG") == 0) {
+				this->game->addEnemy(new Coordinate(position), EGG);
+			}
+			else if (strcmp(type, "CUCUMBER") == 0) {
+				this->game->addEnemy(new Coordinate(position), CUCUMBER);
 			}
 		}
 	}

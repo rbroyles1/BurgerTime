@@ -74,6 +74,12 @@ void EnemyRenderComponent::writeSpritePattern(char* buffer, const char* prePatte
 		case SAUSAGE:
 			snprintf(buffer, 200, prePattern, "sausage");
 			break;
+		case EGG:
+			snprintf(buffer, 200, prePattern, "egg");
+			break;
+		case CUCUMBER:
+			snprintf(buffer, 200, prePattern, "cucumber");
+			break;
 	}
 }
 

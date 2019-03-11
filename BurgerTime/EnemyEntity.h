@@ -3,7 +3,7 @@
 #include "PlayerEntity.h"
 
 class PlayerEntity;
-enum EnemyType { SAUSAGE };
+enum EnemyType { SAUSAGE, EGG, CUCUMBER };
 
 class EnemyEntity : public Entity {
 	Coordinate* initialPosition;
