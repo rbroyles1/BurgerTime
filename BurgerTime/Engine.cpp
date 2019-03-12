@@ -1,14 +1,15 @@
 #include "Engine.h"
 #include "SDL_ttf.h"
+#include "SDL_mixer.h"
 #include <chrono>
 #include <thread>
 
 bool Engine::init(Game* game, int width, int height) {
-	if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0) {
+	if (SDL_Init(SDL_INIT_EVERYTHING) != 0 || TTF_Init() != 0 || Mix_OpenAudio(22050, MIX_DEFAULT_FORMAT, 2, 4096) != 0) {
 		return false;
 	}
 
-	this->window = SDL_CreateWindow("Lab 3", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
+	this->window = SDL_CreateWindow("BurgerTime", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, 0);
 	this->renderer = SDL_CreateRenderer(this->window, -1, 0);
 
 	this->millisecondsPerFrame = 0;
@@ -22,7 +23,6 @@ bool Engine::init(Game* game, int width, int height) {
 
 	return true;
 }
-
 
 bool Engine::update() {
 	int current = this->getElapsedTime();
@@ -109,6 +109,7 @@ Engine::~Engine() {
 	SDL_DestroyRenderer(this->renderer);
 	SDL_DestroyWindow(this->window);
 
+	Mix_CloseAudio();
 	TTF_Quit();
 	SDL_Quit();
 }

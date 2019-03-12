@@ -4,6 +4,7 @@
 #include "PlayerEntity.h"
 #include "IngredientEntity.h"
 #include "InputComponent.h"
+#include "SDL_mixer.h"
 
 class Engine;
 class Entity;
@@ -28,6 +29,7 @@ class Game : public Entity {
 	InputComponent* input;
 	Field previousField;
 	Coordinate* previousFieldPosition;
+	Mix_Music* backgroundMusic;
 
 	int score;
 	int lives;

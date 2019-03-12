@@ -34,7 +34,7 @@ Game::Game(Engine* engine) : Entity(engine) {
 	this->enemies = new std::vector<Entity*>();
 
 	this->input = new InputComponent(this->engine, this);
-	this->player = nullptr;
+	this->player = nullptr;	
 	
 	this->clear();
 }
@@ -55,6 +55,9 @@ void Game::init() {
 	this->engine->getMessageDispatcher()->subscribe(PEPPER_THROWN, this);
 	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_SQUASHED, this);
+
+	this->backgroundMusic = Mix_LoadMUS("resources/sound/music.mp3");
+	Mix_PlayMusic(this->backgroundMusic, -1);
 
 	Entity::init();
 }
@@ -367,6 +370,8 @@ Game::~Game() {
 		delete *it;
 	}
 
+	Mix_FreeMusic(this->backgroundMusic);
+
 	delete this->entities;
 	delete this->floors;
 	delete this->leftFloorsLimits;
@@ -376,6 +381,5 @@ Game::~Game() {
 	delete this->downStairsLimits;
 	delete this->ingredients;
 	delete this->enemies;
-
 	delete this->previousFieldPosition;
 }
