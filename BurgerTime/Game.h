@@ -27,6 +27,7 @@ class Game : public Entity {
 	std::vector<Entity*>* enemies;
 
 	PlayerEntity* player;
+	Entity* lantern;
 	Entity* gameOverText;
 	InputComponent* input;
 	Field previousField;
@@ -54,6 +55,9 @@ public:
 	void addDish(Coordinate* position);
 	void addEnemy(Coordinate* position, EnemyType enemyType, double idleTime);
 	void addPlayer(Coordinate* position);
+
+	void notifyKeyDown(SDL_Keycode key);
+	void notifyKeyUp(SDL_Keycode key);
 
 	int getScore();
 	int getLives();

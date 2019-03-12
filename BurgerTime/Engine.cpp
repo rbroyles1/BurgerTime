@@ -81,9 +81,11 @@ void Engine::handleEvents() {
 		switch (event.type) {
 		case SDL_KEYDOWN:
 			this->keyStatus[event.key.keysym.sym] = true;
+			this->game->notifyKeyDown(event.key.keysym.sym);
 			break;
 		case SDL_KEYUP:
 			this->keyStatus[event.key.keysym.sym] = false;
+			this->game->notifyKeyUp(event.key.keysym.sym);
 			break;
 		case SDL_QUIT:
 			this->stop();

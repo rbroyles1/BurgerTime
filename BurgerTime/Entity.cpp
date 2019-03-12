@@ -61,6 +61,10 @@ void Entity::setBoundingBox(BoundingBox * boundingBox) {
 	this->boundingBox = boundingBox;
 }
 
+bool Entity::getEnabled() {
+	return this->enabled;
+}
+
 void Entity::setEnabled(bool enabled) {
 	this->enabled = enabled;
 }

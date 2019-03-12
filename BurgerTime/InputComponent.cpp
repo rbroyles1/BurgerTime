@@ -18,6 +18,12 @@ void InputComponent::update(double dt) {
 	}
 }
 
+void InputComponent::onKeyDown(SDL_Keycode key) {
+	if (key == SDLK_n) this->engine->getMessageDispatcher()->send(SWITCH_NIGHT_MODE);
+}
+
+void InputComponent::onKeyUp(SDL_Keycode key) { }
+
 void InputComponent::setEnabled(bool enabled) {
 	this->enabled = enabled;
 }

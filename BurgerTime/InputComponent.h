@@ -1,4 +1,5 @@
 #pragma once
+#include "SDL.h"
 #include "Component.h"
 
 class InputComponent : public Component {
@@ -8,6 +9,9 @@ public:
 	InputComponent(Engine* engine, Entity* entity);
 
 	virtual void update(double dt);
+
+	void onKeyDown(SDL_Keycode key);
+	void onKeyUp(SDL_Keycode key);
 	void setEnabled(bool enabled);
 };
 

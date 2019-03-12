@@ -21,7 +21,7 @@
 // TODO reconsider if Receiver.h is really necessary
 // TODO change all int millisecs to double secs
 // TODO reduce enemies bounding box
-// TODO fix enemies are able to kill you when they are stunned
+// TODO fix enemies are able to kill you when they are stunned or dead
 Game::Game(Engine* engine, std::string* chosenLevel) : Entity(engine) {
 	this->chosenLevel = chosenLevel;
 
@@ -52,6 +52,7 @@ void Game::init() {
 	this->addEntity(this->player->getPepper());
 
 	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
+	this->engine->getMessageDispatcher()->subscribe(SWITCH_NIGHT_MODE, this);
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FLOOR_HIT, this);
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FINISHED, this);
 	this->engine->getMessageDispatcher()->subscribe(PEPPER_THROWN, this);
@@ -76,6 +77,9 @@ void Game::receive(Message message) {
 	switch (message) {
 		case EXIT:
 			this->engine->stop();
+			break;
+		case SWITCH_NIGHT_MODE:
+			this->lantern->setEnabled(!this->lantern->getEnabled());
 			break;
 		case INGREDIENT_FLOOR_HIT:
 			this->increaseScore(50);
@@ -121,8 +125,14 @@ void Game::clear() {
 }
 
 void Game::createPlayer() {
-	this->player = new PlayerEntity(this->engine, new Coordinate(), this->enemies, this);
+	Coordinate* playerPos = new Coordinate();
+
+	this->player = new PlayerEntity(this->engine, playerPos, this->enemies, this);
 	this->setWalkingEntityColliders(this->player);
+
+	Sprite* lanternSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/lantern.bmp");
+	this->lantern = new Entity(this->engine, playerPos);
+	this->lantern->addComponent(new RenderComponent(this->engine, this->lantern, lanternSprite));
 }
 
 void Game::createGameComponents() {
@@ -138,6 +148,9 @@ void Game::createFpsCounter() {
 }
 
 void Game::createHUD() {
+	this->addEntity(this->lantern);
+	this->lantern->setEnabled(false);
+
 	Entity* scoreText = new Entity(this->engine, new Coordinate(24, 0));
 	scoreText->addComponent(new ScoreCounterComponent(this->engine, scoreText, this));
 	this->addEntity(scoreText);
@@ -237,6 +250,14 @@ void Game::addEnemy(Coordinate* position, EnemyType enemyType, double idleTime) 
 
 void Game::addPlayer(Coordinate* position) {
 	this->player->setInitialPosition(position);
+}
+
+void Game::notifyKeyDown(SDL_Keycode key) {
+	this->input->onKeyDown(key);
+}
+
+void Game::notifyKeyUp(SDL_Keycode key) {
+	this->input->onKeyUp(key);
 }
 
 void Game::ingredientFinished() {

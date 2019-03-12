@@ -43,6 +43,7 @@ public:
 	BoundingBox* getBoundingBox();
 	void setBoundingBox(BoundingBox* boundingBox);
 
+	bool getEnabled();
 	void setEnabled(bool enabled);
 
 	virtual ~Entity();
