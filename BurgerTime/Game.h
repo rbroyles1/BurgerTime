@@ -14,6 +14,8 @@ enum Field {FLOOR, STAIR, NO_FIELD};
 enum Ingredient;
 
 class Game : public Entity {
+	std::string* chosenLevel;
+
 	std::vector<Entity*>* entities;
 	std::vector<Entity*>* floors;
 	std::vector<Entity*>* leftFloorsLimits;
@@ -38,7 +40,7 @@ class Game : public Entity {
 	int currentFinishedIngredients;
 
 public:
-	Game(Engine* engine);
+	Game(Engine* engine, std::string* chosenLevel);
 
 	virtual void init();
 	virtual void update(double dt);

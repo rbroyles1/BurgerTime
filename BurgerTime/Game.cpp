@@ -22,7 +22,9 @@
 // TODO change all int millisecs to double secs
 // TODO reduce enemies bounding box
 // TODO fix enemies are able to kill you when they are stunned
-Game::Game(Engine* engine) : Entity(engine) {
+Game::Game(Engine* engine, std::string* chosenLevel) : Entity(engine) {
+	this->chosenLevel = chosenLevel;
+
 	this->entities = new std::vector<Entity*>();
 	this->floors = new std::vector<Entity*>();
 	this->leftFloorsLimits = new std::vector<Entity*>();
@@ -158,7 +160,7 @@ void Game::createHUD() {
 void Game::createLevel() {
 	LevelManager manager(this);
 
-	manager.loadLevel("resources/levels/default.bgtm");
+	manager.loadLevel(this->chosenLevel->c_str());
 	this->addEndingLimit();
 }
 
@@ -371,6 +373,8 @@ Game::~Game() {
 	}
 
 	Mix_FreeMusic(this->backgroundMusic);
+
+	delete this->chosenLevel;
 
 	delete this->entities;
 	delete this->floors;
