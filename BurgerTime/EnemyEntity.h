@@ -11,11 +11,14 @@ class EnemyEntity : public Entity {
 	PlayerEntity* player;
 
 	int deadMillisecs;
+	double idleTime;
+	double initialIdleTime;
+
 	bool hasMoved;
 	bool canMove;
 
 public:
-	EnemyEntity(Engine* engine, Coordinate* position, EnemyType enemyType, PlayerEntity* player, std::vector<Entity*>* ingredients);
+	EnemyEntity(Engine* engine, Coordinate* position, EnemyType enemyType, double idleTime, PlayerEntity* player, std::vector<Entity*>* ingredients);
 
 	virtual void update(double dt);
 

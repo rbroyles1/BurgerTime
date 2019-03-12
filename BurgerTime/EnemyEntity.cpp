@@ -6,10 +6,11 @@
 #include <cstdlib>
 
 // TODO put AI in component
-EnemyEntity::EnemyEntity(Engine* engine, Coordinate* position, EnemyType enemyType, PlayerEntity* player, std::vector<Entity*>* ingredients) : Entity(engine, position) {
+EnemyEntity::EnemyEntity(Engine* engine, Coordinate* position, EnemyType enemyType, double idleTime, PlayerEntity* player, std::vector<Entity*>* ingredients) : Entity(engine, position) {
 	this->initialPosition = new Coordinate(position->getX(), position->getY());
 	this->action = NO_ACTION;
 	this->deadMillisecs = 0;
+	this->idleTime = this->initialIdleTime = idleTime;
 	this->hasMoved = false;
 	this->canMove = true;
 	this->player = player;
@@ -53,6 +54,10 @@ void EnemyEntity::update(double dt) {
 		}
 	}
 
+	if (this->idleTime > 0) {
+		this->idleTime -= dt;
+	}
+
 	this->move();
 
 	this->clearMessages();
@@ -65,6 +70,7 @@ void EnemyEntity::respawn() {
 	this->deadMillisecs = 0;
 	this->canMove = true;
 	this->hasMoved = false;
+	this->idleTime = this->initialIdleTime;
 }
 
 CharacterAction EnemyEntity::getAction() {
@@ -72,7 +78,7 @@ CharacterAction EnemyEntity::getAction() {
 }
 
 void EnemyEntity::move() {
-	if (this->canMove) {
+	if (this->canMove && this->idleTime <= 0) {
 		std::vector<CharacterAction> possibleMoves = std::vector<CharacterAction>();
 		std::vector<int> movesProbabilities = std::vector<int>();
 		int currentProbability = 0;

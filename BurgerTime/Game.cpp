@@ -222,8 +222,8 @@ void Game::addDish(Coordinate* position) {
 	this->addEntity(dish);
 }
 
-void Game::addEnemy(Coordinate* position, EnemyType enemyType) {
-	EnemyEntity* enemy = new EnemyEntity(this->engine, position, enemyType, this->player, this->ingredients);
+void Game::addEnemy(Coordinate* position, EnemyType enemyType, double idleTime) {
+	EnemyEntity* enemy = new EnemyEntity(this->engine, position, enemyType, idleTime, this->player, this->ingredients);
 
 	this->setWalkingEntityColliders(enemy);
 	this->enemies->push_back(enemy);

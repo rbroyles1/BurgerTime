@@ -48,7 +48,7 @@ public:
 	void addStair(Coordinate* position);
 	void addIngredient(Coordinate* position, Ingredient ingredient);
 	void addDish(Coordinate* position);
-	void addEnemy(Coordinate* position, EnemyType enemyType);
+	void addEnemy(Coordinate* position, EnemyType enemyType, double idleTime);
 	void addPlayer(Coordinate* position);
 
 	int getScore();

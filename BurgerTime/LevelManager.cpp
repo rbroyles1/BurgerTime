@@ -56,13 +56,13 @@ void LevelManager::loadLevel(const char* levelPath) {
 				this->game->addIngredient(new Coordinate(position), TOMATO);
 			}
 			else if (strcmp(type, "SAUSAGE") == 0) {
-				this->game->addEnemy(new Coordinate(position), SAUSAGE);
+				this->game->addEnemy(new Coordinate(position), SAUSAGE, extra / 1000.0);
 			}
 			else if (strcmp(type, "EGG") == 0) {
-				this->game->addEnemy(new Coordinate(position), EGG);
+				this->game->addEnemy(new Coordinate(position), EGG, extra / 1000.0);
 			}
 			else if (strcmp(type, "CUCUMBER") == 0) {
-				this->game->addEnemy(new Coordinate(position), CUCUMBER);
+				this->game->addEnemy(new Coordinate(position), CUCUMBER, extra / 1000.0);
 			}
 		}
 	}
