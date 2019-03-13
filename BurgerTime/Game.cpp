@@ -19,7 +19,6 @@
 
 const bool SHOW_FPS = false;
 
-// TODO change floor color
 // TODO put AI in component
 // TODO add pepper reloads
 // TODO add proper winnig
@@ -175,7 +174,8 @@ void Game::setWalkingEntityColliders(Entity* entity) {
 
 void Game::addFloor(Coordinate* position, int type) {
 	Entity* floor = new Entity(this->engine, position);
-	Sprite* floorSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/floor.bmp");
+	Sprite* floorSprite = new Sprite(this->engine->getRenderer(),
+		type == 0? "resources/sprites/floor1.bmp" : "resources/sprites/floor2.bmp");
 
 	floor->setBoundingBox(new BoundingBox(new Coordinate(16, 2)));
 	floor->addComponent(new RenderComponent(this->engine, floor, floorSprite));
