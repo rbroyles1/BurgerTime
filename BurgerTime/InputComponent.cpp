@@ -19,12 +19,18 @@ void InputComponent::update(double dt) {
 }
 
 void InputComponent::onKeyDown(SDL_Keycode key) {
-	if (key == SDLK_n) this->engine->getMessageDispatcher()->send(SWITCH_NIGHT_MODE);
-	if (key == SDLK_r) this->engine->getMessageDispatcher()->send(RESET_GAME);
-	if (key == SDLK_l) this->engine->getMessageDispatcher()->send(LOAD_NEW_LEVEL);
+	if (this->enabled) {
+		if (key == SDLK_n) this->engine->getMessageDispatcher()->send(SWITCH_NIGHT_MODE);
+		if (key == SDLK_r) this->engine->getMessageDispatcher()->send(RESET_GAME);
+		if (key == SDLK_l) this->engine->getMessageDispatcher()->send(LOAD_NEW_LEVEL);
+	}
 }
 
-void InputComponent::onKeyUp(SDL_Keycode key) { }
+void InputComponent::onKeyUp(SDL_Keycode key) {
+	if (this->enabled) {
+
+	}
+}
 
 void InputComponent::setEnabled(bool enabled) {
 	this->enabled = enabled;

@@ -9,7 +9,8 @@ EnemyEntity::EnemyEntity(Engine* engine, Coordinate* position, EnemyType enemyTy
 	this->initialPosition = new Coordinate(position->getX(), position->getY());
 	this->action = NO_ACTION;
 	this->deadTime = 0;
-	this->idleTime = this->initialIdleTime = idleTime;
+	this->idleTime = idleTime + INTRO_DURATION_MILLISECS / 1000.0;
+	this->initialIdleTime = idleTime;
 	this->hasMoved = false;
 	this->canMove = true;
 	this->player = player;

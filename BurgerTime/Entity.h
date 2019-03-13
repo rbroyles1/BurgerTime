@@ -12,13 +12,13 @@ class Engine;
 
 class Entity : public Receiver {
 private:
-	std::vector<Component*>* components;
 	bool enabled;
 
 protected:
 	Engine* engine;
 	Coordinate* position;
 	BoundingBox* boundingBox;
+	std::vector<Component*>* components;
 
 public:
 

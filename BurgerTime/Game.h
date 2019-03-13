@@ -32,13 +32,14 @@ class Game : public Entity {
 	InputComponent* input;
 	Field previousField;
 	Coordinate* previousFieldPosition;
-	Mix_Music* backgroundMusic;
 
 	int score;
 	int lives;
 	int pepper;
 	int totalIngredients;
 	int currentFinishedIngredients;
+
+	double introTime;
 
 	bool reset;
 
@@ -92,6 +93,7 @@ private:
 
 	void initFields();
 	void performSubscriptions();
+	void waitForIntro(double dt);
 	void loadNewLevel();
-	void freeResources();
+	void freeResources(bool freeComponents);
 };

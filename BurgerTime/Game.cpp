@@ -20,10 +20,11 @@
 const bool SHOW_FPS = false;
 
 // TODO change floor color
-// TODO reconsider if Receiver.h is really necessary
 // TODO put AI in component
-// TODO add sound effects
 // TODO add pepper reloads
+// TODO add proper winnig
+// TODO maybe add hi-score
+// TODO maybe add controls help
 // TODO search other TODOs
 Game::Game(Engine* engine) : Entity(engine) {
 	this->chosenLevel = new std::string("resources/levels/default.bgtm");
@@ -41,17 +42,16 @@ void Game::init() {
 	this->addEntity(this->player);
 	this->addEntity(this->player->getPepper());
 
-	this->backgroundMusic = Mix_LoadMUS("resources/sounds/music.mp3");
-	Mix_PlayMusic(this->backgroundMusic, -1);
-
 	Entity::init();
 }
 
 void Game::update(double dt) {
 	if (this->reset) {
-		this->freeResources();
+		this->freeResources(true);
 		this->init();
 	}
+
+	this->waitForIntro(dt);
 
 	Entity::update(dt);
 
@@ -111,6 +111,8 @@ void Game::createPlayer() {
 }
 
 void Game::createGameComponents() {
+	this->input->setEnabled(false);
+
 	this->addComponent(this->input);
 	this->addComponent(new SoundEffectsComponent(this->engine, this));
 }
@@ -394,6 +396,8 @@ void Game::initFields() {
 	this->currentFinishedIngredients = 0;
 	this->lives = INITIAL_LIVES;
 	this->pepper = INITIAL_PEPPER;
+
+	this->introTime = INTRO_DURATION_MILLISECS / 1000.0;
 }
 
 void Game::performSubscriptions() {
@@ -409,6 +413,17 @@ void Game::performSubscriptions() {
 	this->engine->getMessageDispatcher()->subscribe(LOAD_NEW_LEVEL, this);
 }
 
+void Game::waitForIntro(double dt) {
+	if (this->introTime > 0) {
+		this->introTime -= dt;
+
+		if (this->introTime <= 0) {
+			this->input->setEnabled(true);
+			this->engine->getMessageDispatcher()->send(GAME_STARTED);
+		}
+	}
+}
+
 void Game::loadNewLevel() {
 	delete this->chosenLevel;
 
@@ -416,12 +431,19 @@ void Game::loadNewLevel() {
 	this->reset = true;
 }
 
-void Game::freeResources() {
+void Game::freeResources(bool freeComponents) {
+	if (freeComponents) {
+		for (auto it = this->components->begin(); it != this->components->end(); it++) {
+			delete *it;
+		}
+
+		this->components->clear();
+	}
+
 	for (auto it = this->entities->begin(); it != this->entities->end(); it++) {
 		delete *it;
 	}
 
-	Mix_FreeMusic(this->backgroundMusic);
 	this->engine->getMessageDispatcher()->clear();
 
 	delete this->entities;
@@ -437,6 +459,6 @@ void Game::freeResources() {
 }
 
 Game::~Game() {
-	this->freeResources();
+	this->freeResources(false);
 	delete this->chosenLevel;
 }
