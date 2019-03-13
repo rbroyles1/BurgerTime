@@ -31,7 +31,7 @@ void SoundEffectsComponent::update(double dt) {
 		Mix_PlayChannel(-1, this->loose, 0);
 		this->dying = true;
 	}
-	if (this->hasReceived(PLAYER_DIED)) {
+	if (this->hasReceived(PLAYER_DIED) && !this->hasReceived(GAME_OVER)) {
 		Mix_ResumeMusic();
 		this->dying = false;
 	}
@@ -54,6 +54,7 @@ void SoundEffectsComponent::update(double dt) {
 
 void SoundEffectsComponent::performSubscriptions() {
 	this->engine->getMessageDispatcher()->subscribe(GAME_STARTED, this);
+	this->engine->getMessageDispatcher()->subscribe(GAME_OVER, this);
 
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_ATTACK, this);
 	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);

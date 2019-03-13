@@ -1,8 +1,8 @@
 #include "ScoreCounterComponent.h"
 
 ScoreCounterComponent::ScoreCounterComponent(Engine* engine, Entity* entity, Game* game) : Component(engine, entity) {
-	this->header = new Text(this->engine->getRenderer(), "space_invaders.ttf", 8);
-	this->score = new Text(this->engine->getRenderer(), "space_invaders.ttf", 8);
+	this->header = new Text(this->engine->getRenderer(), "resources/fonts/space_invaders.ttf", 8);
+	this->score = new Text(this->engine->getRenderer(), "resources/fonts/space_invaders.ttf", 8);
 	this->game = game;
 }
 

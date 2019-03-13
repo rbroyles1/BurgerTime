@@ -1,8 +1,8 @@
 #include "PepperCounterComponent.h"
 
 PepperCounterComponent::PepperCounterComponent(Engine* engine, Entity* entity, Game* game) : Component(engine, entity) {
-	this->header = new Text(this->engine->getRenderer(), "space_invaders.ttf", 8);
-	this->pepper = new Text(this->engine->getRenderer(), "space_invaders.ttf", 8);
+	this->header = new Text(this->engine->getRenderer(), "resources/fonts/space_invaders.ttf", 8);
+	this->pepper = new Text(this->engine->getRenderer(), "resources/fonts/space_invaders.ttf", 8);
 	this->game = game;
 }
 

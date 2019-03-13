@@ -23,7 +23,6 @@ const bool SHOW_FPS = false;
 // TODO add pepper reloads
 // TODO add proper winnig
 // TODO maybe add hi-score
-// TODO maybe add controls help
 // TODO search other TODOs
 Game::Game(Engine* engine) : Entity(engine) {
 	this->chosenLevel = new std::string("resources/levels/default.bgtm");
@@ -119,7 +118,7 @@ void Game::createGameComponents() {
 void Game::createFpsCounter() {
 	if (SHOW_FPS) {
 		Entity* fpsCounter = new Entity(this->engine, new Coordinate(10, 10));
-		Text* text = new Text(this->engine->getRenderer(), "space_invaders.ttf", 8);
+		Text* text = new Text(this->engine->getRenderer(), "resources/fonts/space_invaders.ttf", 8);
 
 		fpsCounter->addComponent(new FpsCounterComponent(this->engine, fpsCounter, text));
 		this->addEntity(fpsCounter);
@@ -141,9 +140,15 @@ void Game::createHUD() {
 	pepperText->addComponent(new PepperCounterComponent(this->engine, pepperText, this));
 	this->addEntity(pepperText);
 
+	Entity* controlsText = new Entity(this->engine, new Coordinate(24, 20));
+	controlsText->addComponent(new TextRenderComponent(this->engine, controlsText,
+		new std::string("NIGHT <N>               LOAD <L>               RESET <R>"),
+		new Text(this->engine->getRenderer(), "resources/fonts/space_invaders.ttf", 8)));
+	this->addEntity(controlsText);
+
 	this->gameOverText = new Entity(this->engine, new Coordinate(70, 120));
 	this->gameOverText->addComponent(new TextRenderComponent(this->engine, this->gameOverText, new std::string("GAME OVER"),
-		new Text(this->engine->getRenderer(), "space_invaders.ttf", 16)));
+		new Text(this->engine->getRenderer(), "resources/fonts/space_invaders.ttf", 16)));
 	this->gameOverText->setEnabled(false);
 
 	this->addEntity(this->gameOverText);
@@ -264,6 +269,7 @@ void Game::playerDied() {
 	if (this->lives <= 0) {
 		this->input->setEnabled(false);
 		this->gameOverText->setEnabled(true);
+		this->engine->getMessageDispatcher()->send(GAME_OVER);
 	}
 	else {
 		this->player->respawn();
