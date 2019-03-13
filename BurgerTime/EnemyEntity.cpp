@@ -42,8 +42,7 @@ void EnemyEntity::update(double dt) {
 		this->hasMoved = false;
 	}
 	if (this->hasReceived(ENEMY_ATTACK)) {
-		this->action = NO_ACTION;
-		this->canMove = false;
+		this->engine->getMessageDispatcher()->send(ENEMY_ATTACK);
 	}
 	if (this->action == DIE) {
 		this->deadTime += dt;
@@ -60,6 +59,11 @@ void EnemyEntity::update(double dt) {
 	this->move();
 
 	this->clearMessages();
+}
+
+void EnemyEntity::onEnemyAttacked() {
+	this->action = NO_ACTION;
+	this->canMove = false;
 }
 
 void EnemyEntity::respawn() {

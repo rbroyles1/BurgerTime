@@ -135,6 +135,9 @@
     <ClInclude Include="WalkingRigidBodyComponent.h">
       <Filter>Header Files\Component</Filter>
     </ClInclude>
+    <ClInclude Include="EnemyPlayerCollideComponent.h">
+      <Filter>Header Files\Component</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -228,6 +231,9 @@
       <Filter>Source Files\Component</Filter>
     </ClCompile>
     <ClCompile Include="WalkingRigidBodyComponent.cpp">
+      <Filter>Source Files\Component</Filter>
+    </ClCompile>
+    <ClCompile Include="EnemyPlayerCollideComponent.cpp">
       <Filter>Source Files\Component</Filter>
     </ClCompile>
   </ItemGroup>

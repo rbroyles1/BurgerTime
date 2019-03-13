@@ -24,6 +24,9 @@ EnemyRenderComponent::EnemyRenderComponent(Engine* engine, Entity* entity, Enemy
 
 	this->writeSpritePattern(enemyPattern, "resources/sprites/%s_stunned (%%d).bmp", enemyType);
 	this->stunned = new Sprite(engine->getRenderer(), enemyPattern, 1, 2, ENEMY_STUNNED_ANIMATION_MILLISECS);
+
+	this->writeSpritePattern(enemyPattern, "resources/sprites/%s_downstairs (1).bmp", enemyType);
+	this->standStill = new Sprite(engine->getRenderer(), enemyPattern);
 }
 
 void EnemyRenderComponent::update(double dt) {
@@ -62,7 +65,7 @@ void EnemyRenderComponent::update(double dt) {
 			}
 			break;
 		default:
-			sprite = this->walkingLeft;
+			sprite = this->standStill;
 			break;
 	}
 
@@ -89,4 +92,6 @@ EnemyRenderComponent::~EnemyRenderComponent() {
 	delete this->upStairs;
 	delete this->downStairs;
 	delete this->squashed;
+	delete this->stunned;
+	delete this->standStill;
 }

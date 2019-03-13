@@ -1,8 +1,8 @@
 #include "PlayerEntity.h"
 #include "PlayerRenderComponent.h"
 #include "WalkingRigidBodyComponent.h"
+#include "EnemyPlayerCollideComponent.h"
 #include "FloorCollideComponent.h"
-#include "BoxCollideComponent.h"
 #include "RenderComponent.h"
 #include "Engine.h"
 
@@ -14,7 +14,7 @@ PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position, std::vector<Ent
 
 	this->addComponent(renderComponent);
 	this->addComponent(rigidBodyComponent);
-	this->addComponent(new BoxCollideComponent(this->engine, this, ENEMY_ATTACK, enemies));
+	this->addComponent(new EnemyPlayerCollideComponent(this->engine, this, enemies));
 
 	this->setBoundingBox(new BoundingBox(new Coordinate(16, 16)));
 	
@@ -35,7 +35,7 @@ PlayerEntity::PlayerEntity(Engine* engine, Coordinate* position, std::vector<Ent
 void PlayerEntity::update(double dt) {
 	Entity::update(dt);
 
-	if (this->action != CELEBRATE_VICTORY) {
+	if (this->action != CELEBRATE_VICTORY && this->action != DIE) {
 		this->action = NO_ACTION;
 
 		if (this->hasReceived(ON_FLOOR)) {

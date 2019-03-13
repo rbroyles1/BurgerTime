@@ -17,14 +17,12 @@
 #include "PepperCounterComponent.h"
 
 // TODO change floor color
-// TODO make all enemies stop when dying
 // TODO maybe allow the player to control one enemy
 // TODO reconsider if Receiver.h is really necessary
-// TODO reduce enemies bounding box
-// TODO fix enemies are able to kill you when they are stunned or dead
 // TODO put AI in component
 // TODO add sound effects
 // TODO add pepper reloads
+// TODO properly prompt level
 // TODO search other TODOs
 Game::Game(Engine* engine, std::string* chosenLevel) : Entity(engine) {
 	this->chosenLevel = chosenLevel;
@@ -62,6 +60,7 @@ void Game::init() {
 	this->engine->getMessageDispatcher()->subscribe(PEPPER_THROWN, this);
 	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_SQUASHED, this);
+	this->engine->getMessageDispatcher()->subscribe(ENEMY_ATTACK, this);
 
 	this->backgroundMusic = Mix_LoadMUS("resources/sound/music.mp3");
 	Mix_PlayMusic(this->backgroundMusic, -1);
@@ -96,6 +95,9 @@ void Game::receive(Message message) {
 			break;
 		case ENEMY_SQUASHED:
 			this->increaseScore(100);
+			break;
+		case ENEMY_ATTACK:
+			this->enemyAttacked();
 			break;
 		case PLAYER_DIED:
 			this->playerDied();
@@ -274,6 +276,12 @@ void Game::ingredientFinished() {
 
 void Game::pepperThrown() {
 	this->pepper--;
+}
+
+void Game::enemyAttacked() {
+	for (Entity* enemy : *this->enemies) {
+		((EnemyEntity*)enemy)->onEnemyAttacked();
+	}
 }
 
 void Game::playerDied() {

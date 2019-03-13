@@ -22,7 +22,9 @@ public:
 
 	virtual void update(double dt);
 
+	void onEnemyAttacked();
 	void respawn();
+	
 	CharacterAction getAction();
 
 private:

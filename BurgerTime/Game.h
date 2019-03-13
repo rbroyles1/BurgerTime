@@ -85,6 +85,7 @@ private:
 	void increaseLives();
 	void ingredientFinished();
 	void pepperThrown();
+	void enemyAttacked();
 	void playerDied();
 	void victory();
 };

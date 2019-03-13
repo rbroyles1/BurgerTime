@@ -10,6 +10,7 @@ class EnemyRenderComponent : public Component {
 	Sprite* downStairs;
 	Sprite* squashed;
 	Sprite* stunned;
+	Sprite* standStill;
 
 	double deadTime;
 	double stunnedTime;
