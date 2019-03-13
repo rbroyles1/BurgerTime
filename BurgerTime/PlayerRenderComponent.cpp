@@ -41,7 +41,7 @@ void PlayerRenderComponent::update(double dt) {
 			if (this->deadTime * 1000 >= COOK_DIE_ANIMATION_MILLISECS * 3) {
 				sprite = this->die2;
 
-				if (this->deadTime * 1000 >= COOK_CELEBRATE_ANIMATION_MILLISECS * 6) {
+				if (this->deadTime * 1000 >= COOK_DIE_ANIMATION_MILLISECS * 16) {
 					this->engine->getMessageDispatcher()->send(PLAYER_DIED);
 
 					if (((PlayerEntity*)this->entity)->getAction() == NO_ACTION) {

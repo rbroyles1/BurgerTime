@@ -6,11 +6,14 @@ class SoundEffectsComponent : public Component {
 	Mix_Music* backgroundMusic;
 
 	Mix_Chunk* intro;
+	Mix_Chunk* loose;
 
 	Mix_Chunk *pepper;
 	Mix_Chunk *ingredientStep;
 	Mix_Chunk *ingredientHit;
 	Mix_Chunk *squashed;
+
+	bool dying;
 
 public:
 	SoundEffectsComponent(Engine* engine, Entity* entity);

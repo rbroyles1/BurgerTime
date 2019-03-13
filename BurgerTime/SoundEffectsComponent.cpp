@@ -5,11 +5,14 @@ SoundEffectsComponent::SoundEffectsComponent(Engine* engine, Entity* entity) : C
 	this->backgroundMusic = Mix_LoadMUS("resources/sounds/music.mp3");
 
 	this->intro = Mix_LoadWAV("resources/sounds/intro.mp3");
+	this->loose = Mix_LoadWAV("resources/sounds/loose.mp3");
 
 	this->pepper = Mix_LoadWAV("resources/sounds/pepper.mp3");
 	this->ingredientStep = Mix_LoadWAV("resources/sounds/ingredient_step.mp3");
 	this->ingredientHit = Mix_LoadWAV("resources/sounds/ingredient_hit.mp3");
 	this->squashed = Mix_LoadWAV("resources/sounds/squashed.mp3");
+
+	this->dying = false;
 
 	this->performSubscriptions();
 
@@ -19,6 +22,18 @@ SoundEffectsComponent::SoundEffectsComponent(Engine* engine, Entity* entity) : C
 void SoundEffectsComponent::update(double dt) {
 	if (this->hasReceived(GAME_STARTED)) {
 		Mix_PlayMusic(this->backgroundMusic, -1);
+	}
+
+	if (this->hasReceived(ENEMY_ATTACK) && !this->dying) {
+		Mix_RewindMusic();
+		Mix_PauseMusic();
+
+		Mix_PlayChannel(-1, this->loose, 0);
+		this->dying = true;
+	}
+	if (this->hasReceived(PLAYER_DIED)) {
+		Mix_ResumeMusic();
+		this->dying = false;
 	}
 
 	if (this->hasReceived(PEPPER_THROWN)) {
@@ -39,6 +54,9 @@ void SoundEffectsComponent::update(double dt) {
 
 void SoundEffectsComponent::performSubscriptions() {
 	this->engine->getMessageDispatcher()->subscribe(GAME_STARTED, this);
+
+	this->engine->getMessageDispatcher()->subscribe(ENEMY_ATTACK, this);
+	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
 
 	this->engine->getMessageDispatcher()->subscribe(PEPPER_THROWN, this);
 	this->engine->getMessageDispatcher()->subscribe(ON_INGREDIENT_1, this);
