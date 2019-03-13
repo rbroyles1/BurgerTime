@@ -19,15 +19,13 @@
 const bool SHOW_FPS = false;
 
 // TODO change floor color
-// TODO maybe allow the player to control one enemy
 // TODO reconsider if Receiver.h is really necessary
 // TODO put AI in component
 // TODO add sound effects
 // TODO add pepper reloads
-// TODO properly prompt level
 // TODO search other TODOs
-Game::Game(Engine* engine, std::string* chosenLevel) : Entity(engine) {
-	this->chosenLevel = chosenLevel;
+Game::Game(Engine* engine) : Entity(engine) {
+	this->chosenLevel = new std::string("resources/levels/default.bgtm");
 }
 
 void Game::init() {
@@ -89,6 +87,9 @@ void Game::receive(Message message) {
 			break;
 		case RESET_GAME:
 			this->reset = true;
+			break;
+		case LOAD_NEW_LEVEL:
+			this->loadNewLevel();
 			break;
 	}
 }
@@ -403,6 +404,14 @@ void Game::performSubscriptions() {
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_SQUASHED, this);
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_ATTACK, this);
 	this->engine->getMessageDispatcher()->subscribe(RESET_GAME, this);
+	this->engine->getMessageDispatcher()->subscribe(LOAD_NEW_LEVEL, this);
+}
+
+void Game::loadNewLevel() {
+	delete this->chosenLevel;
+
+	this->chosenLevel = LevelManager(this).promptLevel();
+	this->reset = true;
 }
 
 void Game::freeResources() {
@@ -412,8 +421,6 @@ void Game::freeResources() {
 
 	Mix_FreeMusic(this->backgroundMusic);
 	this->engine->getMessageDispatcher()->clear();
-
-	//delete this->chosenLevel;
 
 	delete this->entities;
 	delete this->floors;
@@ -429,4 +436,5 @@ void Game::freeResources() {
 
 Game::~Game() {
 	this->freeResources();
+	delete this->chosenLevel;
 }

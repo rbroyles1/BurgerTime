@@ -6,6 +6,7 @@
 #include "Sprite.h"
 #include "IngredientEntity.h"
 #include "EnemyEntity.h"
+#include <Windows.h>
 #include <cstdio>
 
 LevelManager::LevelManager(Game * game) {
@@ -68,4 +69,40 @@ void LevelManager::loadLevel(const char* levelPath) {
 	}
 
 	fclose(fp);
+}
+
+std::string* LevelManager::promptLevel() {
+	std::vector<std::string> levels = listLevels();
+	SDL_MessageBoxButtonData* buttons = new SDL_MessageBoxButtonData[levels.size()]();
+
+	for (int i = 0; i < (int)levels.size(); i++) {
+		buttons[i] = { 0, i, levels.at(i).c_str() };
+	}
+
+	SDL_MessageBoxData messageBoxData = { SDL_MESSAGEBOX_INFORMATION, nullptr, "BurgerTime", "Choose a level", (int)levels.size(), buttons, nullptr };
+
+	int buttonId;
+
+	if (SDL_ShowMessageBox(&messageBoxData, &buttonId) < 0 || buttonId < 0) {
+		return nullptr;
+	}
+
+	return new std::string(std::string("resources/levels/") + std::string(buttons[buttonId].text));
+}
+
+std::vector<std::string> LevelManager::listLevels() {
+	std::vector<std::string> names;
+	WIN32_FIND_DATA fd;
+	HANDLE hFind = ::FindFirstFile("resources/levels/*.*", &fd);
+
+	if (hFind != INVALID_HANDLE_VALUE) {
+		do {
+			if (!(fd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
+				names.push_back(fd.cFileName);
+			}
+		} while (::FindNextFile(hFind, &fd));
+		::FindClose(hFind);
+	}
+
+	return names;
 }

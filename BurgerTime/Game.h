@@ -43,7 +43,7 @@ class Game : public Entity {
 	bool reset;
 
 public:
-	Game(Engine* engine, std::string* chosenLevel);
+	Game(Engine* engine);
 
 	virtual void init();
 	virtual void update(double dt);
@@ -92,5 +92,6 @@ private:
 
 	void initFields();
 	void performSubscriptions();
+	void loadNewLevel();
 	void freeResources();
 };
