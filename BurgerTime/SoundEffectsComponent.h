@@ -7,6 +7,7 @@ class SoundEffectsComponent : public Component {
 
 	Mix_Chunk* intro;
 	Mix_Chunk* loose;
+	Mix_Chunk* win;
 
 	Mix_Chunk *pepper;
 	Mix_Chunk *ingredientStep;

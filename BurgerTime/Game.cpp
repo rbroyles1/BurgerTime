@@ -21,7 +21,6 @@ const bool SHOW_FPS = false;
 
 // TODO put AI in component
 // TODO add pepper reloads
-// TODO add proper winnig
 // TODO maybe add hi-score
 // TODO search other TODOs
 Game::Game(Engine* engine) : Entity(engine) {
@@ -79,7 +78,7 @@ void Game::receive(Message message) {
 			this->increaseScore(100);
 			break;
 		case ENEMY_ATTACK:
-			this->enemyAttacked();
+			this->freezeEnemies();
 			break;
 		case PLAYER_DIED:
 			this->playerDied();
@@ -89,6 +88,9 @@ void Game::receive(Message message) {
 			break;
 		case LOAD_NEW_LEVEL:
 			this->loadNewLevel();
+			break;
+		case GAME_VICTORY:
+			this->freezeEnemies();
 			break;
 	}
 }
@@ -257,9 +259,9 @@ void Game::pepperThrown() {
 	this->pepper--;
 }
 
-void Game::enemyAttacked() {
+void Game::freezeEnemies() {
 	for (Entity* enemy : *this->enemies) {
-		((EnemyEntity*)enemy)->onEnemyAttacked();
+		((EnemyEntity*)enemy)->freeze();
 	}
 }
 
@@ -417,6 +419,7 @@ void Game::performSubscriptions() {
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_ATTACK, this);
 	this->engine->getMessageDispatcher()->subscribe(RESET_GAME, this);
 	this->engine->getMessageDispatcher()->subscribe(LOAD_NEW_LEVEL, this);
+	this->engine->getMessageDispatcher()->subscribe(GAME_VICTORY, this);
 }
 
 void Game::waitForIntro(double dt) {

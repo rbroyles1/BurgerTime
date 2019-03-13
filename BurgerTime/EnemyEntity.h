@@ -22,7 +22,7 @@ public:
 
 	virtual void update(double dt);
 
-	void onEnemyAttacked();
+	void freeze();
 	void respawn();
 	
 	CharacterAction getAction();

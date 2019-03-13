@@ -62,7 +62,7 @@ void EnemyEntity::update(double dt) {
 	this->clearMessages();
 }
 
-void EnemyEntity::onEnemyAttacked() {
+void EnemyEntity::freeze() {
 	this->action = NO_ACTION;
 	this->canMove = false;
 }
