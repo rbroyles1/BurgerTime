@@ -74,7 +74,6 @@ Entity::~Entity() {
 		delete *it;
 	}
 
-	delete this->position;
 	delete this->components;
 	delete this->boundingBox;
 	delete this->receivedMessages;

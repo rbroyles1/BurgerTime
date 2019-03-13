@@ -16,6 +16,8 @@
 #include "TextRenderComponent.h"
 #include "PepperCounterComponent.h"
 
+const bool SHOW_FPS = false;
+
 // TODO change floor color
 // TODO maybe allow the player to control one enemy
 // TODO reconsider if Receiver.h is really necessary
@@ -26,41 +28,19 @@
 // TODO search other TODOs
 Game::Game(Engine* engine, std::string* chosenLevel) : Entity(engine) {
 	this->chosenLevel = chosenLevel;
-
-	this->entities = new std::vector<Entity*>();
-	this->floors = new std::vector<Entity*>();
-	this->leftFloorsLimits = new std::vector<Entity*>();
-	this->rightFloorsLimits = new std::vector<Entity*>();
-	this->stairs = new std::vector<Entity*>();
-	this->upStairsLimits = new std::vector<Entity*>();
-	this->downStairsLimits = new std::vector<Entity*>();
-	this->ingredients = new std::vector<Entity*>();
-	this->enemies = new std::vector<Entity*>();
-
-	this->input = new InputComponent(this->engine, this);
-	this->player = nullptr;	
-	
-	this->clear();
 }
 
 void Game::init() {
-	//this->createFpsCounter();
+	this->initFields();
+	this->createFpsCounter();
 	this->createGameComponents();
 	this->createPlayer();
 	this->createLevel();
 	this->createHUD();
+	this->performSubscriptions();
 
 	this->addEntity(this->player);
 	this->addEntity(this->player->getPepper());
-
-	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
-	this->engine->getMessageDispatcher()->subscribe(SWITCH_NIGHT_MODE, this);
-	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FLOOR_HIT, this);
-	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FINISHED, this);
-	this->engine->getMessageDispatcher()->subscribe(PEPPER_THROWN, this);
-	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
-	this->engine->getMessageDispatcher()->subscribe(ENEMY_SQUASHED, this);
-	this->engine->getMessageDispatcher()->subscribe(ENEMY_ATTACK, this);
 
 	this->backgroundMusic = Mix_LoadMUS("resources/sound/music.mp3");
 	Mix_PlayMusic(this->backgroundMusic, -1);
@@ -69,6 +49,11 @@ void Game::init() {
 }
 
 void Game::update(double dt) {
+	if (this->reset) {
+		this->freeResources();
+		this->init();
+	}
+
 	Entity::update(dt);
 
 	for (auto it = this->entities->begin(); it != this->entities->end(); it++) {
@@ -102,32 +87,14 @@ void Game::receive(Message message) {
 		case PLAYER_DIED:
 			this->playerDied();
 			break;
+		case RESET_GAME:
+			this->reset = true;
+			break;
 	}
 }
 
 void Game::addEntity(Entity* entity) {
 	this->entities->push_back(entity);
-}
-
-void Game::clear() {
-	this->entities->clear();
-	this->floors->clear();
-	this->leftFloorsLimits->clear();
-	this->rightFloorsLimits->clear();
-	this->stairs->clear();
-	this->upStairsLimits->clear();
-	this->downStairsLimits->clear();
-	this->ingredients->clear();
-	this->enemies->clear();
-
-	this->previousField = NO_FIELD;
-	this->previousFieldPosition = new Coordinate();
-
-	this->score = 0;
-	this->totalIngredients = 0;
-	this->currentFinishedIngredients = 0;
-	this->lives = INITIAL_LIVES;
-	this->pepper = INITIAL_PEPPER;
 }
 
 void Game::createPlayer() {
@@ -146,11 +113,13 @@ void Game::createGameComponents() {
 }
 
 void Game::createFpsCounter() {
-	Entity* fpsCounter = new Entity(this->engine, new Coordinate(10, 10));
-	Text* text = new Text(this->engine->getRenderer(), "space_invaders.ttf", 8);
+	if (SHOW_FPS) {
+		Entity* fpsCounter = new Entity(this->engine, new Coordinate(10, 10));
+		Text* text = new Text(this->engine->getRenderer(), "space_invaders.ttf", 8);
 
-	fpsCounter->addComponent(new FpsCounterComponent(this->engine, fpsCounter, text));
-	this->addEntity(fpsCounter);
+		fpsCounter->addComponent(new FpsCounterComponent(this->engine, fpsCounter, text));
+		this->addEntity(fpsCounter);
+	}
 }
 
 void Game::createHUD() {
@@ -400,14 +369,51 @@ void Game::victory() {
 	this->engine->getMessageDispatcher()->send(GAME_VICTORY);
 }
 
-Game::~Game() {
+void Game::initFields() {
+	this->entities = new std::vector<Entity*>();
+	this->floors = new std::vector<Entity*>();
+	this->leftFloorsLimits = new std::vector<Entity*>();
+	this->rightFloorsLimits = new std::vector<Entity*>();
+	this->stairs = new std::vector<Entity*>();
+	this->upStairsLimits = new std::vector<Entity*>();
+	this->downStairsLimits = new std::vector<Entity*>();
+	this->ingredients = new std::vector<Entity*>();
+	this->enemies = new std::vector<Entity*>();
+
+	this->input = new InputComponent(this->engine, this);
+	this->player = nullptr;
+	this->previousField = NO_FIELD;
+	this->previousFieldPosition = new Coordinate();
+	this->reset = false;
+
+	this->score = 0;
+	this->totalIngredients = 0;
+	this->currentFinishedIngredients = 0;
+	this->lives = INITIAL_LIVES;
+	this->pepper = INITIAL_PEPPER;
+}
+
+void Game::performSubscriptions() {
+	this->engine->getMessageDispatcher()->subscribe(EXIT, this);
+	this->engine->getMessageDispatcher()->subscribe(SWITCH_NIGHT_MODE, this);
+	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FLOOR_HIT, this);
+	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FINISHED, this);
+	this->engine->getMessageDispatcher()->subscribe(PEPPER_THROWN, this);
+	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
+	this->engine->getMessageDispatcher()->subscribe(ENEMY_SQUASHED, this);
+	this->engine->getMessageDispatcher()->subscribe(ENEMY_ATTACK, this);
+	this->engine->getMessageDispatcher()->subscribe(RESET_GAME, this);
+}
+
+void Game::freeResources() {
 	for (auto it = this->entities->begin(); it != this->entities->end(); it++) {
 		delete *it;
 	}
 
 	Mix_FreeMusic(this->backgroundMusic);
+	this->engine->getMessageDispatcher()->clear();
 
-	delete this->chosenLevel;
+	//delete this->chosenLevel;
 
 	delete this->entities;
 	delete this->floors;
@@ -419,4 +425,8 @@ Game::~Game() {
 	delete this->ingredients;
 	delete this->enemies;
 	delete this->previousFieldPosition;
+}
+
+Game::~Game() {
+	this->freeResources();
 }

@@ -40,6 +40,8 @@ class Game : public Entity {
 	int totalIngredients;
 	int currentFinishedIngredients;
 
+	bool reset;
+
 public:
 	Game(Engine* engine, std::string* chosenLevel);
 
@@ -47,7 +49,6 @@ public:
 	virtual void update(double dt);
 	virtual void receive(Message message);
 	void addEntity(Entity* entity);
-	void clear();
 
 	void addFloor(Coordinate* position, int type);
 	void addStair(Coordinate* position);
@@ -88,4 +89,8 @@ private:
 	void enemyAttacked();
 	void playerDied();
 	void victory();
+
+	void initFields();
+	void performSubscriptions();
+	void freeResources();
 };

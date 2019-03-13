@@ -14,6 +14,11 @@ void MessageDispatcher::send(Message message) {
 	}
 }
 
+void MessageDispatcher::clear() {
+	delete[] this->receivers;
+	this->receivers = new std::vector<Receiver*>[Message::COUNT]();
+}
+
 MessageDispatcher::~MessageDispatcher() {
 	delete[] this->receivers;
 }
