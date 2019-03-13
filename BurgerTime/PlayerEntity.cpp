@@ -64,9 +64,9 @@ void PlayerEntity::update(double dt) {
 	}
 
 	if (this->pepperActive) {
-		this->pepperActiveMillisecs += dt * 1000;
+		this->pepperActiveTime += dt;
 
-		if (this->pepperActiveMillisecs >= PEPPER_ANIMATION_MILLISECS * 4) {
+		if (this->pepperActiveTime * 1000 >= PEPPER_ANIMATION_MILLISECS * 4) {
 			this->hidePepper();
 		}
 	}
@@ -119,6 +119,6 @@ void PlayerEntity::hidePepper() {
 	Coordinate newPos = Coordinate(900, 900);
 
 	this->pepperActive = false;
-	this->pepperActiveMillisecs = 0;
+	this->pepperActiveTime = 0;
 	this->pepper->setPosition(newPos);
 }

@@ -11,7 +11,8 @@ class PlayerRenderComponent : public Component {
 	Sprite* celebrate;
 	Sprite* die1;
 	Sprite* die2;
-	int deadMillisecs;
+	
+	double deadTime;
 
 public:
 	PlayerRenderComponent(Engine* engine, Entity* entity);

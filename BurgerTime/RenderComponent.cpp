@@ -8,11 +8,11 @@ RenderComponent::RenderComponent(Engine * engine, Entity * entity, Sprite * spri
 }
 
 void RenderComponent::update(double dt) {
-	this->sprite->draw(entity->getPosition()->getX() + offset->getX(), 
-		entity->getPosition()->getY() + offset->getY(), dt);
+	this->sprite->draw((int)entity->getPosition()->getX() + (int)offset->getX(),
+		(int)entity->getPosition()->getY() + (int)offset->getY(), dt);
 }
 
-Sprite * RenderComponent::getSprite() {
+Sprite* RenderComponent::getSprite() {
 	return this->sprite;
 }
 

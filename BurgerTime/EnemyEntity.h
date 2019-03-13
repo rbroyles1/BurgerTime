@@ -10,7 +10,7 @@ class EnemyEntity : public Entity {
 	CharacterAction action;
 	PlayerEntity* player;
 
-	int deadMillisecs;
+	double deadTime;
 	double idleTime;
 	double initialIdleTime;
 

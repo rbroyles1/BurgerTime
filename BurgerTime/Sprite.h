@@ -7,7 +7,7 @@ class Sprite {
 	SDL_Renderer * renderer;
 	std::vector<SDL_Texture*>* textures;
 	int millisecsPerFrame;
-	int millisecsElapsed;
+	double timeElapsed;
 
 public:
 	Sprite(SDL_Renderer* renderer, const char* spritePath);

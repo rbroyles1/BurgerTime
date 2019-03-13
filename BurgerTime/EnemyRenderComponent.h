@@ -11,8 +11,8 @@ class EnemyRenderComponent : public Component {
 	Sprite* squashed;
 	Sprite* stunned;
 
-	int deadMillisecs;
-	int stunnedMillisecs;
+	double deadTime;
+	double stunnedTime;
 
 public:
 	EnemyRenderComponent(Engine* engine, Entity* entity, EnemyType enemyType);

@@ -13,7 +13,7 @@ void Text::draw(Coordinate* coordinate, const char *message, Uint8 red, Uint8 gr
 	int texW = 0;
 	int texH = 0;
 	SDL_QueryTexture(texture, nullptr, nullptr, &texW, &texH);
-	SDL_Rect dstrect = { coordinate->getX() * RESOLUTION_MULTIPLIER, coordinate->getY() * RESOLUTION_MULTIPLIER,
+	SDL_Rect dstrect = { (int)coordinate->getX() * RESOLUTION_MULTIPLIER, (int)coordinate->getY() * RESOLUTION_MULTIPLIER,
 		texW * RESOLUTION_MULTIPLIER, texH * RESOLUTION_MULTIPLIER};
 
 	SDL_RenderCopy(this->renderer, texture, nullptr, &dstrect);

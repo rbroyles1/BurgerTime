@@ -9,7 +9,7 @@ WalkingRigidBodyComponent::WalkingRigidBodyComponent(Engine * engine, Entity * e
 
 void WalkingRigidBodyComponent::update(double dt) {
 	CharacterAction action = NO_ACTION;
-	float speedCoeficient;
+	double speedCoeficient;
 	
 	this->velocity->setX(0);
 	this->velocity->setY(0);

@@ -11,7 +11,7 @@ class PlayerEntity : public Entity {
 	CharacterAction lastDirection;
 	Entity* pepper;
 	bool pepperActive;
-	int pepperActiveMillisecs;
+	double pepperActiveTime;
 
 public:
 	PlayerEntity(Engine* engine, Coordinate* position, std::vector<Entity*>* enemies, Game* game);

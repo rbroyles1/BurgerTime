@@ -26,11 +26,11 @@ std::string* chooseLevel() {
 	std::vector<std::string> levels = listLevels();
 	SDL_MessageBoxButtonData* buttons = new SDL_MessageBoxButtonData[levels.size()]();
 
-	for (int i = 0; i < levels.size(); i++) {
+	for (int i = 0; i < (int)levels.size(); i++) {
 		buttons[i] = { 0, i, levels.at(i).c_str() };
 	}
 
-	SDL_MessageBoxData messageBoxData = { SDL_MESSAGEBOX_INFORMATION, nullptr, "BurgerTime", "Choose a level", levels.size(), buttons, nullptr };
+	SDL_MessageBoxData messageBoxData = { SDL_MESSAGEBOX_INFORMATION, nullptr, "BurgerTime", "Choose a level", (int)levels.size(), buttons, nullptr };
 
 	int buttonId;
 

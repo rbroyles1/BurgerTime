@@ -5,11 +5,10 @@
 #include "WalkingRigidBodyComponent.h"
 #include <cstdlib>
 
-// TODO put AI in component
 EnemyEntity::EnemyEntity(Engine* engine, Coordinate* position, EnemyType enemyType, double idleTime, PlayerEntity* player, std::vector<Entity*>* ingredients) : Entity(engine, position) {
 	this->initialPosition = new Coordinate(position->getX(), position->getY());
 	this->action = NO_ACTION;
-	this->deadMillisecs = 0;
+	this->deadTime = 0;
 	this->idleTime = this->initialIdleTime = idleTime;
 	this->hasMoved = false;
 	this->canMove = true;
@@ -47,9 +46,9 @@ void EnemyEntity::update(double dt) {
 		this->canMove = false;
 	}
 	if (this->action == DIE) {
-		this->deadMillisecs += dt * 1000;
+		this->deadTime += dt;
 
-		if (this->deadMillisecs >= 2000) {
+		if (this->deadTime >= 2) {
 			this->respawn();
 		}
 	}
@@ -67,7 +66,7 @@ void EnemyEntity::respawn() {
 	this->setEnabled(true);
 	this->setPosition(*this->initialPosition);
 	this->action = NO_ACTION;
-	this->deadMillisecs = 0;
+	this->deadTime = 0;
 	this->canMove = true;
 	this->hasMoved = false;
 	this->idleTime = this->initialIdleTime;
@@ -83,8 +82,8 @@ void EnemyEntity::move() {
 		std::vector<int> movesProbabilities = std::vector<int>();
 		int currentProbability = 0;
 
-		int diffX = this->player->getPosition()->getX() - this->position->getX();
-		int diffY = this->player->getPosition()->getY() - this->position->getY();
+		int diffX = (int)this->player->getPosition()->getX() - (int)this->position->getX();
+		int diffY = (int)this->player->getPosition()->getY() - (int)this->position->getY();
 
 		if (this->isInIntersection() || !this->hasMoved) {
 			if (!this->hasReceived(INTERSECT_LIMIT_LEFT)) {

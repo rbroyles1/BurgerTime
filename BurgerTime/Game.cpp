@@ -17,11 +17,15 @@
 #include "PepperCounterComponent.h"
 
 // TODO change floor color
+// TODO make all enemies stop when dying
 // TODO maybe allow the player to control one enemy
 // TODO reconsider if Receiver.h is really necessary
-// TODO change all int millisecs to double secs
 // TODO reduce enemies bounding box
 // TODO fix enemies are able to kill you when they are stunned or dead
+// TODO put AI in component
+// TODO add sound effects
+// TODO add pepper reloads
+// TODO search other TODOs
 Game::Game(Engine* engine, std::string* chosenLevel) : Entity(engine) {
 	this->chosenLevel = chosenLevel;
 
