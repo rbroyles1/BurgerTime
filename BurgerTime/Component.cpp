@@ -7,6 +7,5 @@ Component::Component(Engine* engine, Entity* entity) {
 
 void Component::init() { }
 void Component::update(double dt) { }
-void Component::receive(Message message) { }
 
 Component::~Component() { }

@@ -146,6 +146,7 @@
     <ClInclude Include="PepperCounterComponent.h" />
     <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="PlayerRenderComponent.h" />
+    <ClInclude Include="SoundEffectsComponent.h" />
     <ClInclude Include="WalkingRigidBodyComponent.h" />
     <ClInclude Include="Receiver.h" />
     <ClInclude Include="RenderComponent.h" />
@@ -181,6 +182,8 @@
     <ClCompile Include="PepperCounterComponent.cpp" />
     <ClCompile Include="PlayerEntity.cpp" />
     <ClCompile Include="PlayerRenderComponent.cpp" />
+    <ClCompile Include="Receiver.cpp" />
+    <ClCompile Include="SoundEffectsComponent.cpp" />
     <ClCompile Include="WalkingRigidBodyComponent.cpp" />
     <ClCompile Include="RenderComponent.cpp" />
     <ClCompile Include="RigidBodyComponent.cpp" />

@@ -15,6 +15,7 @@
 #include "FloorCollideComponent.h"
 #include "TextRenderComponent.h"
 #include "PepperCounterComponent.h"
+#include "SoundEffectsComponent.h"
 
 const bool SHOW_FPS = false;
 
@@ -40,7 +41,7 @@ void Game::init() {
 	this->addEntity(this->player);
 	this->addEntity(this->player->getPepper());
 
-	this->backgroundMusic = Mix_LoadMUS("resources/sound/music.mp3");
+	this->backgroundMusic = Mix_LoadMUS("resources/sounds/music.mp3");
 	Mix_PlayMusic(this->backgroundMusic, -1);
 
 	Entity::init();
@@ -111,6 +112,7 @@ void Game::createPlayer() {
 
 void Game::createGameComponents() {
 	this->addComponent(this->input);
+	this->addComponent(new SoundEffectsComponent(this->engine, this));
 }
 
 void Game::createFpsCounter() {

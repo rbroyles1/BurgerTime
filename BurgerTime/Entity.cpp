@@ -4,7 +4,6 @@ Entity::Entity(Engine* engine, Coordinate* position) {
 	this->engine = engine;
 	this->position = position;
 	this->components = new std::vector<Component*>();
-	this->receivedMessages = new std::unordered_set<Message>();
 	this->boundingBox = nullptr;
 	this->enabled = true;
 }
@@ -29,20 +28,8 @@ void Entity::addComponent(Component* component) {
 	this->components->push_back(component);
 }
 
-void Entity::receive(Message message) {
-	this->receivedMessages->insert(message);
-}
-
 Component * Entity::getComponent(int index) {
 	return this->components->at(index);
-}
-
-bool Entity::hasReceived(Message message) {
-	return this->receivedMessages->count(message) > 0;
-}
-
-void Entity::clearMessages() {
-	this->receivedMessages->clear();
 }
 
 Coordinate* Entity::getPosition() {
@@ -76,5 +63,4 @@ Entity::~Entity() {
 
 	delete this->components;
 	delete this->boundingBox;
-	delete this->receivedMessages;
 }
