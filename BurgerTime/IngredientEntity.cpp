@@ -103,6 +103,7 @@ void IngredientEntity::getSpritePattern(char * destinationBuffer, Ingredient ing
 void IngredientEntity::onPlayerStep(int i) {
 	if (i >= 0 && i < 4 && !this->pushedDown[i]) {
 		this->pushedDown[i] = true;
+		this->engine->getMessageDispatcher()->send(ON_INGREDIENT_1);
 	}
 
 	bool allPushedDown = true;
@@ -130,6 +131,7 @@ void IngredientEntity::onIngredientHit() {
 		position->setY(position->getY() - 4);
 
 		this->setPosition(*position);
+		this->engine->getMessageDispatcher()->send(INGREDIENT_INGREDIENT_HIT);
 	}
 
 	this->falling = true;

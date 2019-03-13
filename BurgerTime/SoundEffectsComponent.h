@@ -4,6 +4,9 @@
 
 class SoundEffectsComponent : public Component {
 	Mix_Chunk *pepper;
+	Mix_Chunk *ingredientStep;
+	Mix_Chunk *ingredientHit;
+	Mix_Chunk *squashed;
 
 public:
 	SoundEffectsComponent(Engine* engine, Entity* entity);
