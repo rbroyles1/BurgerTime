@@ -22,7 +22,6 @@ const bool SHOW_FPS = false;
 
 // TODO put AI in component
 // TODO maybe add hi-score
-// TODO add gamepad support
 // TODO search other TODOs
 // TODO fix music loop
 // TODO fix AI going off-screen
@@ -148,9 +147,9 @@ void Game::createHUD() {
 	pepperText->addComponent(new PepperCounterComponent(this->engine, pepperText, this));
 	this->addEntity(pepperText);
 
-	Entity* controlsText = new Entity(this->engine, new Coordinate(24, 20));
+	Entity* controlsText = new Entity(this->engine, new Coordinate(8, 20));
 	controlsText->addComponent(new TextRenderComponent(this->engine, controlsText,
-		new std::string("NIGHT <N>               LOAD <L>               RESET <R>"),
+		new std::string("NIGHT <N, LB>     LOAD <L, START>     RESET <R, RB>"),
 		new Text(this->engine->getRenderer(), "resources/fonts/space_invaders.ttf", 8)));
 	this->addEntity(controlsText);
 
@@ -253,6 +252,14 @@ void Game::notifyKeyDown(SDL_Keycode key) {
 
 void Game::notifyKeyUp(SDL_Keycode key) {
 	this->input->onKeyUp(key);
+}
+
+void Game::notifyControllerDown(Uint8 button) {
+	this->input->onControllerDown(button);
+}
+
+void Game::notifyControllerUp(Uint8 button) {
+	this->input->onControllerUp(button);
 }
 
 void Game::ingredientFinished() {

@@ -1,4 +1,5 @@
 #pragma once
+#include "SDL.h"
 
 const int ORIGINAL_WIDTH = 240;
 const int ORIGINAL_HEIGHT = 240;
@@ -19,5 +20,11 @@ const int INITIAL_LIVES = 4;
 const int MAX_LIVES = 25;
 const int INITIAL_PEPPER = 5;
 const int MAX_PEPPER = 99;
+
+const Uint8 CONTROLLER_UP = 100;
+const Uint8 CONTROLLER_RIGHT = 101;
+const Uint8 CONTROLLER_DOWN = 102;
+const Uint8 CONTROLLER_LEFT = 103;
+
 
 const double ENEMY_PLAYER_SPEED_PROPORTION = 0.6;

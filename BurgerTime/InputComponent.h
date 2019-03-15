@@ -12,6 +12,9 @@ public:
 
 	void onKeyDown(SDL_Keycode key);
 	void onKeyUp(SDL_Keycode key);
+	void onControllerDown(Uint8 button);
+	void onControllerUp(Uint8 button);
+
 	void setEnabled(bool enabled);
 };
 

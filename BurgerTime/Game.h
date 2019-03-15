@@ -60,6 +60,8 @@ public:
 
 	void notifyKeyDown(SDL_Keycode key);
 	void notifyKeyUp(SDL_Keycode key);
+	void notifyControllerDown(Uint8 button);
+	void notifyControllerUp(Uint8 button);
 
 	int getScore();
 	int getLives();
