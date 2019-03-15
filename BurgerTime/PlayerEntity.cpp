@@ -92,6 +92,12 @@ Entity* PlayerEntity::getPepper() {
 	return this->pepper;
 }
 
+void PlayerEntity::notifyNearFloor(Entity* floor) {
+	if (this->hasReceived(MOVE_LEFT) || this->hasReceived(MOVE_RIGHT)) {
+		this->position->setY(floor->getPosition()->getY() - 8);
+	}
+}
+
 void PlayerEntity::createPepper() {
 	this->pepper = new Entity(this->engine);
 	this->hidePepper();

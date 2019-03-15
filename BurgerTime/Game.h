@@ -74,7 +74,7 @@ private:
 	void createHUD();
 	void createLevel();
 
-	void setWalkingEntityColliders(Entity* entity);
+	void setWalkingEntityColliders(Entity* entity, bool isPlayer);
 
 	void updateLimits(Field newField, Coordinate* position);
 	void addStartingLimit(Field newField, Coordinate* position);

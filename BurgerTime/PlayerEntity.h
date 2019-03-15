@@ -23,6 +23,8 @@ public:
 	CharacterAction getAction();
 	Entity* getPepper();
 
+	void notifyNearFloor(Entity* floor);
+
 private:
 	void createPepper();
 	void throwPepper();

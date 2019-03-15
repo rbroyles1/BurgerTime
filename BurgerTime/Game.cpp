@@ -103,7 +103,7 @@ void Game::createPlayer() {
 	Coordinate* playerPos = new Coordinate();
 
 	this->player = new PlayerEntity(this->engine, playerPos, this->enemies, this);
-	this->setWalkingEntityColliders(this->player);
+	this->setWalkingEntityColliders(this->player, true);
 
 	Sprite* lanternSprite = new Sprite(this->engine->getRenderer(), "resources/sprites/lantern.bmp");
 	this->lantern = new Entity(this->engine, playerPos);
@@ -163,8 +163,8 @@ void Game::createLevel() {
 	this->addEndingLimit();
 }
 
-void Game::setWalkingEntityColliders(Entity* entity) {
-	FloorCollideComponent* floorBox = new FloorCollideComponent(this->engine, entity, ON_FLOOR, floors);
+void Game::setWalkingEntityColliders(Entity* entity, bool isPlayer) {
+	FloorCollideComponent* floorBox = new FloorCollideComponent(this->engine, entity, ON_FLOOR, floors, isPlayer);
 	BoxCollideComponent* leftBox = new BoxCollideComponent(this->engine, entity, INTERSECT_LIMIT_LEFT, leftFloorsLimits);
 	BoxCollideComponent* rightBox = new BoxCollideComponent(this->engine, entity, INTERSECT_LIMIT_RIGHT, rightFloorsLimits);
 	BoxCollideComponent* stairsBox = new BoxCollideComponent(this->engine, entity, INTERSECT_STAIRS, stairs);
@@ -230,7 +230,7 @@ void Game::addDish(Coordinate* position) {
 void Game::addEnemy(Coordinate* position, EnemyType enemyType, double idleTime) {
 	EnemyEntity* enemy = new EnemyEntity(this->engine, position, enemyType, idleTime, this->player, this->ingredients);
 
-	this->setWalkingEntityColliders(enemy);
+	this->setWalkingEntityColliders(enemy, false);
 	this->enemies->push_back(enemy);
 	this->addEntity(enemy);
 }

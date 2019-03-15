@@ -29,7 +29,7 @@ IngredientEntity::IngredientEntity(Engine* engine, Coordinate* position, PlayerE
 
 		std::vector<Entity*>* wrappedPart = new std::vector<Entity*>();
 		wrappedPart->push_back(ingredientPart);
-		player->addComponent(new FloorCollideComponent(engine, player, (Message) (ON_INGREDIENT_1 + i), wrappedPart, this));
+		player->addComponent(new FloorCollideComponent(engine, player, (Message) (ON_INGREDIENT_1 + i), wrappedPart, false, this));
 
 		ingredientPart->setBoundingBox(new BoundingBox(new Coordinate(1, 2)));
 
