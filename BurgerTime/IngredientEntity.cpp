@@ -97,7 +97,7 @@ void IngredientEntity::getSpritePattern(char * destinationBuffer, Ingredient ing
 		case TOMATO:
 			strcpy(destinationBuffer, "resources/sprites/tomato (%d).bmp");
 			break;
-		}
+	}
 }
 
 void IngredientEntity::onPlayerStep(int i) {

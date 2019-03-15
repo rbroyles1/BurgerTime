@@ -72,6 +72,14 @@ void SoundEffectsComponent::performSubscriptions() {
 }
 
 SoundEffectsComponent::~SoundEffectsComponent() {
-	// TODO
+	Mix_FreeChunk(this->intro);
+	Mix_FreeChunk(this->loose);
+	Mix_FreeChunk(this->win);
+
+	Mix_FreeChunk(this->pepper);
+	Mix_FreeChunk(this->ingredientStep);
+	Mix_FreeChunk(this->ingredientHit);
+	Mix_FreeChunk(this->squashed);
+
 	Mix_FreeMusic(this->backgroundMusic);
 }

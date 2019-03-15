@@ -20,8 +20,6 @@
 
 const bool SHOW_FPS = false;
 
-// TODO search other TODOs
-// TODO fix AI going off-screen
 Game::Game(Engine* engine) : Entity(engine) {
 	this->chosenLevel = new std::string("resources/levels/default.bgtm");
 }
