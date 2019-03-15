@@ -144,6 +144,7 @@
     <ClInclude Include="LivesTrackerEntity.h" />
     <ClInclude Include="MessageDispatcher.h" />
     <ClInclude Include="PepperCounterComponent.h" />
+    <ClInclude Include="PepperReloadEntity.h" />
     <ClInclude Include="PlayerEntity.h" />
     <ClInclude Include="PlayerRenderComponent.h" />
     <ClInclude Include="SoundEffectsComponent.h" />
@@ -180,6 +181,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MessageDispatcher.cpp" />
     <ClCompile Include="PepperCounterComponent.cpp" />
+    <ClCompile Include="PepperReloadEntity.cpp" />
     <ClCompile Include="PlayerEntity.cpp" />
     <ClCompile Include="PlayerRenderComponent.cpp" />
     <ClCompile Include="Receiver.cpp" />

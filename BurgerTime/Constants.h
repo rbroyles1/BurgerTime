@@ -18,5 +18,6 @@ const int INTRO_DURATION_MILLISECS = 4000;
 const int INITIAL_LIVES = 4;
 const int MAX_LIVES = 25;
 const int INITIAL_PEPPER = 5;
+const int MAX_PEPPER = 99;
 
 const double ENEMY_PLAYER_SPEED_PROPORTION = 0.6;

@@ -87,6 +87,7 @@ private:
 	void increaseLives();
 	void ingredientFinished();
 	void pepperThrown();
+	void increasePepper();
 	void freezeEnemies();
 	void playerDied();
 	void victory();

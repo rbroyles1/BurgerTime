@@ -16,13 +16,16 @@
 #include "TextRenderComponent.h"
 #include "PepperCounterComponent.h"
 #include "SoundEffectsComponent.h"
+#include "PepperReloadEntity.h"
 
 const bool SHOW_FPS = false;
 
 // TODO put AI in component
-// TODO add pepper reloads
 // TODO maybe add hi-score
+// TODO add gamepad support
 // TODO search other TODOs
+// TODO fix music loop
+// TODO fix AI going off-screen
 Game::Game(Engine* engine) : Entity(engine) {
 	this->chosenLevel = new std::string("resources/levels/default.bgtm");
 }
@@ -73,6 +76,9 @@ void Game::receive(Message message) {
 			break;
 		case PEPPER_THROWN:
 			this->pepperThrown();
+			break;
+		case INCREASE_PEPPER:
+			this->increasePepper();
 			break;
 		case ENEMY_SQUASHED:
 			this->increaseScore(100);
@@ -161,6 +167,8 @@ void Game::createLevel() {
 
 	manager.loadLevel(this->chosenLevel->c_str());
 	this->addEndingLimit();
+
+	this->addEntity(new PepperReloadEntity(this->engine, this->player, this->stairs));
 }
 
 void Game::setWalkingEntityColliders(Entity* entity, bool isPlayer) {
@@ -257,6 +265,12 @@ void Game::ingredientFinished() {
 
 void Game::pepperThrown() {
 	this->pepper--;
+}
+
+void Game::increasePepper() {
+	if (this->pepper < MAX_PEPPER) {
+		this->pepper++;
+	}
 }
 
 void Game::freezeEnemies() {
@@ -414,6 +428,7 @@ void Game::performSubscriptions() {
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FLOOR_HIT, this);
 	this->engine->getMessageDispatcher()->subscribe(INGREDIENT_FINISHED, this);
 	this->engine->getMessageDispatcher()->subscribe(PEPPER_THROWN, this);
+	this->engine->getMessageDispatcher()->subscribe(INCREASE_PEPPER, this);
 	this->engine->getMessageDispatcher()->subscribe(PLAYER_DIED, this);
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_SQUASHED, this);
 	this->engine->getMessageDispatcher()->subscribe(ENEMY_ATTACK, this);

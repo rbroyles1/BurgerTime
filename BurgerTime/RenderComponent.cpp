@@ -16,6 +16,10 @@ Sprite* RenderComponent::getSprite() {
 	return this->sprite;
 }
 
+void RenderComponent::setSprite(Sprite* sprite) {
+	this->sprite = sprite;
+}
+
 RenderComponent::~RenderComponent() {
 	delete this->sprite;
 }

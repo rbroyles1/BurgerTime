@@ -12,6 +12,7 @@ public:
 
 	virtual void update(double dt);
 	Sprite* getSprite();
+	void setSprite(Sprite* sprite);
 
 	~RenderComponent();
 };
