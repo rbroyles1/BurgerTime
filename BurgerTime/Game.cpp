@@ -20,10 +20,7 @@
 
 const bool SHOW_FPS = false;
 
-// TODO put AI in component
-// TODO maybe add hi-score
 // TODO search other TODOs
-// TODO fix music loop
 // TODO fix AI going off-screen
 Game::Game(Engine* engine) : Entity(engine) {
 	this->chosenLevel = new std::string("resources/levels/default.bgtm");

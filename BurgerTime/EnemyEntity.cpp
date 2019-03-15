@@ -91,17 +91,19 @@ void EnemyEntity::move() {
 		int diffY = (int)this->player->getPosition()->getY() - (int)this->position->getY();
 
 		if (this->isInIntersection() || !this->hasMoved) {
-			if (!this->hasReceived(INTERSECT_LIMIT_LEFT)) {
-				currentProbability += diffX < 0 ? -diffX : 1;
+			if (this->hasReceived(ON_FLOOR)) {
+				if (!this->hasReceived(INTERSECT_LIMIT_LEFT)) {
+					currentProbability += diffX < 0 ? -diffX : 1;
 
-				possibleMoves.push_back(WALK_LEFT);
-				movesProbabilities.push_back(currentProbability);
-			}
-			if (!this->hasReceived(INTERSECT_LIMIT_RIGHT)) {
-				currentProbability += diffX > 0 ? diffX : 1;
+					possibleMoves.push_back(WALK_LEFT);
+					movesProbabilities.push_back(currentProbability);
+				}
+				if (!this->hasReceived(INTERSECT_LIMIT_RIGHT)) {
+					currentProbability += diffX > 0 ? diffX : 1;
 
-				possibleMoves.push_back(WALK_RIGHT);
-				movesProbabilities.push_back(currentProbability);
+					possibleMoves.push_back(WALK_RIGHT);
+					movesProbabilities.push_back(currentProbability);
+				}
 			}
 
 			if (this->hasReceived(INTERSECT_STAIRS)) {
